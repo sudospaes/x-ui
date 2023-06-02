@@ -19,16 +19,16 @@
 
 
 {{define "commonSider"}}
-<a-layout-sider :theme="themeSwitcher.currentTheme" id="sider" collapsible breakpoint="md" collapsed-width="0">
-    <a-menu :theme="themeSwitcher.currentTheme" mode="inline" selected-keys="">
-        <a-menu-item mode="inline">
-            <a-icon type="bg-colors"></a-icon>
-            <theme-switch />
-        </a-menu-item>
-    </a-menu>
-    <a-menu :theme="themeSwitcher.currentTheme" mode="inline" :selected-keys="['{{ .request_uri }}']"
+<a-layout-sider style="background-color: #191919;" id="sider" collapsible breakpoint="md" collapsed-width="0">
+    <a-menu style="background-color: #191919;" theme="dark" mode="inline" :selected-keys="['{{ .request_uri }}']"
             @click="({key}) => key.startsWith('http') ? window.open(key) : location.href = key">
         {{template "menuItems" .}}
+    </a-menu>
+    <a-menu style="background-color: #191919;" theme="dark" mode="inline" selected-keys="">
+        <a-menu-item mode="inline">
+            Theme :
+            <theme-switch />
+        </a-menu-item>
     </a-menu>
 </a-layout-sider>
 <a-drawer id="sider-drawer" placement="left" :closable="false"

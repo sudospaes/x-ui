@@ -24,7 +24,7 @@
             <a-spin :spinning="spinning" :delay="200" :tip="loadingTip"/>
             <transition name="list" appear>
                 <a-row>
-                    <a-card hoverable :class="themeSwitcher.darkCardClass">
+                    <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                         <a-row>
                             <a-col :sm="24" :md="12">
                                 <a-row>
@@ -33,7 +33,8 @@
                                                     :stroke-color="status.cpu.color"
                                                     :class="themeSwitcher.darkCardClass"
                                                     :percent="status.cpu.percent"></a-progress>
-                                        <div>CPU</div>
+                                        <div>CPU:  [[ cpuCoreFormat(status.cpuCores) ]]</div>
+                                        <div>Speed:  [[ cpuSpeedFormat(status.cpuSpeedMhz) ]]</div>
                                     </a-col>
                                     <a-col :span="12" style="text-align: center">
                                         <a-progress type="dashboard" status="normal"
@@ -75,13 +76,17 @@
             <transition name="list" appear>
                 <a-row>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
-                            x-ui: <a href="https://github.com/alireza0/x-ui/releases" target="_blank"><a-tag color="green">{{ .cur_ver }}</a-tag></a>
-                            xray: <a-tag color="green" style="cursor: pointer;" @click="openSelectV2rayVersion">[[ status.xray.version ]]</a-tag>
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
+                            {{ i18n "pages.index.xrayVerion" }}:
+                            <a-tag color="purple" >[[ status.xray.version ]]</a-tag>
+                            <a-tag color="blue" style="cursor: pointer;" @click="openSelectV2rayVersion"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="swap"></a-icon> {{ i18n "pages.index.xraySwitch"}}</a-tag>
+                            <a-tag color="green"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #6abe39' : ''" type="bulb"></a-icon> X-UI v{{ .cur_ver }}</a-tag>
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             {{ i18n "pages.index.operationHours" }}:
                             <a-tag color="green">[[ formatSecond(status.uptime) ]]</a-tag>
                             <a-tooltip>
@@ -90,10 +95,24 @@
                                 </template>
                                 <a-icon type="question-circle" theme="filled"></a-icon>
                             </a-tooltip>
+                            <span style="margin-left: 10px; margin-right: 3px;">IPv4:</span>
+                            <a-tooltip>
+                                <template slot="title">
+                                    [[ status.publicIP.ipv4 ]]
+                                </template>
+                                <a-icon type="question-circle" theme="filled"></a-icon>
+                            </a-tooltip>
+                            <span style="margin-left: 10px; margin-right: 3px;">IPv6:</span>
+                            <a-tooltip>
+                                <template slot="title">
+                                    [[ status.publicIP.ipv6 ]]
+                                </template>
+                                <a-icon type="question-circle" theme="filled"></a-icon>
+                            </a-tooltip>
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             {{ i18n "pages.index.xrayStatus" }}:
                             <a-tag :color="status.xray.color">[[ status.xray.state ]]</a-tag>
                             <a-tooltip v-if="status.xray.state === State.Error">
@@ -102,26 +121,30 @@
                                 </template>
                                 <a-icon type="question-circle" theme="filled"></a-icon>
                             </a-tooltip>
-                            <a-tag color="blue" style="cursor: pointer;" @click="stopXrayService">{{ i18n "pages.index.stopXray" }}</a-tag>
-                            <a-tag color="blue" style="cursor: pointer;" @click="restartXrayService">{{ i18n "pages.index.restartXray" }}</a-tag>                    
-                            <a-tag color="blue" style="cursor: pointer;" @click="openSelectV2rayVersion">{{ i18n "pages.index.xraySwitch" }}</a-tag>
+                            <a-tag color="orange" style="cursor: pointer;" @click="stopXrayService"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #e89a3c' : ''" type="poweroff"></a-icon> {{ i18n "pages.index.stopXray" }}</a-tag>
+                            <a-tag color="cyan" style="cursor: pointer;" @click="restartXrayService"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #33bcb7' : ''" type="sync"></a-icon> {{ i18n "pages.index.restartXray" }}</a-tag>
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
-                            {{ i18n "menu.link" }}:
-                            <a-tag color="blue" style="cursor: pointer;" @click="openLogs(20)">{{ i18n "pages.index.logs" }}</a-tag>
-                            <a-tag color="blue" style="cursor: pointer;" @click="openConfig">{{ i18n "pages.index.config" }}</a-tag>
-                            <a-tag color="blue" style="cursor: pointer;" @click="openBackup">{{ i18n "pages.index.backup" }}</a-tag>
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
+                            {{ i18n "pages.index.toolBox" }}:
+                            <a-tag color="blue" style="cursor: pointer;" @click="openLogs(20)"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="eye"></a-icon> {{ i18n "pages.index.logs" }}</a-tag>
+                            <a-tag color="blue" style="cursor: pointer;" @click="openBackup"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="snippets"></a-icon> {{ i18n "pages.index.backup" }}</a-tag>
+                            <a-tag color="blue" style="cursor: pointer;" @click="openConfig"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="file-text"></a-icon> {{ i18n "pages.index.config" }}</a-tag>
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             {{ i18n "pages.index.systemLoad" }}: [[ status.loads[0] ]] | [[ status.loads[1] ]] | [[ status.loads[2] ]]
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             tcp / udp {{ i18n "pages.index.connectionCount" }}: [[ status.tcpCount ]] / [[ status.udpCount ]]
                             <a-tooltip>
                                 <template slot="title">
@@ -132,7 +155,7 @@
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             <a-row>
                                 <a-col :span="12">
                                     <a-icon type="arrow-up"></a-icon>
@@ -158,7 +181,7 @@
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">
-                        <a-card hoverable :class="themeSwitcher.darkCardClass">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             <a-row>
                                 <a-col :span="12">
                                     <a-icon type="cloud-upload"></a-icon>
@@ -220,17 +243,16 @@
                 </a-select>
             </a-form-item>
             <a-form-item>
-                <button class="ant-btn ant-btn-primary" @click="openLogs(logModal.rows)"><a-icon type="sync"></a-icon> Reload</button>
+                <a-button icon="sync" type="primary" @click="openLogs(logModal.rows)">{{ i18n "reload" }}</a-button>
             </a-form-item>
             <a-form-item>
-                <a-button type="primary" style="margin-bottom: 10px;"
-                :href="'data:application/text;charset=utf-8,' + encodeURIComponent(logModal.logs)" download="x-ui.log">
-                    {{ i18n "download" }} x-ui.log
-                </a-button>
+                <a-button icon="cloud-download" type="primary" style="margin-bottom: 10px;"
+                :href="'data:application/text;charset=utf-8,' + encodeURIComponent(logModal.logs)" download="x-ui.log">{{ i18n "download" }} x-ui.log</a-button>
             </a-form-item>
        </a-form>
         <a-input type="textarea" v-model="logModal.logs" disabled="true"
-                :autosize="{ minRows: 10, maxRows: 22}"></a-input>
+                :autosize="{ minRows: 10, maxRows: 22}"
+                :style="themeSwitcher.darkCardClass ? 'cursor: default;': 'cursor: default; color: rgba(0,0,0,.65);'"></a-input>
     </a-modal>
 
     <a-modal id="backup-modal" v-model="backupModal.visible" :title="backupModal.title"
@@ -292,6 +314,8 @@
     class Status {
         constructor(data) {
             this.cpu = new CurTotal(0, 0);
+            this.cpuCores = 0;
+            this.cpuSpeedMhz = 0;
             this.disk = new CurTotal(0, 0);
             this.loads = [0, 0, 0];
             this.mem = new CurTotal(0, 0);
@@ -301,12 +325,15 @@
             this.tcpCount = 0;
             this.udpCount = 0;
             this.uptime = 0;
+            this.publicIP = { ipv4: 0, ipv6: 0 };
             this.xray = {state: State.Stop, errorMsg: "", version: "", color: ""};
 
             if (data == null) {
                 return;
             }
             this.cpu = new CurTotal(data.cpu, 100);
+            this.cpuCores = data.cpuCores;
+            this.cpuSpeedMhz = data.cpuSpeedMhz;
             this.disk = new CurTotal(data.disk.current, data.disk.total);
             this.loads = data.loads.map(load => toFixed(load, 2));
             this.mem = new CurTotal(data.mem.current, data.mem.total);
@@ -316,6 +343,7 @@
             this.tcpCount = data.tcpCount;
             this.udpCount = data.udpCount;
             this.uptime = data.uptime;
+            this.publicIP = data.publicIP;
             this.xray = data.xray;
             switch (this.xray.state) {
                 case State.Running:

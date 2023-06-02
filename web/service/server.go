@@ -38,9 +38,11 @@ const (
 )
 
 type Status struct {
-	T   time.Time `json:"-"`
-	Cpu float64   `json:"cpu"`
-	Mem struct {
+	T           time.Time `json:"-"`
+	Cpu         float64   `json:"cpu"`
+	CpuCores    int       `json:"cpuCores"`
+	CpuSpeedMhz float64   `json:"cpuSpeedMhz"`
+	Mem         struct {
 		Current uint64 `json:"current"`
 		Total   uint64 `json:"total"`
 	} `json:"mem"`
@@ -69,6 +71,10 @@ type Status struct {
 		Sent uint64 `json:"sent"`
 		Recv uint64 `json:"recv"`
 	} `json:"netTraffic"`
+	PublicIP struct {
+		IPv4 string `json:"ipv4"`
+		IPv6 string `json:"ipv6"`
+	} `json:"publicIP"`
 }
 
 type Release struct {
@@ -78,6 +84,33 @@ type Release struct {
 type ServerService struct {
 	xrayService    XrayService
 	inboundService InboundService
+}
+
+const DebugMode = false // Set to true during development
+
+func getPublicIP(url string) string {
+	resp, err := http.Get(url)
+	if err != nil {
+		if DebugMode {
+			logger.Warning("get public IP failed:", err)
+		}
+		return "N/A"
+	}
+	defer resp.Body.Close()
+
+	ip, err := io.ReadAll(resp.Body)
+	if err != nil {
+		if DebugMode {
+			logger.Warning("read public IP failed:", err)
+		}
+		return "N/A"
+	}
+
+	if string(ip) == "" {
+		return "N/A" // default value
+	}
+
+	return string(ip)
 }
 
 func (s *ServerService) GetStatus(lastStatus *Status) *Status {
@@ -114,6 +147,21 @@ func (s *ServerService) GetStatus(lastStatus *Status) *Status {
 	} else {
 		status.Swap.Current = swapInfo.Used
 		status.Swap.Total = swapInfo.Total
+	}
+
+	status.CpuCores, err = cpu.Counts(false)
+	if err != nil {
+		logger.Warning("get cpu cores count failed:", err)
+	}
+
+	cpuInfos, err := cpu.Info()
+	if err != nil {
+		logger.Warning("get cpu info failed:", err)
+	} else if len(cpuInfos) > 0 {
+		cpuInfo := cpuInfos[0]
+		status.CpuSpeedMhz = cpuInfo.Mhz // setting CPU speed in MHz
+	} else {
+		logger.Warning("could not find cpu info")
 	}
 
 	distInfo, err := disk.Usage("/")
@@ -160,6 +208,9 @@ func (s *ServerService) GetStatus(lastStatus *Status) *Status {
 	if err != nil {
 		logger.Warning("get udp connections failed:", err)
 	}
+
+	status.PublicIP.IPv4 = getPublicIP("https://api.ipify.org")
+	status.PublicIP.IPv6 = getPublicIP("https://api6.ipify.org")
 
 	if s.xrayService.IsXrayRunning() {
 		status.Xray.State = Running

@@ -49,6 +49,7 @@
 "install" = "Install"
 "clients" = "Clients"
 "usage" = "Usage"
+"reload" = "Reload"
 
 [menu]
 "dashboard" = "System Status"
@@ -72,6 +73,7 @@
 "title" = "System Status"
 "memory" = "Memory"
 "hard" = "Hard Disk"
+"xrayVerion" = "Xray Version"
 "xrayStatus" = "Xray Status"
 "stopXray" = "Stop"
 "restartXray" = "Restart"
@@ -90,6 +92,7 @@
 "xraySwitchVersionDialog" = "Switch Xray Version"
 "xraySwitchVersionDialogDesc" = "Are you sure you want to switch the Xray version to"
 "dontRefresh" = "Installation is in progress, please do not refresh this page."
+"toolBox" = "Tool Box"
 "logs" = "Logs"
 "config" = "Config"
 "backup" = "Backup & Restore"

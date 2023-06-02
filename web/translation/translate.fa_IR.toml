@@ -49,6 +49,7 @@
 "install" = "نصب"
 "clients" = "کاربران"
 "usage" = "استفاده"
+"reload" = "بارگیری مجدد"
 
 [menu]
 "dashboard" = "وضعیت سیستم"
@@ -72,6 +73,7 @@
 "title" = "وضعیت سیستم"
 "memory" = "حافظه رم"
 "hard" = "حافظه دیسک"
+"xrayVerion" = "نسخه Xray"
 "xrayStatus" = "وضعیت Xray"
 "stopXray" = "توقف"
 "restartXray" = "شروع مجدد"
@@ -90,6 +92,7 @@
 "xraySwitchVersionDialog" = "تغییر ورژن Xray"
 "xraySwitchVersionDialogDesc" = "آیا از تغییر ورژن مطمئن هستین"
 "dontRefresh" = "در حال نصب ، لطفا رفرش نکنید "
+"toolBox" = "جعبه ابزار"
 "logs" = "گزارش ها"
 "config" = "تنظیمات"
 "backup" = "پشتیبان گیری"

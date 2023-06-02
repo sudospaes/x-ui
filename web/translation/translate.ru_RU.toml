@@ -49,6 +49,7 @@
 "install" = "установка"
 "clients" = "клиенты"
 "usage" = "использование"
+"reload" = "Перезагрузить"
 
 [menu]
 "dashboard" = "статус системы"
@@ -72,6 +73,7 @@
 "title" = "статус системы"
 "memory" = "память"
 "hard" = "жесткий диск"
+"xrayVerion" = "Версия Xray"
 "xrayStatus" = "статус Xray"
 "stopXray" = "стоп"
 "restartXray" = "рестарт Xray"
@@ -90,6 +92,7 @@
 "xraySwitchVersionDialog" = "переключить версию Xray"
 "xraySwitchVersionDialogDesc" = "Вы точно хотите сменить версию Xray?"
 "dontRefresh" = "Установка. Не обновляйте эту страницу"
+"toolBox" = "Ящик для инструментов"
 "logs" = "Логи"
 "config" = "Конфиг"
 "backup" = "Бекап и восстановление"

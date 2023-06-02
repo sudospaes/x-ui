@@ -49,6 +49,7 @@
 "install" = "安装"
 "clients" = "客户端"
 "usage" = "用法"
+"reload" = "重新加载"
 
 [menu]
 "dashboard" = "系统状态"
@@ -72,6 +73,7 @@
 "title" = "系统状态"
 "memory" = "内存"
 "hard" = "硬盘"
+"xrayVerion" = "Xray 版本"
 "xrayStatus" = "Xray 状态"
 "stopXray" = "停止"
 "restartXray" = "重启"
@@ -90,6 +92,7 @@
 "xraySwitchVersionDialog" = "切换 Xray 版本"
 "xraySwitchVersionDialogDesc" = "是否切换 Xray 版本至"
 "dontRefresh" = "安装中，请不要刷新此页面"
+"toolBox" = "工具箱"
 "logs" = "日志"
 "config" = "配置"
 "backup" = "备份"
