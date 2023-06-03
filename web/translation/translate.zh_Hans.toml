@@ -270,6 +270,7 @@
 "subUpdates" = "订阅更新间隔"
 "subUpdatesDesc" = "客户端应用程序更新之间的间隔时间"
 "language" = "语言"
+"otherSettings" = "其他设置"
 
 [pages.settings.templates]
 "title" = "模板"

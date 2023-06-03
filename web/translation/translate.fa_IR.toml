@@ -269,6 +269,7 @@
 "subUpdates" = "فاصله به روز رسانی های سابسکریپشن"
 "subUpdatesDesc" = "ساعت های فاصله بین به روز رسانی در برنامه کاربر"
 "language" = "زبان"
+"otherSettings" = "سایر تنظیمات"
 
 [pages.settings.templates]
 "title" = "الگوها"

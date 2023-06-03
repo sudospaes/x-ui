@@ -270,6 +270,7 @@
 "subUpdates" = "Интервалы обновления подписки"
 "subUpdatesDesc" = "Часовой интервал между обновлениями в клиентском приложении"
 "language" = "Язык"
+"otherSettings" = "Другие настройки"
 
 [pages.settings.templates]
 "title" = "Шаблоны"

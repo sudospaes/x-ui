@@ -270,6 +270,7 @@
 "subUpdates" = "Subscription update intervals"
 "subUpdatesDesc" = "Interval hours between updates in client application"
 "language" = "Language"
+"otherSettings" = "Other Settings"
 
 
 [pages.settings.templates]
