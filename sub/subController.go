@@ -1,7 +1,6 @@
 package sub
 
 import (
-	"encoding/base64"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -40,6 +39,6 @@ func (a *SUBController) subs(c *gin.Context) {
 		c.Writer.Header().Set("Profile-Update-Interval", headers[1])
 		c.Writer.Header().Set("Profile-Title", headers[2])
 
-		c.String(200, base64.StdEncoding.EncodeToString([]byte(result)))
+		c.String(200, result)
 	}
 }
