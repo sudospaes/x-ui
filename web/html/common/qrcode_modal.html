@@ -5,14 +5,16 @@
          :footer="null"
          width="300px">
     <a-tag color="green" style="margin-bottom: 10px;display: block;text-align: center;" >{{ i18n "pages.inbounds.clickOnQRcode" }}</a-tag>
-    <template v-if="app.subSettings.enable && qrModal.subId">
-        <a-divider>Subscription</a-divider>
-        <canvas @click="copyToClipboard('qrCode-sub',genSubLink(qrModal.client.subId))" id="qrCode-sub" style="width: 100%; height: 100%;"></canvas>
-    </template>
-    <a-divider>{{ i18n "pages.inbounds.client" }}</a-divider>
     <template v-for="(row, index) in qrModal.qrcodes">
-        <a-tag color="orange" style="margin-top: 10px;display: block;text-align: center;">[[ row.remark ]]</a-tag>
+        <a-tag color="orange" v-if="qrModal.inbound.protocol == Protocols.VMESS && qrModal.inbound.reality"
+        style="display: block;text-align: center;">vmess reality uses aead format by default</a-tag>
+        <a-tag color="blue" style="margin-top: 5px; margin-bottom: 10px; display: block;text-align: center;">[[ row.remark ]]</a-tag>
+        <a-divider style="margin-top: 5px; margin-bottom: 10px;">{{ i18n "pages.inbounds.client" }}</a-divider>
         <canvas @click="copyToClipboard('qrCode-'+index, row.link)" :id="'qrCode-'+index" style="width: 100%; height: 100%;"></canvas>
+    </template>
+    <template v-if="app.subSettings.enable && qrModal.subId">
+        <a-divider style="margin-top: 5px; margin-bottom: 10px;">Subscription</a-divider>
+        <canvas @click="copyToClipboard('qrCode-sub',genSubLink(qrModal.client.subId))" id="qrCode-sub" style="width: 100%; height: 100%;"></canvas>
     </template>
 </a-modal>
 
@@ -35,16 +37,21 @@
             this.inbound = dbInbound.toInbound();
             settings = JSON.parse(this.inbound.settings);
             this.client = settings.clients[clientIndex];
-            remark = this.dbInbound.remark + "-" + this.client.email;
+            remark = this.dbInbound.remark + " - " + this.client.email;
             address = this.dbInbound.address;
             this.subId = '';
             this.qrcodes = [];
             if (this.inbound.tls && !ObjectUtil.isArrEmpty(this.inbound.stream.tls.settings.domains)) {
                 this.inbound.stream.tls.settings.domains.forEach((domain) => {
                     this.qrcodes.push({
-                        remark: remark + "-" + domain.remark,
-                        link: this.inbound.genLink(domain.domain, remark + "-" + domain.remark, clientIndex)
+                        remark: remark + " - " + domain.remark,
+                        link: this.inbound.genLink(domain.domain, remark + " - " + domain.remark, clientIndex)
                     });
+                });
+            } else if (this.inbound.protocol == Protocols.VMESS && this.inbound.reality) {
+                this.qrcodes.push({
+                    remark: remark,
+                    link: this.inbound.genVMESSAheadLink(address, remark, clientIndex)
                 });
             } else {
                 this.qrcodes.push({

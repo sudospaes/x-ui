@@ -75,9 +75,9 @@ const UTLS_FINGERPRINT = {
 };
 
 const ALPN_OPTION = {
-    HTTP1: "http/1.1",
-    H2: "h2",
     H3: "h3",
+    H2: "h2",
+    HTTP1: "http/1.1",
 };
 
 const SNIFFING_OPTION = {
@@ -462,8 +462,8 @@ class GrpcStreamSettings extends XrayCommonClass {
 
 class TlsStreamSettings extends XrayCommonClass {
     constructor(serverName='',
-                minVersion = TLS_VERSION_OPTION.TLS10,
-                maxVersion = TLS_VERSION_OPTION.TLS12,
+                minVersion = TLS_VERSION_OPTION.TLS12,
+                maxVersion = TLS_VERSION_OPTION.TLS13,
                 cipherSuites = '',
                 certificates=[new TlsStreamSettings.Cert()],
                 alpn=[],
@@ -589,10 +589,10 @@ TlsStreamSettings.Settings = class extends XrayCommonClass {
 
 class RealityStreamSettings extends XrayCommonClass {
     constructor(show = false, xver = 0,
-        dest = 'microsoft.com:443',
-        serverNames = 'microsoft.com,www.microsoft.com',
-        privateKey = '', minClient = '', maxClient = '',
-        maxTimediff = 0, shortIds = [],
+        dest = 'yahoo.com:443',
+        serverNames = 'yahoo.com,www.yahoo.com',
+        privateKey = '', minClient = '', maxClient = '', maxTimediff = 0,
+        shortIds = RandomUtil.randomShortId(),
         settings= new RealityStreamSettings.Settings()) {
         super();
         this.show = show;
@@ -992,6 +992,7 @@ class Inbound extends XrayCommonClass {
         switch (this.protocol) {
             case Protocols.VLESS:
             case Protocols.TROJAN:
+            case Protocols.VMESS:
                 break;
             default:
                 return false;
@@ -1113,6 +1114,103 @@ class Inbound extends XrayCommonClass {
         }
         
         return 'vmess://' + base64(JSON.stringify(obj, null, 2));
+    }
+
+    genVMESSAheadLink(address = '', remark='', clientIndex=0) {
+        const settings = this.settings;
+        const uuid = settings.vmesses[clientIndex].id;
+        const port = this.port;
+        const type = this.stream.network;
+        const params = new Map();
+        params.set("type", this.stream.network);
+        switch (type) {
+            case "tcp":
+                const tcp = this.stream.tcp;
+                if (tcp.type === 'http') {
+                    const request = tcp.request;
+                    params.set("path", request.path.join(','));
+                    const index = request.headers.findIndex(header => header.name.toLowerCase() === 'host');
+                    if (index >= 0) {
+                        const host = request.headers[index].value;
+                        params.set("host", host);
+                    }
+                    params.set("headerType", 'http');
+                }
+                break;
+            case "kcp":
+                const kcp = this.stream.kcp;
+                params.set("headerType", kcp.type);
+                params.set("seed", kcp.seed);
+                break;
+            case "ws":
+                const ws = this.stream.ws;
+                params.set("path", ws.path);
+                const index = ws.headers.findIndex(header => header.name.toLowerCase() === 'host');
+                if (index >= 0) {
+                    const host = ws.headers[index].value;
+                    params.set("host", host);
+                }
+                break;
+            case "http":
+                const http = this.stream.http;
+                params.set("path", http.path);
+                params.set("host", http.host);
+                break;
+            case "quic":
+                const quic = this.stream.quic;
+                params.set("quicSecurity", quic.security);
+                params.set("key", quic.key);
+                params.set("headerType", quic.type);
+                break;
+            case "grpc":
+                const grpc = this.stream.grpc;
+                params.set("serviceName", grpc.serviceName);
+                if(grpc.multiMode){
+                    params.set("mode", "multi");
+                }
+                break;
+        }
+
+        if (this.tls) {
+            params.set("security", "tls");
+            params.set("fp" , this.stream.tls.settings.fingerprint);
+            params.set("alpn", this.stream.tls.alpn);
+            if(this.stream.tls.settings.allowInsecure){
+                params.set("allowInsecure", "1");
+            }
+            if (!ObjectUtil.isEmpty(this.stream.tls.server)) {
+                address = this.stream.tls.server;
+			}
+            if (this.stream.tls.settings.serverName !== ''){
+                params.set("sni", this.stream.tls.settings.serverName);
+            }
+        }
+
+        if (this.reality) {
+            params.set("security", "reality");
+            params.set("pbk", this.stream.reality.settings.publicKey);
+            params.set("fp", this.stream.reality.settings.fingerprint);
+            if (!ObjectUtil.isArrEmpty(this.stream.reality.serverNames)) {
+                params.set("sni", this.stream.reality.serverNames.split(",")[0]);
+            }
+            if (this.stream.reality.shortIds.length > 0) {
+                params.set("sid", this.stream.reality.shortIds.split(",")[0]);
+            }
+            if (!ObjectUtil.isEmpty(this.stream.reality.settings.serverName)) {
+                address = this.stream.reality.settings.serverName;
+            }
+            if (!ObjectUtil.isEmpty(this.stream.reality.settings.spiderX)) {
+                params.set("spx", this.stream.reality.settings.spiderX);
+            }
+        }
+
+        const link = `vmess://${uuid}@${address}:${port}`;
+        const url = new URL(link);
+        for (const [key, value] of params) {
+            url.searchParams.set(key, value)
+        }
+        url.hash = encodeURIComponent(remark);
+        return url.toString();
     }
 
     genVLESSLink(address = '', remark='', clientIndex=0) {
@@ -1618,7 +1716,7 @@ Inbound.VLESSSettings = class extends Inbound.Settings {
 
 };
 Inbound.VLESSSettings.VLESS = class extends XrayCommonClass {
-    constructor(id=RandomUtil.randomUUID(), flow='', email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId=RandomUtil.randomText(16,16)) {
+    constructor(id=RandomUtil.randomUUID(), flow=TLS_FLOW_CONTROL.VISION, email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId=RandomUtil.randomText(16,16)) {
         super();
         this.id = id;
         this.flow = flow;

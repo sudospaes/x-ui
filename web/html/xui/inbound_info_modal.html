@@ -179,20 +179,37 @@
     </template>
     <div v-if="dbInbound.hasLink()">
         <a-divider>URL</a-divider>
-        <!-- <a-row v-for="(link,index) in infoModal.links">
-            <a-col :span="21"><a-tag color="cyan">[[ link.remark ]]</a-tag><br />[[ link.link ]]</a-col>
-            <a-col :span="3" style="text-align: right;">
-                <button class="ant-btn ant-btn-primary" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
-                    <a-icon type="snippets"></a-icon>{{ i18n "copy" }}
-                </button>
-            </a-col>
-        </a-row> -->
-        <div v-for="(link,index) in infoModal.links" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+
+        <div v-if="inbound.protocol == Protocols.VMESS && inbound.reality" 
+        v-for="(link,index) in infoModal.aheadLinks" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <a-tag color="orange">vmess reality uses aead sharing format by default</a-tag>
             <p>[[ link.link ]]</p>
-            <a-button type="primary" icon="snippets" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
+            <a-button type="primary" icon="copy" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
+                {{ i18n "copy" }} Ahead Link
+            </a-button>
+        </div>
+
+        <div v-else-if="inbound.protocol == Protocols.VMESS && !inbound.reality"
+        v-for="(link,index) in infoModal.links" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <p>[[ link.link ]]</p>
+            <a-button type="primary" icon="copy" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
+                {{ i18n "copy" }}
+            </a-button>
+            <div v-for="(link,index) in infoModal.aheadLinks" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+                <a-button type="primary" icon="copy" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
+                    {{ i18n "copy" }} Ahead Link
+                </a-button>
+            </div>
+        </div>
+
+        <div v-if = "(inbound.protocol == Protocols.VMESS) == false"
+        v-for="(link,index) in infoModal.links" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <p>[[ link.link ]]</p>
+            <a-button type="primary" icon="copy" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
                 {{ i18n "copy" }}
             </a-button>
         </div>
+        
     </div>
 </a-modal>
 <script>
@@ -207,6 +224,7 @@
         downStats: 0,
         clipboard: null,
         links: [],
+        aheadLinks: [],
         index: null,
         isExpired: false,
         subLink: '',
@@ -219,20 +237,34 @@
             this.clientSettings = this.settings.clients ? Object.values(this.settings.clients)[index] : null;
             this.isExpired = this.inbound.isExpiry(index);
             this.clientStats = this.settings.clients ? this.dbInbound.clientStats.find(row => row.email === this.clientSettings.email) : [];
-            remark = this.dbInbound.remark + "-" + this.clientSettings.email;
+            remark = this.dbInbound.remark + " - " + this.clientSettings.email;
             address = this.dbInbound.address;
             this.links = [];
+            this.aheadLinks = [];
             if (this.inbound.tls && !ObjectUtil.isArrEmpty(this.inbound.stream.tls.settings.domains)) {
                 this.inbound.stream.tls.settings.domains.forEach((domain) => {
                     this.links.push({
-                        remark: remark + "-" + domain.remark,
-                        link: this.inbound.genLink(domain.domain, remark + "-" + domain.remark, index)
+                        remark: remark + " - " + domain.remark,
+                        link: this.inbound.genLink(domain.domain, remark + " - " + domain.remark, index)
                     });
                 });
             } else {
                 this.links.push({
                     remark: remark,
                     link: this.inbound.genLink(address, remark, index)
+                });
+            }
+            if (this.inbound.protocol == Protocols.VMESS && this.inbound.tls && !ObjectUtil.isArrEmpty(this.inbound.stream.tls.settings.domains)) {
+                this.inbound.stream.tls.settings.domains.forEach((domain) => {
+                    this.aheadLinks.push({
+                        remark: remark + " - " + domain.remark,
+                        link: this.inbound.genVMESSAheadLink(domain.domain, remark + " - " + domain.remark, index)
+                    });
+                });
+            } else if (this.inbound.protocol == Protocols.VMESS) {
+                this.aheadLinks.push({
+                    remark: remark,
+                    link: this.inbound.genVMESSAheadLink(address, remark, index)
                 });
             }
             if (this.clientSettings) {
