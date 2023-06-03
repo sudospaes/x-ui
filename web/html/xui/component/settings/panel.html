@@ -1,0 +1,37 @@
+{{define "settings/panel"}}
+<a-tab-pane key="1" tab='{{ i18n "pages.settings.panelConfig"}}'>
+    <a-list item-layout="horizontal" :style="themeSwitcher.textStyle">
+        <setting-list-item type="text" title='{{ i18n "pages.settings.panelListeningIP"}}' desc='{{ i18n "pages.settings.panelListeningIPDesc"}}' v-model="allSetting.webListen"></setting-list-item>
+        <setting-list-item type="number" title='{{ i18n "pages.settings.panelPort"}}' desc='{{ i18n "pages.settings.panelPortDesc"}}' v-model.number="allSetting.webPort"></setting-list-item>
+        <setting-list-item type="text" title='{{ i18n "pages.settings.panelListeningDomain"}}' desc='{{ i18n "pages.settings.panelListeningDomainDesc"}}' v-model="allSetting.webDomain"></setting-list-item>
+        <setting-list-item type="text" title='{{ i18n "pages.settings.publicKeyPath"}}' desc='{{ i18n "pages.settings.publicKeyPathDesc"}}' v-model="allSetting.webCertFile"></setting-list-item>
+        <setting-list-item type="text" title='{{ i18n "pages.settings.privateKeyPath"}}' desc='{{ i18n "pages.settings.privateKeyPathDesc"}}' v-model="allSetting.webKeyFile"></setting-list-item>
+        <setting-list-item type="text" title='{{ i18n "pages.settings.panelUrlPath"}}' desc='{{ i18n "pages.settings.panelUrlPathDesc"}}' v-model="allSetting.webBasePath"></setting-list-item>
+        <setting-list-item type="number" title='{{ i18n "pages.settings.sessionMaxAge" }}' desc='{{ i18n "pages.settings.sessionMaxAgeDesc" }}'  v-model="allSetting.sessionMaxAge" :min="0"></setting-list-item>
+        <a-list-item>
+            <a-row style="padding: 20px">
+                <a-col :lg="24" :xl="12">
+                    <a-list-item-meta title='{{ i18n "pages.settings.language"}}'/>
+                </a-col>
+
+                <a-col :lg="24" :xl="12">
+                    <template>
+                        <a-select
+                                ref="selectLang"
+                                v-model="lang"
+                                @change="setLang(lang)"
+                                :dropdown-class-name="themeSwitcher.darkCardClass"
+                                style="width: 100%"
+                        >
+                            <a-select-option :value="l.value" :label="l.value" v-for="l in supportLangs">
+                                <span role="img" aria-label="l.name" v-text="l.icon"></span>
+                                &nbsp;&nbsp;<span v-text="l.name"></span>
+                            </a-select-option>
+                        </a-select>
+                    </template>
+                </a-col>
+            </a-row>
+        </a-list-item>
+    </a-list>
+</a-tab-pane>
+{{end}}

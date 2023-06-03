@@ -1,0 +1,9 @@
+{{define "settings/other"}}
+<a-tab-pane key="6" tab='{{ i18n "pages.settings.subSettings" }}'>
+    <a-list item-layout="horizontal" :style="themeSwitcher.textStyle">
+        <setting-list-item type="number" title='{{ i18n "pages.settings.expireTimeDiff" }}' desc='{{ i18n "pages.settings.expireTimeDiffDesc" }}'  v-model="allSetting.expireDiff" :min="0"></setting-list-item>
+        <setting-list-item type="number" title='{{ i18n "pages.settings.trafficDiff" }}' desc='{{ i18n "pages.settings.trafficDiffDesc" }}'  v-model="allSetting.trafficDiff" :min="0"></setting-list-item>
+        <setting-list-item type="text" title='{{ i18n "pages.settings.timeZone"}}' desc='{{ i18n "pages.settings.timeZoneDesc"}}' v-model="allSetting.timeLocation"></setting-list-item>
+    </a-list>
+</a-tab-pane>
+{{end}}
