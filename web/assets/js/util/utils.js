@@ -75,17 +75,9 @@ class PromiseUtil {
     }
 }
 
-const seq = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g',
-    'h', 'i', 'j', 'k', 'l', 'm', 'n',
-    'o', 'p', 'q', 'r', 's', 't',
-    'u', 'v', 'w', 'x', 'y', 'z',
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G',
-    'H', 'I', 'J', 'K', 'L', 'M', 'N',
-    'O', 'P', 'Q', 'R', 'S', 'T',
-    'U', 'V', 'W', 'X', 'Y', 'Z'
-];
+const seq = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+const shortIdSeq = 'abcdef0123456789'.split('');
 
 class RandomUtil {
     static randomIntRange(min, max) {
@@ -102,6 +94,18 @@ class RandomUtil {
             str += seq[this.randomInt(62)];
         }
         return str;
+    }
+
+    static randomShortIdSeq(count) {
+        let str = '';
+        for (let i = 0; i < count; ++i) {
+            str += shortIdSeq[this.randomInt(16)];
+        }
+        return str;
+    }
+    
+    static randomShortId() {
+        return this.randomShortIdSeq(8);
     }
 
     static randomLowerAndNum(count) {

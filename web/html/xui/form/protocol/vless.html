@@ -1,6 +1,6 @@
 {{define "form/vless"}}
 <a-form layout="inline">
-<a-collapse activeKey="0" v-for="(client, index) in inbound.settings.vlesses.slice(0,1)" v-if="!isEdit">    
+<a-collapse activeKey="0" v-for="(client, index) in inbound.settings.vlesses.slice(0,1)" v-if="!isEdit" style="margin-top: 10px; margin-bottom: 10px;">    
     <a-collapse-panel header="{{ i18n "pages.inbounds.client" }}">
         <table width="100%" class="ant-table-tbody">
             <tr>
@@ -28,11 +28,11 @@
                 </td>
             </tr>
             <tr v-if="inbound.canEnableTlsFlow()">
-                <td>flow</td>
+                <td>Flow</td>
                 <td>
                     <a-form-item>
                         <a-select v-model="inbound.settings.vlesses[index].flow" style="width: 200px" :dropdown-class-name="themeSwitcher.darkCardClass">
-                            <a-select-option value="" selected>{{ i18n "none" }}</a-select-option>
+                            <a-select-option value="" selected>none</a-select-option>
                             <a-select-option v-for="key in TLS_FLOW_CONTROL" :value="key">[[ key ]]</a-select-option>
                         </a-select>
                     </a-form-item>    
@@ -47,7 +47,7 @@
                 </td>
             </tr>
             <tr v-if="client.email && app.tgBotEnable">
-                <td>Telegram Username</td>
+                <td>Telegram Username <a-icon @click="client.tgId = RandomUtil.randomText(6)" type="sync"></a-icon></td>
                 <td>
                     <a-form-item>
                         <a-input v-model.trim="client.tgId" style="width: 200px;"></a-input>
@@ -103,18 +103,6 @@
                                        v-model="client._expiryTime" style="width: 200px;"></a-date-picker>
                     </a-form-item>
                 </td>
-            </tr>
-        </table>
-    </a-collapse-panel>
-</a-collapse>
-<a-collapse v-else>
-    <a-collapse-panel :header="'{{ i18n "pages.client.clientCount"}} : ' + inbound.settings.vlesses.length">
-        <table width="100%">
-            <tr class="client-table-header">
-                <th v-for="col in Object.keys(inbound.settings.vlesses[0]).slice(0, 3)">[[ col ]]</th>
-            </tr>
-            <tr v-for="(client, index) in inbound.settings.vlesses" :class="index % 2 == 1 ? 'client-table-odd-row' : ''">
-                <td v-for="col in Object.values(client).slice(0, 3)">[[ col ]]</td>
             </tr>
         </table>
     </a-collapse-panel>

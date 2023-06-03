@@ -1,6 +1,6 @@
 {{define "form/trojan"}}
 <a-form layout="inline">
-<a-collapse activeKey="0" v-for="(client, index) in inbound.settings.trojans.slice(0,1)" v-if="!isEdit">  
+<a-collapse activeKey="0" v-for="(client, index) in inbound.settings.trojans.slice(0,1)" v-if="!isEdit" style="margin-top: 10px; margin-bottom: 10px;">  
     <a-collapse-panel header='{{ i18n "pages.inbounds.client" }}'>
         <table width="100%" class="ant-table-tbody">
             <tr>
@@ -20,7 +20,7 @@
                 </td>
             </tr>
             <tr>
-                <td>password</td>
+                <td>Password <a-icon @click="client.password = RandomUtil.randomText(10)" type="sync"></a-icon></td>
                 <td>
                     <a-form-item>
                         <a-input v-model.trim="client.password" style="width: 200px;"></a-input>
@@ -36,7 +36,7 @@
                 </td>
             </tr>
             <tr v-if="client.email && app.tgBotEnable">
-                <td>Telegram Username</td>
+                <td>Telegram Username <a-icon @click="client.tgId = RandomUtil.randomText(6)" type="sync"></a-icon></td>
                 <td>
                     <a-form-item>
                         <a-input v-model.trim="client.tgId" style="width: 200px;"></a-input>
@@ -92,18 +92,6 @@
                                        v-model="client._expiryTime" style="width: 200px;"></a-date-picker>
                     </a-form-item>
                 </td>
-            </tr>
-        </table>
-    </a-collapse-panel>
-</a-collapse>
-<a-collapse v-else>
-    <a-collapse-panel :header="'{{ i18n "pages.client.clientCount"}} : ' + inbound.settings.trojans.length">
-        <table width="100%">
-            <tr class="client-table-header">
-                <th v-for="col in Object.keys(inbound.settings.trojans[0]).slice(0, 3)">[[ col ]]</th>
-            </tr>
-            <tr v-for="(client, index) in inbound.settings.trojans" :class="index % 2 == 1 ? 'client-table-odd-row' : ''">
-                <td v-for="col in Object.values(client).slice(0, 3)">[[ col ]]</td>
             </tr>
         </table>
     </a-collapse-panel>

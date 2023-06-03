@@ -50,6 +50,7 @@
 "clients" = "客户端"
 "usage" = "用法"
 "reload" = "重新加载"
+"all" = "全部"
 
 [menu]
 "dashboard" = "系统状态"
@@ -123,6 +124,8 @@
 "modifyInbound" = "修改入站"
 "deleteInbound" = "删除入站"
 "deleteInboundContent" = "确定要删除入站吗?"
+"deleteClient" = "删除客户端"
+"deleteClientContent" = "您确定要删除此客户吗？"
 "resetTrafficContent" = "确定要重置流量吗?"
 "copyLink" = "复制链接"
 "address" = "地址"

@@ -50,6 +50,7 @@
 "clients" = "клиенты"
 "usage" = "использование"
 "reload" = "Перезагрузить"
+"all" = "Все"
 
 [menu]
 "dashboard" = "статус системы"
@@ -123,6 +124,8 @@
 "modifyInbound" = "Изменить данные"
 "deleteInbound" = "Удалить пользователя"
 "deleteInboundContent" = "Подтвердите удаление пользователя?"
+"deleteClient" = "Удалить клиента"
+"deleteClientContent" = "Вы уверены, что хотите удалить этого клиента??"
 "resetTrafficContent" = "Подтвердите обнуление траффика?"
 "copyLink" = "Копировать ключ"
 "address" = "Адрес"

@@ -25,7 +25,7 @@
                     </a-tag>
                 </transition>
                 <transition name="list" appear>
-                    <a-card hoverable style="margin-bottom: 20px;" :class="themeSwitcher.darkCardClass">
+                    <a-card hoverable style="margin-bottom: 20px; border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                         <a-row>
                             <a-col :xs="24" :sm="24" :lg="12">
                                 {{ i18n "pages.inbounds.totalDownUp" }}:
@@ -41,7 +41,7 @@
                             </a-col>
                             <a-col :xs="24" :sm="24" :lg="12">
                                 {{ i18n "clients" }}:
-                                <a-tag color="green">[[ total.clients ]]</a-tag>
+                                <a-tag color="green">{{ i18n "all" }} : [[ total.clients ]]</a-tag>
                                 <a-popover title='{{ i18n "disabled" }}' :overlay-class-name="themeSwitcher.darkClass">
                                     <template slot="content">
                                         <p v-for="clientEmail in total.deactive">[[ clientEmail ]]</p>
@@ -65,11 +65,11 @@
                     </a-card>
                 </transition>
                 <transition name="list" appear>
-                    <a-card hoverable :class="themeSwitcher.darkCardClass">
+                    <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                         <div slot="title">
                             <a-row>
                                 <a-col :xs="24" :sm="24" :lg="12">
-                                    <a-button type="primary" icon="plus" @click="openAddInbound">{{ i18n "pages.inbounds.addInbound" }}</a-button>
+                                    <a-button type="primary" icon="user-add" @click="openAddInbound">{{ i18n "pages.inbounds.addInbound" }}</a-button>
                                     <a-dropdown :trigger="['click']">
                                         <a-button type="primary" icon="menu">{{ i18n "pages.inbounds.generalActions" }}</a-button>
                                         <a-menu slot="overlay" @click="a => generalActions(a)" :theme="themeSwitcher.currentTheme">
@@ -104,17 +104,14 @@
                                 </a-col>
                             </a-row>
                         </div>
-                        <a-switch v-model="enableFilter"
-                            checked-children='{{ i18n "search" }}' un-checked-children='{{ i18n "filter" }}'
-                            @change="toggleFilter" style="margin-right: 10px;">
-                        </a-switch>
-                        <a-input v-if="!enableFilter" v-model.lazy="searchKey" placeholder='{{ i18n "search" }}' autofocus style="max-width: 300px"></a-input>
+                        <a-input v-if="!enableFilter" v-model.lazy="searchKey" placeholder='{{ i18n "search" }}' autofocus style="max-width: 300px" allow-clear></a-input>
                         <a-radio-group v-if="enableFilter" v-model="filterBy" @change="filterInbounds" button-style="solid">
                             <a-radio-button value="">{{ i18n "none" }}</a-radio-button>
                             <a-radio-button value="deactive">{{ i18n "disabled" }}</a-radio-button>
                             <a-radio-button value="depleted">{{ i18n "depleted" }}</a-radio-button>
                             <a-radio-button value="expiring">{{ i18n "depletingSoon" }}</a-radio-button>
                         </a-radio-group>
+                        <a-checkbox v-model="enableFilter" @change="toggleFilter" style="margin-left: 10px;">{{ i18n "filter" }}</a-checkbox>
                         <a-table :columns="columns" :row-key="dbInbound => dbInbound.id"
                                  :data-source="searchedInbounds"
                                  :loading="spinning" :scroll="{ x: 1300 }"
@@ -123,7 +120,7 @@
                                  @change="() => getDBInbounds()">
                             <template slot="action" slot-scope="text, dbInbound">
                                 <a-dropdown :trigger="['click']">
-                                    <a-icon @click="e => e.preventDefault()" type="menu"></a-icon>
+                                    <a-icon @click="e => e.preventDefault()" style="font-size: 18px;" type="menu"></a-icon>
                                     <a-menu slot="overlay" @click="a => clickAction(a, dbInbound)" :theme="themeSwitcher.currentTheme">
                                         <a-menu-item key="edit">
                                             <a-icon type="edit"></a-icon>
@@ -172,11 +169,11 @@
                                 </a-dropdown>
                             </template>
                             <template slot="protocol" slot-scope="text, dbInbound">
-                                <a-tag style="margin:0;" color="blue">[[ dbInbound.protocol ]]</a-tag>
+                                <a-tag style="margin:0;" color="pink">[[ dbInbound.protocol ]]</a-tag>
                                 <template v-if="dbInbound.isVMess || dbInbound.isVLess || dbInbound.isTrojan || dbInbound.isSS">
                                     <a-tag style="margin:0;" color="green">[[ dbInbound.toInbound().stream.network ]]</a-tag>
-                                    <a-tag style="margin:0;" v-if="dbInbound.toInbound().stream.isTls" color="cyan">tls</a-tag>
-                                    <a-tag style="margin:0;" v-if="dbInbound.toInbound().stream.isReality" color="cyan">reality</a-tag>
+                                    <a-tag style="margin:0;" v-if="dbInbound.toInbound().stream.isTls" color="blue">tls</a-tag>
+                                    <a-tag style="margin:0;" v-if="dbInbound.toInbound().stream.isReality" color="blue">reality</a-tag>
                                 </template>
                             </template>
                             <template slot="clients" slot-scope="text, dbInbound">
@@ -186,19 +183,19 @@
                                         <template slot="content">
                                             <p v-for="clientEmail in clientCount[dbInbound.id].deactive">[[ clientEmail ]]</p>
                                         </template>
-                                        <a-tag style="margin:0; padding: 0 2px;" v-if="clientCount[dbInbound.id].deactive.length">[[ clientCount[dbInbound.id].deactive.length ]]</a-tag>
+                                        <a-tag style="margin:0;" v-if="clientCount[dbInbound.id].deactive.length">[[ clientCount[dbInbound.id].deactive.length ]]</a-tag>
                                     </a-popover>
                                     <a-popover title='{{ i18n "depleted" }}' :overlay-class-name="themeSwitcher.darkClass">
                                         <template slot="content">
                                             <p v-for="clientEmail in clientCount[dbInbound.id].depleted">[[ clientEmail ]]</p>
                                         </template>
-                                        <a-tag style="margin:0; padding: 0 2px;" color="red" v-if="clientCount[dbInbound.id].depleted.length">[[ clientCount[dbInbound.id].depleted.length ]]</a-tag>
+                                        <a-tag style="margin:0;" color="red" v-if="clientCount[dbInbound.id].depleted.length">[[ clientCount[dbInbound.id].depleted.length ]]</a-tag>
                                     </a-popover>
                                     <a-popover title='{{ i18n "depletingSoon" }}' :overlay-class-name="themeSwitcher.darkClass">
                                         <template slot="content">
                                             <p v-for="clientEmail in clientCount[dbInbound.id].expiring">[[ clientEmail ]]</p>
                                         </template>
-                                        <a-tag style="margin:0; padding: 0 2px;" color="orange" v-if="clientCount[dbInbound.id].expiring.length">[[ clientCount[dbInbound.id].expiring.length ]]</a-tag>
+                                        <a-tag style="margin:0;" color="orange" v-if="clientCount[dbInbound.id].expiring.length">[[ clientCount[dbInbound.id].expiring.length ]]</a-tag>
                                     </a-popover>
                                 </template>
                             </template>
@@ -281,12 +278,12 @@
         width: 40,
     }, {
         title: '{{ i18n "pages.inbounds.protocol" }}',
-        align: 'left',
+        align: 'center',
         width: 70,
         scopedSlots: { customRender: 'protocol' },
     }, {
         title: '{{ i18n "clients" }}',
-        align: 'left',
+        align: 'center',
         width: 50,
         scopedSlots: { customRender: 'clients' },
     }, {
@@ -302,21 +299,21 @@
     }];
 
     const innerColumns = [
-        { title: '{{ i18n "pages.inbounds.operate" }}', width: 70, scopedSlots: { customRender: 'actions' } },
-        { title: '{{ i18n "pages.inbounds.enable" }}', width: 30, scopedSlots: { customRender: 'enable' } },
-        { title: '{{ i18n "pages.inbounds.client" }}', width: 80, scopedSlots: { customRender: 'client' } },
-        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', width: 70, scopedSlots: { customRender: 'traffic' } },
-        { title: '{{ i18n "pages.inbounds.expireDate" }}', width: 70, scopedSlots: { customRender: 'expiryTime' } },
-        { title: 'UUID', width: 120, dataIndex: "id" },
+        { title: '{{ i18n "pages.inbounds.operate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'actions' } },
+        { title: '{{ i18n "pages.inbounds.enable" }}', align: 'center', width: 30, scopedSlots: { customRender: 'enable' } },
+        { title: '{{ i18n "pages.inbounds.client" }}', align: 'center', width: 80, scopedSlots: { customRender: 'client' } },
+        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 70, scopedSlots: { customRender: 'traffic' } },
+        { title: '{{ i18n "pages.inbounds.expireDate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'expiryTime' } },
+        { title: 'UUID', align: 'center', width: 120, dataIndex: "id" },
     ];
 
     const innerTrojanColumns = [
-        { title: '{{ i18n "pages.inbounds.operate" }}', width: 70, scopedSlots: { customRender: 'actions' } },
-        { title: '{{ i18n "pages.inbounds.enable" }}', width: 30, scopedSlots: { customRender: 'enable' } },
-        { title: '{{ i18n "pages.inbounds.client" }}', width: 80, scopedSlots: { customRender: 'client' } },
-        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', width: 70, scopedSlots: { customRender: 'traffic' } },
-        { title: '{{ i18n "pages.inbounds.expireDate" }}', width: 70, scopedSlots: { customRender: 'expiryTime' } },
-        { title: 'Password', width: 120, dataIndex: "password" },
+        { title: '{{ i18n "pages.inbounds.operate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'actions' } },
+        { title: '{{ i18n "pages.inbounds.enable" }}', align: 'center', width: 30, scopedSlots: { customRender: 'enable' } },
+        { title: '{{ i18n "pages.inbounds.client" }}', align: 'center', width: 80, scopedSlots: { customRender: 'client' } },
+        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 70, scopedSlots: { customRender: 'traffic' } },
+        { title: '{{ i18n "pages.inbounds.expireDate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'expiryTime' } },
+        { title: 'Password', align: 'center', width: 120, dataIndex: "password" },
     ];
 
     const app = new Vue({
@@ -736,8 +733,8 @@
                 dbInbound = this.dbInbounds.find(row => row.id === dbInboundId);
                 clientId = this.getClientId(dbInbound.protocol, client);
                 this.$confirm({
-                    title: '{{ i18n "pages.inbounds.deleteInbound"}}',
-                    content: '{{ i18n "pages.inbounds.deleteInboundContent"}}',
+                    title: '{{ i18n "pages.inbounds.deleteClient"}}',
+                    content: '{{ i18n "pages.inbounds.deleteClientContent"}}',
                     class: themeSwitcher.darkCardClass,
                     okText: '{{ i18n "delete"}}',
                     cancelText: '{{ i18n "cancel"}}',

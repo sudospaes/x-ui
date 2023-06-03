@@ -50,6 +50,7 @@
 "clients" = "کاربران"
 "usage" = "استفاده"
 "reload" = "بارگیری مجدد"
+"all" = "همه"
 
 [menu]
 "dashboard" = "وضعیت سیستم"
@@ -123,6 +124,8 @@
 "modifyInbound" = "ویرایش سرویس"
 "deleteInbound" = "حذف سرویس"
 "deleteInboundContent" = "آیا مطمئن به حذف سرویس هستید ؟"
+"deleteClient" = "حذف کاربر"
+"deleteClientContent" = "آیا مطمئن هستید که می خواهید این کاربر را حذف کنید؟"
 "resetTrafficContent" = "آیا مطمئن به ریست ترافیک هستید ؟"
 "copyLink" = "کپی لینک"
 "address" = "آدرس"

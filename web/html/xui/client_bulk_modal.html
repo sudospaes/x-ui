@@ -65,7 +65,7 @@
                 <td>
                     <a-form-item>
                         <a-select v-model="clientsBulkModal.flow" style="width: 250px" :dropdown-class-name="themeSwitcher.darkCardClass">
-                            <a-select-option value="" selected>{{ i18n "none" }}</a-select-option>
+                            <a-select-option value="" selected>none</a-select-option>
                             <a-select-option v-for="key in TLS_FLOW_CONTROL" :value="key">[[ key ]]</a-select-option>
                         </a-select>
                     </a-form-item>

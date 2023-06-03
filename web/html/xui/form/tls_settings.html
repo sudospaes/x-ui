@@ -14,11 +14,23 @@
 <a-form v-if="inbound.tls" layout="inline">
     <table width="100%" class="ant-table-tbody">
         <tr>
-            <td>SNI</td>
+            <td>MinVersion</td>
             <td>
-                <a-form-item placeholder="Server Name Indication" v-if="inbound.tls">
-                    <a-input v-model.trim="inbound.stream.tls.settings.serverName" style="width: 250px"></a-input>
-                </a-form-item>                
+                <a-form-item>
+                    <a-select v-model="inbound.stream.tls.minVersion" :dropdown-class-name="themeSwitcher.darkCardClass" style="width: 60px">
+                        <a-select-option v-for="key in TLS_VERSION_OPTION" :value="key">[[ key ]]</a-select-option>
+                    </a-select>
+                </a-form-item>
+            </td>
+        </tr>
+        <tr>
+            <td>MaxVersion</td>
+            <td>
+                <a-form-item>
+                    <a-select v-model="inbound.stream.tls.maxVersion" :dropdown-class-name="themeSwitcher.darkCardClass" style="width: 60px">
+                        <a-select-option v-for="key in TLS_VERSION_OPTION" :value="key">[[ key ]]</a-select-option>
+                    </a-select>
+                </a-form-item>
             </td>
         </tr>
         <tr>
@@ -33,32 +45,12 @@
             </td>
         </tr>
         <tr>
-            <td>MinVersion</td>
-            <td>
-                <a-form-item>
-                    <a-select v-model="inbound.stream.tls.minVersion" :dropdown-class-name="themeSwitcher.darkCardClass">
-                        <a-select-option v-for="key in TLS_VERSION_OPTION" :value="key">[[ key ]]</a-select-option>
-                    </a-select>
-                </a-form-item>
-            </td>
-        </tr>
-        <tr>
-            <td>MaxVersion</td>
-            <td>
-                <a-form-item>
-                    <a-select v-model="inbound.stream.tls.maxVersion" :dropdown-class-name="themeSwitcher.darkCardClass">
-                        <a-select-option v-for="key in TLS_VERSION_OPTION" :value="key">[[ key ]]</a-select-option>
-                    </a-select>
-                </a-form-item>
-            </td>
-        </tr>
-        <tr>
             <td>uTLS</td>
             <td>
                 <a-form-item>
                     <a-select v-model="inbound.stream.tls.settings.fingerprint"
                               style="width: 250px" :dropdown-class-name="themeSwitcher.darkCardClass">
-                        <a-select-option value=''>None</a-select-option>
+                        <a-select-option value=''>none</a-select-option>
                         <a-select-option v-for="key in UTLS_FINGERPRINT" :value="key">[[ key ]]</a-select-option>
                     </a-select>
                 </a-form-item>
@@ -94,6 +86,14 @@
             </td>
         </tr>
         <tr>
+            <td>SNI</td>
+            <td>
+                <a-form-item placeholder="Server Name Indication" v-if="inbound.tls">
+                    <a-input v-model.trim="inbound.stream.tls.settings.serverName" style="width: 250px"></a-input>
+                </a-form-item>                
+            </td>
+        </tr>
+        <tr>
             <td>Alpn</td>
             <td>
                 <a-form-item>
@@ -104,7 +104,7 @@
             </td>
         </tr>
         <tr>
-            <td>Allow insecure</td>
+            <td>Allow Insecure</td>
             <td>
                 <a-form-item>
                     <a-switch v-model="inbound.stream.tls.settings.allowInsecure"></a-switch>
@@ -174,14 +174,6 @@
 <a-form v-if="inbound.reality" layout="inline">
     <table width="100%" class="ant-table-tbody">
         <tr>
-            <td>{{ i18n "domainName" }}</td>
-            <td>
-                <a-form-item>
-                    <a-input v-model.trim="inbound.stream.reality.settings.serverName" style="width: 250px"></a-input>
-                </a-form-item>
-            </td>
-        </tr>
-        <tr>
             <td>Show</td>
             <td>
                 <a-form-item>
@@ -209,6 +201,14 @@
             </td>
         </tr>
         <tr>
+            <td>mainAddress</td>
+            <td>
+                <a-form-item>
+                    <a-input v-model.trim="inbound.stream.reality.settings.serverName" style="width: 250px"></a-input>
+                </a-form-item>
+            </td>
+        </tr>
+        <tr>
             <td>Dest</td>
             <td>
                 <a-form-item>
@@ -225,18 +225,18 @@
             </td>
         </tr>
         <tr>
-            <td>Short Ids</td>
-            <td>
-                <a-form-item>
-                    <a-input v-model.trim="inbound.stream.reality.shortIds" style="width:250px"></a-input>
-                </a-form-item>
-            </td>
-        </tr>
-        <tr>
             <td>SpiderX</td>
             <td>
                 <a-form-item>
                     <a-input v-model.trim="inbound.stream.reality.settings.spiderX" style="width:250px"></a-input>
+                </a-form-item>
+            </td>
+        </tr>
+        <tr>
+            <td>Short Ids  <a-icon @click="inbound.stream.reality.shortIds = RandomUtil.randomShortId()" type="sync"></a-icon></td>
+            <td>
+                <a-form-item>
+                    <a-input v-model.trim="inbound.stream.reality.shortIds" style="width:250px"></a-input>
                 </a-form-item>
             </td>
         </tr>
@@ -259,7 +259,7 @@
         <tr>
             <td></td>
             <td>
-                <a-button type="primary" icon="import" @click="getNewX25519Cert">Get new cert</a-button>
+                <a-button type="primary" icon="import" @click="getNewX25519Cert">Get New Keys</a-button>
             </td>
         </tr>
     </table>
