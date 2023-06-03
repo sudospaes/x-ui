@@ -1,0 +1,21 @@
+{{define "settings/user"}}
+<a-tab-pane key="2" tab='{{ i18n "pages.settings.userSettings"}}'>
+    <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
+        <a-form-item label='{{ i18n "pages.settings.oldUsername"}}'>
+            <a-input v-model="user.oldUsername" style="max-width: 300px"></a-input>
+        </a-form-item>
+        <a-form-item label='{{ i18n "pages.settings.currentPassword"}}'>
+            <password-input v-model="user.oldPassword" style="max-width: 300px"></password-input>
+        </a-form-item>
+        <a-form-item label='{{ i18n "pages.settings.newUsername"}}'>
+            <a-input v-model="user.newUsername" style="max-width: 300px"></a-input>
+        </a-form-item>
+        <a-form-item label='{{ i18n "pages.settings.newPassword"}}'>
+            <password-input v-model="user.newPassword" style="max-width: 300px"></password-input>
+        </a-form-item>
+        <a-form-item>
+            <a-button type="primary" @click="updateUser">{{ i18n "confirm" }}</a-button>
+        </a-form-item>
+    </a-form>
+</a-tab-pane>
+{{end}}

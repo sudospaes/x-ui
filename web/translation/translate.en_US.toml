@@ -269,6 +269,7 @@
 "subDomainDesc" = "Leave blank by default to monitor all domains and IPs"
 "subUpdates" = "Subscription update intervals"
 "subUpdatesDesc" = "Interval hours between updates in client application"
+"language" = "Language"
 
 
 [pages.settings.templates]
