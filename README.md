@@ -10,7 +10,7 @@
 Xray web panel supporting multi-protocol and multi-lang (English, Farsi, Chinese, Russian)
 <br>
 <br>
-It's a fork from [AlirezaAhmadi's x-ui](https://github.com/alireza0/x-ui).
+It's a fork from [alirezaahmadi's x-ui](https://github.com/alireza0/x-ui).
 
 | Features                             |      Enable?       |
 | ------------------------------------ | :----------------: |
