@@ -1,4 +1,4 @@
-name: Release X-ui
+name: Release x-ui
 on:
   push:
     tags:
@@ -10,9 +10,9 @@ jobs:
     name: build x-ui amd64 version
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.2
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v4.0.1
         with:
           go-version: 'stable'
       - name: build linux amd64 version
@@ -28,10 +28,9 @@ jobs:
           cd bin
           wget https://github.com/XTLS/Xray-core/releases/download/v1.8.1/Xray-linux-64.zip
           unzip Xray-linux-64.zip
-          rm -f Xray-linux-64.zip geoip.dat geosite.dat iran.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          rm -f Xray-linux-64.zip
           wget https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
+          wget https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
           mv xray xray-linux-amd64
           cd ..
           cd ..
@@ -49,15 +48,13 @@ jobs:
     name: build x-ui arm64 version
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.2
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v4.0.1
         with:
-          go-version: '1.20'
+          go-version: 'stable'
       - name: build linux arm64 version
         run: |
-          sudo apt-get update
-          sudo apt install gcc-aarch64-linux-gnu
           CGO_ENABLED=1 GOOS=linux GOARCH=arm64 CC=aarch64-linux-gnu-gcc go build -o xui-release -v main.go
           mkdir x-ui
           cp xui-release x-ui/xui-release
@@ -67,12 +64,11 @@ jobs:
           mv xui-release x-ui
           mkdir bin
           cd bin
-          wget https://github.com/xtls/xray-core/releases/download/v1.8.1/Xray-linux-arm64-v8a.zip
+          wget https://github.com/XTLS/Xray-core/releases/download/v1.8.1/Xray-linux-arm64-v8a.zip
           unzip Xray-linux-arm64-v8a.zip
-          rm -f Xray-linux-64.zip geoip.dat geosite.dat iran.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          rm -f Xray-linux-arm64-v8a.zip
           wget https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
+          wget https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
           mv xray xray-linux-arm64
           cd ..
           cd ..
@@ -86,19 +82,17 @@ jobs:
           file: x-ui-linux-arm64.tar.gz
           asset_name: x-ui-linux-arm64.tar.gz
           prerelease: true
-  linuxs390xbuild:
+    linuxs390xbuild:
     name: build x-ui s390x version
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.5.2
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v4.0.1
         with:
-          go-version: '1.20'
+          go-version: 'stable'
       - name: build linux s390x version
         run: |
-          sudo apt-get update
-          sudo apt install gcc-s390x-linux-gnu -y
           CGO_ENABLED=1 GOOS=linux GOARCH=s390x CC=s390x-linux-gnu-gcc go build -o xui-release -v main.go
           mkdir x-ui
           cp xui-release x-ui/xui-release
@@ -108,12 +102,11 @@ jobs:
           mv xui-release x-ui
           mkdir bin
           cd bin
-          wget https://github.com/xtls/xray-core/releases/download/v1.8.1/Xray-linux-s390x.zip
+          wget https://github.com/XTLS/Xray-core/releases/download/v1.8.1/Xray-linux-s390x.zip
           unzip Xray-linux-s390x.zip
-          rm -f Xray-linux-64.zip geoip.dat geosite.dat iran.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
-          wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+          rm -f Xray-linux-s390x.zip
           wget https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
+          wget https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
           mv xray xray-linux-s390x
           cd ..
           cd ..
