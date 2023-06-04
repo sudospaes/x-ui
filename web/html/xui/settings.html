@@ -97,12 +97,12 @@
                     google: ["geosite:google"],
                     netflix: ["geosite:netflix"],
                     cn: [
-                        "geosite:cn",
-                        "regexp:.*\\.cn$"
+                        "regexp:.*\\.cn$",
+                        "geosite:cn"
                     ],
                     ru: [
-                        "geosite:category-gov-ru",
-                        "regexp:.*\\.ru$"
+                        "regexp:.*\\.ru$",
+                        "geosite:category-gov-ru"
                     ],
                     ir: [
                         "regexp:.*\\.ir$",
@@ -482,9 +482,12 @@
                     }
                 },
             },
-            IRIpSettings: {
+            BlockIranSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.ir, this.blockedIPs);
+                    return(
+                        doAllItemsExist(this.settingsData.ips.ir, this.blockedIPs),
+                        doAllItemsExist(this.settingsData.domains.ir, this.blockedDomains)
+                    );
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -492,13 +495,6 @@
                     } else {
                         this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ir.includes(data));
                     }
-                }
-            },
-            IRDomainSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.ir, this.blockedDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.ir];
                     } else {
@@ -506,9 +502,12 @@
                     }
                 }
             },
-            ChinaIpSettings: {
+            BlockChinaSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.cn, this.blockedIPs);
+                    return(
+                        doAllItemsExist(this.settingsData.ips.cn, this.blockedIPs),
+                        doAllItemsExist(this.settingsData.domains.cn, this.blockedDomains)
+                    );
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -516,13 +515,6 @@
                     } else {
                         this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.cn.includes(data));
                     }
-                }
-            },
-            ChinaDomainSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.cn, this.blockedDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.cn];
                     } else {
@@ -530,9 +522,12 @@
                     }
                 }
             },
-            RussiaIpSettings: {
+            BlockRussiaSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.ru, this.blockedIPs);
+                    return (
+                        doAllItemsExist(this.settingsData.ips.ru, this.blockedIPs),
+                        doAllItemsExist(this.settingsData.domains.ru, this.blockedDomains)
+                    );
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -540,13 +535,6 @@
                     } else {
                         this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ru.includes(data));
                     }
-                }
-            },
-            RussiaDomainSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.ru, this.blockedDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.ru];
                     } else {
@@ -554,9 +542,12 @@
                     }
                 }
             },
-            IRIpDirectSettings: {
+            IranDirectSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.ir, this.directIPs);
+                    return (
+                        doAllItemsExist(this.settingsData.ips.ir, this.directIPs),
+                        doAllItemsExist(this.settingsData.domains.ir, this.directDomains)
+                    )
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -564,13 +555,6 @@
                     } else {
                         this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ir.includes(data));
                     }
-                }
-            },
-            IRDomainDirectSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.ir, this.directDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.ir];
                     } else {
@@ -578,9 +562,12 @@
                     }
                 }
             },
-            ChinaIpDirectSettings: {
+            ChinaDirectSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.cn, this.directIPs);
+                    return (
+                        doAllItemsExist(this.settingsData.ips.cn, this.directIPs),
+                        doAllItemsExist(this.settingsData.domains.cn, this.directDomains)
+                    )
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -588,13 +575,6 @@
                     } else {
                         this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.cn.includes(data));
                     }
-                }
-            },
-            ChinaDomainDirectSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.cn, this.directDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.cn];
                     } else {
@@ -602,9 +582,12 @@
                     }
                 }
             },
-            RussiaIpDirectSettings: {
+            RussiaDirectSettings: {
                 get: function () {
-                    return doAllItemsExist(this.settingsData.ips.ru, this.directIPs);
+                    return (
+                        doAllItemsExist(this.settingsData.ips.ru, this.directIPs),
+                        doAllItemsExist(this.settingsData.domains.ru, this.directDomains)
+                    )
                 },
                 set: function (newValue) {
                     if (newValue) {
@@ -612,13 +595,6 @@
                     } else {
                         this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ru.includes(data));
                     }
-                }
-            },
-            RussiaDomainDirectSettings: {
-                get: function () {
-                    return doAllItemsExist(this.settingsData.domains.ru, this.directDomains);
-                },
-                set: function (newValue) {
                     if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.ru];
                     } else {
