@@ -59,7 +59,7 @@
             </td>
         </tr>
         <tr v-if="client.email && app.tgBotEnable">
-            <td>Telegram Username <a-icon @click="client.subId = RandomUtil.randomText(6)" type="sync"></a-icon></td>
+            <td>Telegram Username <a-icon @click="client.tgId = RandomUtil.randomText(6)" type="sync"></a-icon></td>
             <td>
                 <a-form-item>
                     <a-input v-model.trim="client.tgId" style="width: 250px"></a-input>
