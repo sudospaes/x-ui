@@ -1,72 +1,90 @@
 #!/bin/bash
 
-red='\033[0;31m'
-green='\033[0;32m'
-yellow='\033[0;33m'
-plain='\033[0m'
+export LANG=en_US.UTF-8
 
-#Add some basic function here
-function LOGD() {
-    echo -e "${yellow}[DEG] $* ${plain}"
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+PLAIN='\033[0m'
+
+red() {
+    echo -e "\033[31m\033[01m$1\033[0m"
 }
 
-function LOGE() {
-    echo -e "${red}[ERR] $* ${plain}"
+green() {
+    echo -e "\033[32m\033[01m$1\033[0m"
 }
 
-function LOGI() {
-    echo -e "${green}[INF] $* ${plain}"
+yellow() {
+    echo -e "\033[33m\033[01m$1\033[0m"
 }
-# check root
-[[ $EUID -ne 0 ]] && LOGE "ERROR: You must be root to run this script! \n" && exit 1
 
-# Check OS and set release variable
-if [[ -f /etc/os-release ]]; then
-    source /etc/os-release
-    release=$ID
-elif [[ -f /usr/lib/os-release ]]; then
-    source /usr/lib/os-release
-    release=$ID
-else
-    echo "Failed to check the system OS, please contact the author!" >&2
-    exit 1
+REGEX=("debian" "ubuntu" "centos|red hat|kernel|oracle linux|alma|rocky" "'amazon linux'" "fedora", "alpine")
+RELEASE=("Debian" "Ubuntu" "CentOS" "CentOS" "Fedora" "Alpine")
+PACKAGE_UPDATE=("apt-get update" "apt-get update" "yum -y update" "yum -y update" "yum -y update" "apk update -f")
+PACKAGE_INSTALL=("apt -y install" "apt -y install" "yum -y install" "yum -y install" "yum -y install" "apk add -f")
+PACKAGE_REMOVE=("apt -y remove" "apt -y remove" "yum -y remove" "yum -y remove" "yum -y remove" "apk del -f")
+PACKAGE_UNINSTALL=("apt -y autoremove" "apt -y autoremove" "yum -y autoremove" "yum -y autoremove" "yum -y autoremove" "apk del -f")
+
+[[ $EUID -ne 0 ]] && red "Please run the script as the root user" && exit 1
+
+CMD=("$(grep -i pretty_name /etc/os-release 2>/dev/null | cut -d \" -f2)" "$(hostnamectl 2>/dev/null | grep -i system | cut -d : -f2)" "$(lsb_release -sd 2>/dev/null)" "$(grep -i description /etc/lsb-release 2>/dev/null | cut -d \" -f2)" "$(grep . /etc/redhat-release 2>/dev/null)" "$(grep . /etc/issue 2>/dev/null | cut -d \\ -f1 | sed '/^[ ]*$/d')")
+
+for i in "${CMD[@]}"; do
+    SYS="$i" && [[ -n $SYS ]] && break
+done
+
+for ((int = 0; int < ${#REGEX[@]}; int++)); do
+    [[ $(echo "$SYS" | tr '[:upper:]' '[:lower:]') =~ ${REGEX[int]} ]] && SYSTEM="${RELEASE[int]}" && [[ -n $SYSTEM ]] && break
+done
+
+# ------ For detect Fedora ------
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$NAME
+    VER=$VERSION_ID
+elif type lsb_release >/dev/null 2>&1; then
+    OS=$(lsb_release -si)
+    VER=$(lsb_release -sr)
+elif [ -f /etc/lsb-release ]; then
+    . /etc/lsb-release
+    OS=$DISTRIB_ID
+    VER=$DISTRIB_RELEASE
 fi
 
-echo "The OS release is: $release"
+if [[ $OS == "Fedora Linux" ]]; then
+    SYSTEM="Fedora"
+fi
+# -------------------------------
 
+[[ -z $SYSTEM ]] && red "Does not support the current OS, please use the a supported one" && exit 1
 
-os_version=""
 os_version=$(grep -i version_id /etc/os-release | cut -d \" -f2 | cut -d . -f1)
 
-if [[ "${release}" == "centos" ]]; then
-    if [[ ${os_version} -lt 8 ]]; then
-        echo -e "${red} Please use CentOS 8 or higher ${plain}\n" && exit 1
-    fi
-elif [[ "${release}" ==  "ubuntu" ]]; then
-    if [[ ${os_version} -lt 20 ]]; then
-        echo -e "${red}please use Ubuntu 20 or higher version! ${plain}\n" && exit 1
-    fi
+[[ $SYSTEM == "CentOS" && ${os_version} -lt 9 ]] && echo -e "Please use CentOS 9 or higher!" && exit 1
+[[ $SYSTEM == "Fedora" && ${VER} -lt 32 ]] && echo -e "Please use Fedora 32 or higher!" && exit 1
+[[ $SYSTEM == "Ubuntu" && ${os_version} -lt 20 ]] && echo -e "Please use Ubuntu 20.04 or higher!" && exit 1
+[[ $SYSTEM == "Debian" && ${os_version} -lt 11 ]] && echo -e "Please use Debian 11 or higher!" && exit 1
 
-elif [[ "${release}" == "fedora" ]]; then
-    if [[ ${os_version} -lt 36 ]]; then
-        echo -e "${red}please use Fedora 36 or higher version! ${plain}\n" && exit 1
-    fi
-
-elif [[ "${release}" == "debian" ]]; then
-    if [[ ${os_version} -lt 10 ]]; then
-        echo -e "${red} Please use Debian 10 or higher ${plain}\n" && exit 1
-    fi
-fi
+archAffix(){
+    case "$(uname -m)" in
+        x86_64 | x64 | amd64 ) echo 'amd64' ;;
+        armv8 | arm64 | aarch64 ) echo 'arm64' ;;
+        s390x ) echo 's390x' ;;
+        * ) red "Unsupported CPU architecture!" && exit 1 ;;
+    esac
+}
 
 confirm() {
     if [[ $# > 1 ]]; then
-        echo && read -p "$1 [Default$2]: " temp
+        echo && read -rp "$1 [default $2]: " temp
         if [[ x"${temp}" == x"" ]]; then
             temp=$2
         fi
     else
-        read -p "$1 [y/n]: " temp
+        read -rp "$1 [y/n]: " temp
     fi
+    
     if [[ x"${temp}" == x"y" || x"${temp}" == x"Y" ]]; then
         return 0
     else
@@ -75,7 +93,7 @@ confirm() {
 }
 
 confirm_restart() {
-    confirm "Restart the panel, Attention: Restarting the panel will also restart xray" "y"
+    confirm "Whether to restart the X-UI panel? It will also restart XRAY" "y"
     if [[ $? == 0 ]]; then
         restart
     else
@@ -84,12 +102,12 @@ confirm_restart() {
 }
 
 before_show_menu() {
-    echo && echo -n -e "${yellow}Press enter to return to the main menu: ${plain}" && read temp
+    echo && echo -n -e "${YELLOW}Press Enter key and return to the main menu: ${PLAIN}" && read temp
     show_menu
 }
 
 install() {
-    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/main/install.sh)
+    bash <(curl -Ls https://raw.githubusercontent.com/sudospaes/x-ui/main/install.sh)
     if [[ $? == 0 ]]; then
         if [[ $# == 0 ]]; then
             start
@@ -100,23 +118,54 @@ install() {
 }
 
 update() {
-    confirm "This function will forcefully reinstall the latest version, and the data will not be lost. Do you want to continue?" "n"
-    if [[ $? != 0 ]]; then
-        LOGE "Cancelled"
-        if [[ $# == 0 ]]; then
-            before_show_menu
+    read -rp "Updating the X-UI panel to the latest version. Data will not be lost. Whether to continues? [Y/N]: " yn
+    if [[ $yn =~ "Y"|"y" ]]; then
+        systemctl stop x-ui
+        if [[ -e /usr/local/x-ui/ ]]; then
+            cd
+            rm -rf /usr/local/x-ui/
         fi
-        return 0
-    fi
-    bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/main/install.sh)
-    if [[ $? == 0 ]]; then
-        LOGI "Update is complete, Panel has automatically restarted "
-        exit 0
+        
+        last_version=$(curl -Ls "https://api.github.com/repos/sudospaes/x-ui/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') || last_version=$(curl -sm8 https://raw.githubusercontent.com/sudospaes/x-ui/main/config/version)
+        if [[ -z "$last_version" ]]; then
+            red "Detecting the X-UI version failed, please make sure your server can connect to the GitHub API"
+            exit 1
+        fi
+        
+        yellow "The latest version of X-UI is: ${last_version}, starting update..."
+        wget -N --no-check-certificate -O /usr/local/x-ui-linux-$(archAffix).tar.gz https://github.com/sudospaes/x-ui/releases/download/${last_version}/x-ui-linux-$(archAffix).tar.gz
+        if [[ $? -ne 0 ]]; then
+            red "Download the X-UI failure, please make sure your server can connect and download the files from github"
+            exit 1
+        fi
+        
+        cd /usr/local/
+        tar zxvf x-ui-linux-$(archAffix).tar.gz
+        rm -f x-ui-linux-$(archAffix).tar.gz
+        
+        cd x-ui
+        chmod +x x-ui bin/xray-linux-$(archAffix)
+        cp -f x-ui.service /etc/systemd/system/
+        
+        wget -N --no-check-certificate https://raw.githubusercontent.com/sudospaes/x-ui/main/x-ui.sh -O /usr/bin/x-ui
+        chmod +x /usr/local/x-ui/x-ui.sh
+        chmod +x /usr/bin/x-ui
+        
+        systemctl daemon-reload
+        systemctl enable x-ui >/dev/null 2>&1
+        systemctl start x-ui
+        systemctl restart x-ui
+        
+        green "The update is completed, and the X-UI panel has been automatically restarted "
+        exit 1
+    else
+        red "The upgrade X-UI panel has been canceled!"
+        exit 1
     fi
 }
 
 uninstall() {
-    confirm "Are you sure you want to uninstall the panel? xray will also uninstalled!" "n"
+    confirm "Are you sure to uninstall the X-UI panel, it will uninstall XRAY also?" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
@@ -130,59 +179,58 @@ uninstall() {
     systemctl reset-failed
     rm /etc/x-ui/ -rf
     rm /usr/local/x-ui/ -rf
-
-    echo ""
-    echo -e "Uninstalled Successfully，If you want to remove this script，then after exiting the script run ${green}rm /usr/bin/x-ui -f${plain} to delete it."
-    echo ""
-
-    if [[ $# == 0 ]]; then
-        before_show_menu
-    fi
+    rm /usr/bin/x-ui -f
+    green "X-UI panel has been completely uninstalled. Bye Bye!"
 }
 
 reset_user() {
-    confirm "Reset your username and password to admin?" "n"
+    confirm "Are you sure to reset the username and password of the panel?" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
         fi
         return 0
     fi
-    /usr/local/x-ui/x-ui setting -username admin -password admin
-    echo -e "Username and password have been reset to ${green}admin${plain}，Please restart the panel now."
+    read -rp "Please set the login user name [default is a random user name]: " config_account
+    [[ -z $config_account ]] && config_account=$(date +%s%N | md5sum | cut -c 1-8)
+    read -rp "Please set the login password [default is a random password]: " config_password
+    [[ -z $config_password ]] && config_password=$(date +%s%N | md5sum | cut -c 1-8)
+    /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password} >/dev/null 2>&1
+    # /usr/local/x-ui/x-ui setting -remove_secret >/dev/null 2>&1
+    echo -e "Panel login user name has been reset to: ${GREEN} ${config_account} ${PLAIN}"
+    echo -e "Panel login password has been reset to: ${GREEN} ${config_password} ${PLAIN}"
+    # yellow "Panel login secret token disabled"
+    green "Please use the new login user name and password to access the X-UI panel. Also remember them!"
     confirm_restart
 }
 
 reset_config() {
-    confirm "Are you sure you want to reset all panel settings，Account data will not be lost，Username and password will not change" "n"
+    confirm "Are you sure you want to reset all settings? The account data will not be lost, the username and password will not change" "n"
     if [[ $? != 0 ]]; then
         if [[ $# == 0 ]]; then
             show_menu
         fi
         return 0
     fi
-    /usr/local/x-ui/x-ui setting -reset
-    echo -e "All panel settings have been reset to default，Please restart the panel now，and use the default ${green}54321${plain} Port to Access the web Panel"
+    /usr/local/x-ui/x-ui setting -reset >/dev/null 2>&1
+    echo -e "All panel settings have been reset to the default value, please restart the panel and use the web access port $ {Green} 54321 $ {plain} "
     confirm_restart
 }
 
-check_config() {
-    info=$(/usr/local/x-ui/x-ui setting -show true)
-    if [[ $? != 0 ]]; then
-        LOGE "get current settings error,please check logs"
-        show_menu
-    fi
-    LOGI "${info}"
-}
-
 set_port() {
-    echo && echo -n -e "Enter port number[1-65535]: " && read port
+    echo && echo -n -e "Enter the new port number[1-65535]: " && read port
     if [[ -z "${port}" ]]; then
-        LOGD "Cancelled"
+        red "Aborted!"
         before_show_menu
     else
-        /usr/local/x-ui/x-ui setting -port ${port}
-        echo -e "The port is set，Please restart the panel now，and use the new port ${green}${port}${plain} to access web panel"
+        until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$port") ]]; do
+            if [[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$port") ]]; then
+                yellow "The access port you set is currently in use, please reassign another port"
+                echo -n -e "Input terminal number[1-65535]: " && read port
+            fi
+        done
+        /usr/local/x-ui/x-ui setting -port ${port} >/dev/null 2>&1
+        echo -e "After the setting port is complete. Use the newly set port ${${GREEN}} ${port} ${PLAIN} to access the panel"
         confirm_restart
     fi
 }
@@ -191,18 +239,18 @@ start() {
     check_status
     if [[ $? == 0 ]]; then
         echo ""
-        LOGI "Panel is running，No need to start again，If you need to restart, please select restart"
+        green "The X-UI panel is running, no need to start again, if you need to restart the panel, please use the restart option"
     else
         systemctl start x-ui
         sleep 2
         check_status
         if [[ $? == 0 ]]; then
-            LOGI "x-ui Started Successfully"
+            green "X-UI panel is successfully started"
         else
-            LOGE "panel Failed to start，Probably because it takes longer than two seconds to start，Please check the log information later"
+            red "Starting the X-UI panel keep failing, please use X-UI Log to view debug information"
         fi
     fi
-
+    
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
@@ -212,18 +260,18 @@ stop() {
     check_status
     if [[ $? == 1 ]]; then
         echo ""
-        LOGI "Panel stopped，No need to stop again!"
+        green "The X-UI panel has already stopped, no need to stop again"
     else
         systemctl stop x-ui
         sleep 2
         check_status
         if [[ $? == 1 ]]; then
-            LOGI "x-ui and xray stopped successfully"
+            green "X-UI and XRAY stopped successfully"
         else
-            LOGE "Panel stop failed，Probably because the stop time exceeds two seconds，Please check the log information later"
+            red "Stopping the X-UI panel keeps failing, please use X-UI Log to view the debug information"
         fi
     fi
-
+    
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
@@ -234,9 +282,9 @@ restart() {
     sleep 2
     check_status
     if [[ $? == 0 ]]; then
-        LOGI "x-ui and xray Restarted successfully"
+        green "X-UI and XRAY restarted successfully"
     else
-        LOGE "Panel restart failed，Probably because it takes longer than two seconds to start，Please check the log information later"
+        red "Restarting the X-UI panel keeps failing, please use X-UI Log to view the debug information"
     fi
     if [[ $# == 0 ]]; then
         before_show_menu
@@ -250,27 +298,27 @@ status() {
     fi
 }
 
-enable() {
+enable_xui() {
     systemctl enable x-ui
     if [[ $? == 0 ]]; then
-        LOGI "x-ui Set to boot automatically on startup successfully"
+        green "X-UI will be automatically started after upon system startup"
     else
-        LOGE "x-ui Failed to set Autostart"
+        red "Setting automatic start up keeps failing, please use X-UI Log to view the debug information"
     fi
-
+    
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
 }
 
-disable() {
+disable_xui() {
     systemctl disable x-ui
     if [[ $? == 0 ]]; then
-        LOGI "x-ui Autostart Cancelled successfully"
+        green "Canceled the automatic start up of X-UI upon system startup"
     else
-        LOGE "x-ui Failed to cancel autostart"
+        red "Cancelling the automatic start up of X-UI keeps failing, please use X-UI Log to view the debug information"
     fi
-
+    
     if [[ $# == 0 ]]; then
         before_show_menu
     fi
@@ -285,7 +333,7 @@ show_log() {
 
 migrate_v2_ui() {
     /usr/local/x-ui/x-ui v2-ui
-
+    
     before_show_menu
 }
 
@@ -297,14 +345,14 @@ install_bbr() {
 }
 
 update_shell() {
-    wget -O /usr/bin/x-ui -N --no-check-certificate https://github.com/alireza0/x-ui/raw/main/x-ui.sh
+    wget -O /usr/bin/x-ui -N --no-check-certificate https://github.com/sudospaes/x-ui/raw/master/x-ui.sh
     if [[ $? != 0 ]]; then
         echo ""
-        LOGE "Failed to download script，Please check whether the machine can connect Github"
+        red "Downloading the script failed, please make sure your server can connect and download the files from github"
         before_show_menu
     else
         chmod +x /usr/bin/x-ui
-        LOGI "Upgrade script succeeded，Please rerun the script" && exit 0
+        green "Upgrading the script succeed, please re-run the script" && exit 1
     fi
 }
 
@@ -334,7 +382,7 @@ check_uninstall() {
     check_status
     if [[ $? != 2 ]]; then
         echo ""
-        LOGE "Panel installed，Please do not reinstall"
+        red "The X-UI panel has been installed, please do not repeat the installation"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -348,7 +396,7 @@ check_install() {
     check_status
     if [[ $? == 2 ]]; then
         echo ""
-        LOGE "Please install the panel first"
+        red "Please install the X-UI panel first"
         if [[ $# == 0 ]]; then
             before_show_menu
         fi
@@ -361,16 +409,16 @@ check_install() {
 show_status() {
     check_status
     case $? in
-    0)
-        echo -e "Panel state: ${green}Runing${plain}"
-        show_enable_status
+        0)
+            echo -e "Panel state: ${GREEN}Running${PLAIN}"
+            show_enable_status
         ;;
-    1)
-        echo -e "Panel state: ${yellow}Not Running${plain}"
-        show_enable_status
+        1)
+            echo -e "Panel state: ${YELLOW}Installed. But not running${PLAIN}"
+            show_enable_status
         ;;
-    2)
-        echo -e "Panel state: ${red}Not Installed${plain}"
+        2)
+            echo -e "Panel state: ${RED}Not Installed${PLAIN}"
         ;;
     esac
     show_xray_status
@@ -379,9 +427,9 @@ show_status() {
 show_enable_status() {
     check_enabled
     if [[ $? == 0 ]]; then
-        echo -e "Start automatically: ${green}Yes${plain}"
+        echo -e "Whether to start at your own boot: ${GREEN}Yes${PLAIN}"
     else
-        echo -e "Start automatically: ${red}No${plain}"
+        echo -e "Whether to start at your own boot: ${RED}no${PLAIN}"
     fi
 }
 
@@ -397,229 +445,170 @@ check_xray_status() {
 show_xray_status() {
     check_xray_status
     if [[ $? == 0 ]]; then
-        echo -e "xray state: ${green}Runing${plain}"
+        echo -e "XRay status: ${GREEN}Running${PLAIN}"
     else
-        echo -e "xray state: ${red}Not Running${plain}"
+        echo -e "XRay status: ${RED}Not running${PLAIN}"
     fi
 }
 
-ssl_cert_issue() {
-    echo -E ""
-    LOGD "******Instructions for use******"
-    LOGI "This Acme script requires the following data:"
-    LOGI "1.Cloudflare Registered e-mail"
-    LOGI "2.Cloudflare Global API Key"
-    LOGI "3.The domain name that has been resolved dns to the current server by Cloudflare"
-    LOGI "4.The script applies for a certificate. The default installation path is /root/cert "
-    confirm "Confirmed?[y/n]" "y"
-    if [ $? -eq 0 ]; then
-        cd ~
-        LOGI "Install Acme-Script"
-        curl https://get.acme.sh | sh
-        if [ $? -ne 0 ]; then
-            LOGE "Failed to install acme script"
-            exit 1
-        fi
-        CF_Domain=""
-        CF_GlobalKey=""
-        CF_AccountEmail=""
-        certPath=/root/cert
-        if [ ! -d "$certPath" ]; then
-            mkdir $certPath
-        else
-            rm -rf $certPath
-            mkdir $certPath
-        fi
-        LOGD "Please set a domain name:"
-        read -p "Input your domain here:" CF_Domain
-        LOGD "Your domain name is set to:${CF_Domain}"
-        LOGD "Please set the API key:"
-        read -p "Input your key here:" CF_GlobalKey
-        LOGD "Your API key is:${CF_GlobalKey}"
-        LOGD "Please set up registered email:"
-        read -p "Input your email here:" CF_AccountEmail
-        LOGD "Your registered email address is:${CF_AccountEmail}"
-        ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
-        if [ $? -ne 0 ]; then
-            LOGE "Default CA, Lets'Encrypt fail, script exiting..."
-            exit 1
-        fi
-        export CF_Key="${CF_GlobalKey}"
-        export CF_Email=${CF_AccountEmail}
-        ~/.acme.sh/acme.sh --issue --dns dns_cf -d ${CF_Domain} -d *.${CF_Domain} --log
-        if [ $? -ne 0 ]; then
-            LOGE "Certificate issuance failed, script exiting..."
-            exit 1
-        else
-            LOGI "Certificate issued Successfully, Installing..."
-        fi
-        ~/.acme.sh/acme.sh --installcert -d ${CF_Domain} -d *.${CF_Domain} --ca-file /root/cert/ca.cer \
-        --cert-file /root/cert/${CF_Domain}.cer --key-file /root/cert/${CF_Domain}.key \
-        --fullchain-file /root/cert/fullchain.cer
-        if [ $? -ne 0 ]; then
-            LOGE "Certificate installation failed, script exiting..."
-            exit 1
-        else
-            LOGI "Certificate installed Successfully,Turning on automatic updates..."
-        fi
-        ~/.acme.sh/acme.sh --upgrade --auto-upgrade
-        if [ $? -ne 0 ]; then
-            LOGE "Auto update setup Failed, script exiting..."
-            ls -lah cert
-            chmod 755 $certPath
-            exit 1
-        else
-            LOGI "The certificate is installed and auto-renewal is turned on, Specific information is as follows"
-            ls -lah cert
-            chmod 755 $certPath
-        fi
+open_ports(){
+    systemctl stop firewalld.service 2>/dev/null
+    systemctl disable firewalld.service 2>/dev/null
+    setenforce 0 2>/dev/null
+    ufw disable 2>/dev/null
+    iptables -P INPUT ACCEPT 2>/dev/null
+    iptables -P FORWARD ACCEPT 2>/dev/null
+    iptables -P OUTPUT ACCEPT 2>/dev/null
+    iptables -t nat -F 2>/dev/null
+    iptables -t mangle -F 2>/dev/null
+    iptables -F 2>/dev/null
+    iptables -X 2>/dev/null
+    netfilter-persistent save 2>/dev/null
+    green "WARNING: All network ports in the server have been opened!"
+    before_show_menu
+}
+
+update_geo(){
+    systemctl stop x-ui
+    cd /usr/local/x-ui/bin
+    rm -f geoip.dat geosite.dat
+    wget -N https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
+    wget -N https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+    systemctl start x-ui
+    green "Geosite and Geoip have been updated successfully！"
+}
+
+check_login_info(){
+    yellow "The server and the X-UI panel configurations are being checked, please wait ..."
+    
+    WgcfIPv4Status=$(curl -s4m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+    WgcfIPv6Status=$(curl -s6m8 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
+    if [[ $WgcfIPv4Status =~ "on"|"plus" ]] || [[ $WgcfIPv6Status =~ "on"|"plus" ]]; then
+        wg-quick down wgcf >/dev/null 2>&1
+        v6=$(curl -s6m8 ip.gs -k)
+        v4=$(curl -s4m8 ip.gs -k)
+        wg-quick up wgcf >/dev/null 2>&1
     else
-        show_menu
+        v6=$(curl -s6m8 ip.gs -k)
+        v4=$(curl -s4m8 ip.gs -k)
     fi
+    
+    config_port=$(/usr/local/x-ui/x-ui 2>&1 | grep tcp | awk '{print $5}' | sed "s/://g")
 }
 
 show_usage() {
-    echo "x-ui control menu usages: "
-    echo "------------------------------------------"
-    echo "x-ui              - Enter     Admin menu"
-    echo "x-ui start        - Start     x-ui"
-    echo "x-ui stop         - Stop      x-ui"
-    echo "x-ui restart      - Restart   x-ui"
-    echo "x-ui status       - Show      x-ui status"
-    echo "x-ui enable       - Enable    x-ui on system startup"
-    echo "x-ui disable      - Disable   x-ui on system startup"
-    echo "x-ui log          - Check     x-ui logs"
-    echo "x-ui v2-ui        - Migrate   v2-ui Account data to x-ui"
-    echo "x-ui update       - Update    x-ui"
-    echo "x-ui install      - Install   x-ui"
-    echo "x-ui uninstall    - Uninstall x-ui"
-    echo "------------------------------------------"
+    green "X-UI ${last_version} Installation is Completed, The Panel has been Started"
+    echo -e ""
+    echo -e "${GREEN} --------------------------------------------------------------------- ${PLAIN}"
+    echo -e "${GREEN}                  __   __           _    _ _____                       ${PLAIN}"
+    echo -e "${GREEN}                  \ \ / /          | |  | |_   _|                      ${PLAIN}"
+    echo -e "${GREEN}                   \ V /   ______  | |  | | | |                        ${PLAIN}"
+    echo -e "${GREEN}                    > <   |______| | |  | | | |                        ${PLAIN}"
+    echo -e "${GREEN}                   / . \           | |__| |_| |_                       ${PLAIN}"
+    echo -e "${GREEN}                  /_/ \_\           \____/|_____|                      ${PLAIN}"
+    echo -e "${GREEN} --------------------------------------------------------------------- ${PLAIN}"
+    echo -e ""
+    echo -e "------------------------------------------------------------------------------"
+    echo -e "X-UI MANAGEMENT SCRIPT USAGE: "
+    echo -e "------------------------------------------------------------------------------"
+    echo -e "x-ui              - Show the management menu"
+    echo -e "x-ui start        - Start X-UI panel"
+    echo -e "x-ui stop         - Stop X-UI panel"
+    echo -e "x-ui restart      - Restart X-UI panel"
+    echo -e "x-ui status       - View X-UI status"
+    echo -e "x-ui enable       - Set X-UI boot self-starting"
+    echo -e "x-ui disable      - Cancel X-UI boot self-starting"
+    echo -e "x-ui log          - View x-ui log"
+    echo -e "x-ui v2-ui        - Migrate V2-UI to X-UI"
+    echo -e "x-ui update       - Update X-UI panel"
+    echo -e "x-ui install      - Install X-UI panel"
+    echo -e "x-ui uninstall    - Uninstall X-UI panel"
+    echo -e "------------------------------------------------------------------------------"
+    echo -e ""
 }
 
 show_menu() {
     echo -e "
-  ${green}x-ui Panel Management Script${plain}
-  ${green}0.${plain} exit script
-————————————————
-  ${green}1.${plain} Install x-ui
-  ${green}2.${plain} Update x-ui
-  ${green}3.${plain} Uninstall x-ui
-————————————————
-  ${green}4.${plain} Reset username and password
-  ${green}5.${plain} Reset panel settings
-  ${green}6.${plain} Set panel port
-  ${green}7.${plain} View current panel settings
-————————————————
-  ${green}8.${plain} Start x-ui
-  ${green}9.${plain} stop x-ui
-  ${green}10.${plain} Reboot x-ui
-  ${green}11.${plain} Check x-ui state
-  ${green}12.${plain} Check x-ui logs
-————————————————
-  ${green}13.${plain} set x-ui Autostart
-  ${green}14.${plain} Cancel x-ui Autostart
-————————————————
-  ${green}15.${plain} 一A key installation bbr (latest kernel)
-  ${green}16.${plain} 一Apply for a SSL certificate with one click(acme script)
- "
+ -------------------------------------------------------------------------------- 
+  ${GREEN}                  __   __           _    _ _____                       ${PLAIN} 
+  ${GREEN}                  \ \ / /          | |  | |_   _|                      ${PLAIN}
+  ${GREEN}                   \ V /   ______  | |  | | | |                        ${PLAIN}
+  ${GREEN}                    > <   |______| | |  | | | |                        ${PLAIN}
+  ${GREEN}                   / . \           | |__| |_| |_                       ${PLAIN} 
+  ${GREEN}                  /_/ \_\           \____/|_____|                      ${PLAIN}
+--------------------------------------------------------------------------------
+  ${GREEN}X-UI PANEL MANAGEMENT SCRIPT ${PLAIN}
+--------------------------------------------------------------------------------
+  ${GREEN}0.${PLAIN} Exit Script
+--------------------------------------------------------------------------------
+  ${GREEN}1.${PLAIN} Reinstall X-UI
+  ${GREEN}2.${PLAIN} Update X-UI
+  ${GREEN}3.${PLAIN} Uninstall X-UI
+--------------------------------------------------------------------------------
+  ${GREEN}4.${PLAIN} Reset Username Password
+  ${GREEN}5.${PLAIN} Reset Panel Settings
+  ${GREEN}6.${PLAIN} Set the Panel Web Port
+--------------------------------------------------------------------------------
+  ${GREEN}7.${PLAIN} Start X-UI
+  ${GREEN}8.${PLAIN} Stop X-UI
+  ${GREEN}9.${PLAIN} Restart X-UI
+ ${GREEN}10.${PLAIN} Check X-UI Status
+ ${GREEN}11.${PLAIN} View X-UI Log
+---------------------------------------------------------------------------------
+ ${GREEN}12.${PLAIN} Set the X-UI auto-start at boot
+ ${GREEN}13.${PLAIN} Cancel the X-UI auto-start at boot
+---------------------------------------------------------------------------------
+ ${GREEN}14.${PLAIN} One-click installation BBR (the latest kernel)
+ ${GREEN}15.${PLAIN} Open all network ports in the server
+ --------------------------------------------------------------------------------   "
     show_status
-    echo && read -p "Please enter your selection [0-16]: " num
-
+    echo ""
+    if [[ -n $v4 && -z $v6 ]]; then
+        echo -e "Panel IPv4 login address is: ${GREEN}http://$v4:$config_port ${PLAIN}"
+    elif [[ -n $v6 && -z $v4 ]]; then
+        echo -e "Panel IPv6 login address is: ${GREEN}http://[$v6]:$config_port ${PLAIN}"
+    elif [[ -n $v4 && -n $v6 ]]; then
+        echo -e "Panel IPv4 login address is: ${GREEN}http://$v4:$config_port ${PLAIN}"
+        echo -e "Panel IPv6 login address is: ${GREEN}http://[$v6]:$config_port ${PLAIN}"
+    fi
+    echo && read -rp "Please enter the option [0-18]: " num
+    
     case "${num}" in
-    0)
-        exit 0
-        ;;
-    1)
-        check_uninstall && install
-        ;;
-    2)
-        check_install && update
-        ;;
-    3)
-        check_install && uninstall
-        ;;
-    4)
-        check_install && reset_user
-        ;;
-    5)
-        check_install && reset_config
-        ;;
-    6)
-        check_install && set_port
-        ;;
-    7)
-        check_install && check_config
-        ;;
-    8)
-        check_install && start
-        ;;
-    9)
-        check_install && stop
-        ;;
-    10)
-        check_install && restart
-        ;;
-    11)
-        check_install && status
-        ;;
-    12)
-        check_install && show_log
-        ;;
-    13)
-        check_install && enable
-        ;;
-    14)
-        check_install && disable
-        ;;
-    15)
-        install_bbr
-        ;;
-    16)
-        ssl_cert_issue
-        ;;
-    *)
-        LOGE "Please enter the correct number [0-16]"
-        ;;
+        0) exit 1 ;;
+        1) check_uninstall && install ;;
+        2) check_install && update ;;
+        3) check_install && uninstall ;;
+        4) check_install && reset_user ;;
+        5) check_install && reset_config ;;
+        6) check_install && set_port ;;
+        7) check_install && start ;;
+        8) check_install && stop ;;
+        9) check_install && restart ;;
+        10) check_install && status ;;
+        11) check_install && show_log ;;
+        12) check_install && enable_xui ;;
+        13) check_install && disable_xui ;;
+        14) install_bbr ;;
+        15) open_ports ;;
+        *) red "Please enter the correct option [0-15]" ;;
     esac
 }
 
 if [[ $# > 0 ]]; then
     case $1 in
-    "start")
-        check_install 0 && start 0
-        ;;
-    "stop")
-        check_install 0 && stop 0
-        ;;
-    "restart")
-        check_install 0 && restart 0
-        ;;
-    "status")
-        check_install 0 && status 0
-        ;;
-    "enable")
-        check_install 0 && enable 0
-        ;;
-    "disable")
-        check_install 0 && disable 0
-        ;;
-    "log")
-        check_install 0 && show_log 0
-        ;;
-    "v2-ui")
-        check_install 0 && migrate_v2_ui 0
-        ;;
-    "update")
-        check_install 0 && update 0
-        ;;
-    "install")
-        check_uninstall 0 && install 0
-        ;;
-    "uninstall")
-        check_install 0 && uninstall 0
-        ;;
-    *) show_usage ;;
+        "start") check_install 0 && start 0 ;;
+        "stop") check_install 0 && stop 0 ;;
+        "restart") check_install 0 && restart 0 ;;
+        "status") check_install 0 && status 0 ;;
+        "enable") check_install 0 && enable_xui 0 ;;
+        "disable") check_install 0 && disable_xui 0 ;;
+        "log") check_install 0 && show_log 0 ;;
+        "v2-ui") check_install 0 && migrate_v2_ui 0 ;;
+        "update") check_install 0 && update ;;
+        "install") check_uninstall 0 && install 0 ;;
+        "uninstall") check_install 0 && uninstall 0 ;;
+        *) show_usage ;;
     esac
 else
-    show_menu
+    check_login_info && show_menu
 fi
