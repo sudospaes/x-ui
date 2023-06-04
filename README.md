@@ -22,8 +22,6 @@ It's a fork from [AlirezaAhmadi's x-ui](https://github.com/alireza0/x-ui).
 | Subscription link + userInfo         | :heavy_check_mark: |
 | Calculate expire date on first usage | :heavy_check_mark: |
 
-**If you think this project is helpful to you, you may wish to give a** :star2:
-
 ## Supported operating systems 💻
 -   Debian 11 or higher
 -   Ubuntu 20.04 or higher
