@@ -1,14 +1,13 @@
-# x-ui
+# X-UI
 
-![](https://img.shields.io/github/v/release/alireza0/x-ui.svg)
-![](https://img.shields.io/docker/pulls/alireza7/x-ui.svg)
-[![Go Report Card](https://goreportcard.com/badge/github.com/alireza0/x-ui)](https://goreportcard.com/report/github.com/alireza0/x-ui)
-[![Downloads](https://img.shields.io/github/downloads/alireza0/x-ui/total.svg)](https://img.shields.io/github/downloads/alireza0/x-ui/total.svg)
-[![License](https://img.shields.io/badge/license-GPL%20V3-blue.svg?longCache=true)](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
 
 > **Disclaimer: This project is only for personal learning and communication, please do not use it for illegal purposes, please do not use it in a production environment**
 
-xray panel supporting multi-protocol, **Multi-lang (English,Farsi,Chinese,Russian)**
+xray panel supporting multi-protocol, Multi-lang (English, Farsi, Chinese, Russian)
+<br>
+<br>
+It's a fork from [AlirezaAhmadi's x-ui](https://github.com/alireza0/x-ui).
 
 | Features                             |      Enable?       |
 | ------------------------------------ | :----------------: |
@@ -25,38 +24,38 @@ xray panel supporting multi-protocol, **Multi-lang (English,Farsi,Chinese,Russia
 
 **If you think this project is helpful to you, you may wish to give a** :star2:
 
-**Buy Me a Coffee :**
+## Supported operating systems 💻
+-   Debian 11 or higher
+-   Ubuntu 20.04 or higher
+-   Fedora 32 or higher
+-   CentOS 9 Stream or higher
+-   AlmaLinux 9.1 or higher
+-   Rocky Linux 9 or higher
 
-- Tron USDT (TRC20): `TYTq73Gj6dJ67qe58JVPD9zpjW2cc9XgVz`
-- Tezos (XTZ): tz2Wnh2SsY1eezXrcLChu6idWpgdHzUFQcts
+## Single Command Install ✨
 
-# Install & Upgrade to latest version
+    bash <(curl -Ls https://raw.githubusercontent.com/sudospaes/x-ui/master/install.sh)
+    
+> If you have already installed this panel and want to update to the latest version, read here : [How to update](https://github.com/sudospaes/x-ui#how-to-update)
 
-```sh
-bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh)
+    
+## Manual install ⚙️
+1.  First update your system and run the following commands. (Must have root user permissions)
+
+   ```sh
+sudo su
+cd
 ```
 
-## Install custom version
+2.  Then download the latest compressed package from  [https://github.com/sudospaes/x-ui/releases/latest](https://github.com/sudospaes/x-ui/releases/latest), generally choose  `amd64`  architecture
 
-To install your desired version you can add the version to the end of install command. Example for ver `0.5.2`:
+2.  Run the following commands respectively:
 
-```sh
-bash <(curl -Ls https://raw.githubusercontent.com/alireza0/x-ui/master/install.sh) 0.5.2
-```
+> If your server cpu architecture is not  `amd64`, replace  `*`  in the command with another architecture
 
-## Manual install & upgrade
-
-1. First download the latest compressed package from https://github.com/alireza0/x-ui/releases, generally choose Architecture `amd64`
-2. Then upload the compressed package to the server's `/root/` directory and `root` rootlog in to the server with user
-
-> If your server cpu architecture is not `amd64` replace another architecture
-
-```sh
-ARCH=$(uname -m)
-[[ "${ARCH}" == "s390x" ]] && XUI_ARCH="s390x" || [[ "${ARCH}" == "aarch64" || "${ARCH}" == "arm64" ]] && XUI_ARCH="arm64" || XUI_ARCH="amd64"
-cd /root/
+  ```sh
 rm x-ui/ /usr/local/x-ui/ /usr/bin/x-ui -rf
-tar zxvf x-ui-linux-${XUI_ARCH}.tar.gz
+tar zxvf x-ui-linux-amd64.tar.gz
 chmod +x x-ui/x-ui x-ui/bin/xray-linux-* x-ui/x-ui.sh
 cp x-ui/x-ui.sh /usr/bin/x-ui
 cp -f x-ui/x-ui.service /etc/systemd/system/
@@ -64,34 +63,25 @@ mv x-ui/ /usr/local/
 systemctl daemon-reload
 systemctl enable x-ui
 systemctl restart x-ui
+x-ui
 ```
 
-## Install using docker
-
-1. install docker
-
-```shell
-curl -fsSL https://get.docker.com | sh
+## How to Update
+1.  Run this command.
+  ```sh
+x-ui
 ```
-
-2. install x-ui
-
-```shell
-mkdir x-ui && cd x-ui
-docker run -itd \
-    -p 54321:54321 -p 443:443 -p 80:80 \
-    -e XRAY_VMESS_AEAD_FORCED=false \
-    -v $PWD/db/:/etc/x-ui/ \
-    -v $PWD/cert/:/root/cert/ \
-    --name x-ui --restart=unless-stopped \
-    alireza7/x-ui:latest
-```
-
-> Build your own image
-
-```shell
-docker build -t x-ui .
-```
+2.  After that will show x-ui script menu and enter the number 2
+<br><br>
+![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201330.png)
+<br><br>
+3. Then a message will be shown to confirm the update. enter y
+<br><br>
+![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201739.png)
+<br><br>
+4. Wait until the successful update message is displayed
+<br><br>
+![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201811.png)
 
 # Features
 
@@ -110,13 +100,6 @@ docker build -t x-ui .
 - Support one-click SSL certificate application and automatic renewal
 - For more advanced configuration items, please refer to the panel
 - Support export/import database from panel
-
-## suggestion system
-
-- CentOS 8+
-- Ubuntu 20+
-- Debian 10+
-- Fedora 36+
 
 ## API routes
 
@@ -154,27 +137,7 @@ docker build -t x-ui .
 | XUI_BIN_FOLDER |                    `string`                    | `"bin"`       |
 | XUI_DB_FOLDER  |                    `string`                    | `"/etc/x-ui"` |
 
-# Screenshot from Inbouds page
-
-![inbounds](./media/inbounds.png)
-![Dark inbounds](./media/inbounds-dark.png)
-
-## SSL certificate application
-
-<details>
-  <summary>Click for details</summary>
-
-### Certbot
-
-```bash
-snap install core; snap refresh core
-snap install --classic certbot
-ln -s /snap/bin/certbot /usr/bin/certbot
-
-certbot certonly --standalone --register-unsafely-without-email --non-interactive --agree-tos -d <Your Domain Name>
-```
-
-</details>
+# Screenshot
 
 ## Tg robot use
 
@@ -217,70 +180,8 @@ Reference syntax:
 - Multi language bot
 </details>
 
-# Common problem
-
-<details>
-  <summary>Click for details</summary>
-## Migrating from v2-ui
-
-First install the latest version of x-ui on the server where v2-ui is installed, and then use the following command to migrate, which will migrate the native v2-ui `All inbound account data` to x-ui，`Panel settings and username passwords are not migrated`
-
-> Please `Close v2-ui` and `restart x-ui`, otherwise the inbound of v2-ui will cause a `port conflict with the inbound of x-ui`
-
-```sh
-x-ui v2-ui
-```
-
-# T-Shoots:
-
-**If you upgrade from an old version or other forks, for enable traffic for users you should do :**
-
-find this in config :
-
-```json
- "policy": {
-    "system": {
-```
-
-**and add this just after ` "policy": {` :**
-
-```json
-    "levels": {
-      "0": {
-        "statsUserUplink": true,
-        "statsUserDownlink": true
-      }
-    },
-```
-
-**the final output is like :**
-
-```json
-  "policy": {
-    "levels": {
-      "0": {
-        "statsUserUplink": true,
-        "statsUserDownlink": true
-      }
-    },
-
-    "system": {
-      "statsInboundDownlink": true,
-      "statsInboundUplink": true
-    }
-  },
-  "routing": {
-```
-
-restart panel
-
-</details>
-
 # a special thanks to
 
 - [HexaSoftwareTech](https://github.com/HexaSoftwareTech/)
 - [MHSanaei](https://github.com/MHSanaei)
-
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/alireza0/x-ui.svg)](https://starchart.cc/alireza0/x-ui)
+- [AlirezaAhmadi](https://github.com/alireza0/x-ui)
