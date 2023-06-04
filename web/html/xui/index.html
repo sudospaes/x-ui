@@ -87,6 +87,33 @@
                     </a-col>
                     <a-col :sm="24" :md="12">
                         <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
+                            {{ i18n "pages.index.toolBox" }}:
+                            <a-tag color="blue" style="cursor: pointer;" @click="openLogs(20)"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="eye"></a-icon> {{ i18n "pages.index.logs" }}</a-tag>
+                            <a-tag color="blue" style="cursor: pointer;" @click="openBackup"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="snippets"></a-icon> {{ i18n "pages.index.backup" }}</a-tag>
+                            <a-tag color="blue" style="cursor: pointer;" @click="openConfig"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="file-text"></a-icon> {{ i18n "pages.index.config" }}</a-tag>
+                        </a-card>
+                    </a-col>
+                    <a-col :sm="24" :md="12">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
+                            {{ i18n "pages.index.xrayStatus" }}:
+                            <a-tag :color="status.xray.color">[[ status.xray.state ]]</a-tag>
+                            <a-tooltip v-if="status.xray.state === State.Error">
+                                <template slot="title">
+                                    <p v-for="line in status.xray.errorMsg.split('\n')">[[ line ]]</p>
+                                </template>
+                                <a-icon type="question-circle" theme="filled"></a-icon>
+                            </a-tooltip>
+                            <a-tag color="orange" style="cursor: pointer;" @click="stopXrayService"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #e89a3c' : ''" type="poweroff"></a-icon> {{ i18n "pages.index.stopXray" }}</a-tag>
+                            <a-tag color="cyan" style="cursor: pointer;" @click="restartXrayService"><a-icon 
+                                :style="themeSwitcher.darkCardClass ? 'color: #33bcb7' : ''" type="sync"></a-icon> {{ i18n "pages.index.restartXray" }}</a-tag>
+                        </a-card>
+                    </a-col>
+                    <a-col :sm="24" :md="12">
+                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                             {{ i18n "pages.index.operationHours" }}:
                             <a-tag color="green">[[ formatSecond(status.uptime) ]]</a-tag>
                             <a-tooltip>
@@ -109,33 +136,6 @@
                                 </template>
                                 <a-icon type="question-circle" theme="filled"></a-icon>
                             </a-tooltip>
-                        </a-card>
-                    </a-col>
-                    <a-col :sm="24" :md="12">
-                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
-                            {{ i18n "pages.index.xrayStatus" }}:
-                            <a-tag :color="status.xray.color">[[ status.xray.state ]]</a-tag>
-                            <a-tooltip v-if="status.xray.state === State.Error">
-                                <template slot="title">
-                                    <p v-for="line in status.xray.errorMsg.split('\n')">[[ line ]]</p>
-                                </template>
-                                <a-icon type="question-circle" theme="filled"></a-icon>
-                            </a-tooltip>
-                            <a-tag color="orange" style="cursor: pointer;" @click="stopXrayService"><a-icon 
-                                :style="themeSwitcher.darkCardClass ? 'color: #e89a3c' : ''" type="poweroff"></a-icon> {{ i18n "pages.index.stopXray" }}</a-tag>
-                            <a-tag color="cyan" style="cursor: pointer;" @click="restartXrayService"><a-icon 
-                                :style="themeSwitcher.darkCardClass ? 'color: #33bcb7' : ''" type="sync"></a-icon> {{ i18n "pages.index.restartXray" }}</a-tag>
-                        </a-card>
-                    </a-col>
-                    <a-col :sm="24" :md="12">
-                        <a-card hoverable style="border-radius: 5px;" :class="themeSwitcher.darkCardClass">
-                            {{ i18n "pages.index.toolBox" }}:
-                            <a-tag color="blue" style="cursor: pointer;" @click="openLogs(20)"><a-icon 
-                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="eye"></a-icon> {{ i18n "pages.index.logs" }}</a-tag>
-                            <a-tag color="blue" style="cursor: pointer;" @click="openBackup"><a-icon 
-                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="snippets"></a-icon> {{ i18n "pages.index.backup" }}</a-tag>
-                            <a-tag color="blue" style="cursor: pointer;" @click="openConfig"><a-icon 
-                                :style="themeSwitcher.darkCardClass ? 'color: #3c9ae8' : ''" type="file-text"></a-icon> {{ i18n "pages.index.config" }}</a-tag>
                         </a-card>
                     </a-col>
                     <a-col :sm="24" :md="12">

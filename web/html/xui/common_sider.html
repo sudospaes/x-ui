@@ -11,6 +11,10 @@
     <a-icon type="setting"></a-icon>
     <span>{{ i18n "menu.settings"}}</span>
 </a-menu-item>
+<a-menu-item key="https://github.com/sudospaes/x-ui">
+    <a-icon type="github"></a-icon>
+    <span>{{ i18n "menu.githubpage"}}</span>
+</a-menu-item>
 <a-menu-item key="{{ .base_path }}logout">
     <a-icon type="logout"></a-icon>
     <span>{{ i18n "menu.logout"}}</span>
@@ -26,7 +30,7 @@
     </a-menu>
     <a-menu style="background-color: #191919;" theme="dark" mode="inline" selected-keys="">
         <a-menu-item mode="inline">
-            Theme :
+            {{ i18n "darkMode"}} : 
             <theme-switch />
         </a-menu-item>
     </a-menu>

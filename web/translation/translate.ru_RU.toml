@@ -51,11 +51,13 @@
 "usage" = "использование"
 "reload" = "Перезагрузить"
 "all" = "Все"
+"darkMode" = "Темный режим"
 
 [menu]
 "dashboard" = "статус системы"
 "inbounds" = "пользователи"
 "settings" = "настройки"
+"githubpage" = "Страница GitHub"
 "logout" = "выход"
 "link" = "другое"
 

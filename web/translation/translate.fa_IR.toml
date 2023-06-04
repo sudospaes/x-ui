@@ -51,11 +51,13 @@
 "usage" = "استفاده"
 "reload" = "بارگیری مجدد"
 "all" = "همه"
+"darkMode" = "حالت تاریک"
 
 [menu]
 "dashboard" = "وضعیت سیستم"
 "inbounds" = "سرویس ها"
 "settings" = "تنظیمات پنل"
+"githubpage" = "صفحه گیت هاب"
 "logout" = "خروج"
 "link" = "دیگر"
 

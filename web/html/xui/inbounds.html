@@ -28,20 +28,20 @@
                     <a-card hoverable style="margin-bottom: 20px; border-radius: 5px;" :class="themeSwitcher.darkCardClass">
                         <a-row>
                             <a-col :xs="24" :sm="24" :lg="12">
-                                {{ i18n "pages.inbounds.totalDownUp" }}:
+                                {{ i18n "pages.inbounds.totalDownUp" }}：
                                 <a-tag color="green">[[ sizeFormat(total.up) ]] / [[ sizeFormat(total.down) ]]</a-tag>
                             </a-col>
                             <a-col :xs="24" :sm="24" :lg="12">
-                                {{ i18n "pages.inbounds.totalUsage" }}:
+                                {{ i18n "pages.inbounds.totalUsage" }}：
                                 <a-tag color="green">[[ sizeFormat(total.up + total.down) ]]</a-tag>
                             </a-col>
                             <a-col :xs="24" :sm="24" :lg="12">
-                                {{ i18n "pages.inbounds.inboundCount" }}:
+                                {{ i18n "pages.inbounds.inboundCount" }}：
                                 <a-tag color="green">[[ dbInbounds.length ]]</a-tag>
                             </a-col>
                             <a-col :xs="24" :sm="24" :lg="12">
-                                {{ i18n "clients" }}:
-                                <a-tag color="green">{{ i18n "all" }} : [[ total.clients ]]</a-tag>
+                                {{ i18n "clients" }}：
+                                <a-tag color="green">[[ total.clients ]]</a-tag>
                                 <a-popover title='{{ i18n "disabled" }}' :overlay-class-name="themeSwitcher.darkClass">
                                     <template slot="content">
                                         <p v-for="clientEmail in total.deactive">[[ clientEmail ]]</p>
@@ -302,7 +302,7 @@
         { title: '{{ i18n "pages.inbounds.operate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'actions' } },
         { title: '{{ i18n "pages.inbounds.enable" }}', align: 'center', width: 30, scopedSlots: { customRender: 'enable' } },
         { title: '{{ i18n "pages.inbounds.client" }}', align: 'center', width: 80, scopedSlots: { customRender: 'client' } },
-        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 70, scopedSlots: { customRender: 'traffic' } },
+        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 90, scopedSlots: { customRender: 'traffic' } },
         { title: '{{ i18n "pages.inbounds.expireDate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'expiryTime' } },
         { title: 'UUID', align: 'center', width: 120, dataIndex: "id" },
     ];
@@ -311,7 +311,7 @@
         { title: '{{ i18n "pages.inbounds.operate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'actions' } },
         { title: '{{ i18n "pages.inbounds.enable" }}', align: 'center', width: 30, scopedSlots: { customRender: 'enable' } },
         { title: '{{ i18n "pages.inbounds.client" }}', align: 'center', width: 80, scopedSlots: { customRender: 'client' } },
-        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 70, scopedSlots: { customRender: 'traffic' } },
+        { title: '{{ i18n "pages.inbounds.traffic" }}↑|↓', align: 'center', width: 90, scopedSlots: { customRender: 'traffic' } },
         { title: '{{ i18n "pages.inbounds.expireDate" }}', align: 'center', width: 70, scopedSlots: { customRender: 'expiryTime' } },
         { title: 'Password', align: 'center', width: 120, dataIndex: "password" },
     ];
@@ -573,9 +573,10 @@
             },
 			openCloneInbound(dbInbound) {
                 this.$confirm({
-                    title: '{{ i18n "pages.inbounds.cloneInbound"}} \"' + dbInbound.remark + '\"',
+                    title: '{{ i18n "pages.inbounds.cloneInbound"}}',
                     content: '{{ i18n "pages.inbounds.cloneInboundContent"}}',
-                    okText: '{{ i18n "pages.inbounds.update"}}',
+                    class: themeSwitcher.darkCardClass,
+                    okText: '{{ i18n "confirm"}}',
                     cancelText: '{{ i18n "cancel" }}',
                     onOk: () => {
                         const baseInbound = dbInbound.toInbound();

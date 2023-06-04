@@ -51,11 +51,13 @@
 "usage" = "Usage"
 "reload" = "Reload"
 "all" = "All"
+"darkMode" = "Dark Mode"
 
 [menu]
 "dashboard" = "System Status"
 "inbounds" = "Inbounds"
 "settings" = "Panel Settings"
+"githubpage" = "GitHub Page"
 "logout" = "Logout"
 "link" = "Other"
 
