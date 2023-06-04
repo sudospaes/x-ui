@@ -1,10 +1,13 @@
 # X-UI
 
-
+![](https://img.shields.io/github/v/release/sudospaes/x-ui?style=flat-square)
+![Downloads](https://img.shields.io/github/downloads/sudospaes/x-ui/total?color=367cc0&style=flat-square)
+![GO Version](https://img.shields.io/github/go-mod/go-version/sudospaes/x-ui.svg?style=flat-square)
+![License](https://img.shields.io/github/license/sudospaes/x-ui?color=1C7947&style=flat-square)
 
 > **Disclaimer: This project is only for personal learning and communication, please do not use it for illegal purposes, please do not use it in a production environment**
 
-xray panel supporting multi-protocol, Multi-lang (English, Farsi, Chinese, Russian)
+Xray web panel supporting multi-protocol and multi-lang (English, Farsi, Chinese, Russian)
 <br>
 <br>
 It's a fork from [AlirezaAhmadi's x-ui](https://github.com/alireza0/x-ui).
@@ -81,24 +84,6 @@ x-ui
 <br><br>
 ![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201811.png)
 
-# Features
-
-- System Status Monitoring
-- Search within all inbounds and clients
-- Support Dark/Light theme UI
-- Support multi-user multi-protocol, web page visualization operation
-- Support multi-domain configuration and multi-certificate inbounds
-- Supported protocols: vmess, vless, trojan, shadowsocks, dokodemo-door, socks, http
-- Support for configuring more transport configurations
-- Traffic statistics, limit traffic, limit expiration time
-- Customizable xray configuration templates
-- Support subscription ( multi ) link
-- Detect users which are expiring or exceed traffic limit soon
-- Support https access panel (self-provided domain name + ssl certificate)
-- Support one-click SSL certificate application and automatic renewal
-- For more advanced configuration items, please refer to the panel
-- Support export/import database from panel
-
 ## API routes
 
 - `/login` with `PUSH` user data: `{username: '', password: ''}` for login
@@ -126,7 +111,7 @@ x-ui
 - `client.password` for TROJAN
 - `client.email` for Shadowsocks
 
-# Environment Variables
+## Environment Variables
 
 | Variable       |                      Type                      | Default       |
 | -------------- | :--------------------------------------------: | :------------ |
@@ -135,7 +120,7 @@ x-ui
 | XUI_BIN_FOLDER |                    `string`                    | `"bin"`       |
 | XUI_DB_FOLDER  |                    `string`                    | `"/etc/x-ui"` |
 
-# Screenshot
+## Screenshot
 
 ## Tg robot use
 
