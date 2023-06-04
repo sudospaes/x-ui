@@ -44,7 +44,6 @@ jobs:
           file: x-ui-linux-amd64.tar.gz
           asset_name: x-ui-linux-amd64.tar.gz
           prerelease: true
-          overwrite: true
   linuxarm64build:
     name: build x-ui arm64 version
     runs-on: ubuntu-20.04
@@ -83,4 +82,3 @@ jobs:
           file: x-ui-linux-arm64.tar.gz
           asset_name: x-ui-linux-arm64.tar.gz
           prerelease: true
-          overwrite: true
