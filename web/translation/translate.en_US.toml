@@ -232,6 +232,7 @@
 "currentPassword" = "Current Password"
 "newUsername" = "New Username"
 "newPassword" = "New Password"
+"telegramBotLanguage" = "Telegram Bot Language"
 "telegramBotEnable" = "Enable Telegram bot"
 "telegramBotEnableDesc" = "Your telegram bot will interact with the panel"
 "telegramToken" = "Telegram Token"
@@ -271,6 +272,8 @@
 "subUpdatesDesc" = "Interval hours between updates in client application"
 "language" = "Language"
 "otherSettings" = "Other Settings"
+"resetXrayConfigTemp" = "Reset Xray Configuration"
+"resetXrayConfigTempContent" = "Are you sure reset xray configuration ? Any changes you did made will be lost"
 
 
 [pages.settings.templates]
@@ -337,12 +340,15 @@
 "xrayConfigRoutings" = "Configuration of routing rules"
 "xrayConfigRoutingsDesc" = "Change the configuration template to define routing rules for this server."
 "manualLists" = "Manual Lists"
-"manualListsDesc" = "Please use the JSON array format."
+"manualListsDesc" = "Use the JSON array format."
 "manualBlockedIPs" = "List of Blocked IPs"
 "manualBlockedDomains" = "List of Blocked Domains"
 "manualDirectIPs" = "List of Direct IPs"
 "manualDirectDomains" = "List of Direct Domains"
 "manualIPv4Domains" = "List of IPv4 Domains"
+"IPv4Domains" = "IPv4 Domains"
+"BlockedIPsDomains" = "Blocked IPs and Domains"
+"DirectIPsDomains" = "Direct IPs and Domains"
 
 [pages.settings.toasts]
 "modifySettings" = "Modify Settings "

@@ -108,7 +108,14 @@
                         "regexp:.*\\.ir$",
                         "ext:iran.dat:ir",
                         "ext:iran.dat:other",
-                        "geosite:category-ir"
+                        "geosite:category-ir-gov",
+                        "geosite:category-ir-news",
+                        "geosite:category-ir-bank",
+                        "geosite:category-ir-tech",
+                        "geosite:category-ir-travel",
+                        "geosite:category-ir-shopping",
+                        "geosite:category-ir-insurance",
+                        "geosite:category-ir-scholar"
                     ]
                 },
                 familyProtectDNS: {
@@ -177,13 +184,22 @@
                 }
             },
             async resetXrayConfigToDefault() {
-                this.loading(true);
-                const msg = await HttpUtil.get("/xui/setting/getDefaultJsonConfig");
-                this.loading(false);
-                if (msg.success) {
-                    this.templateSettings = JSON.parse(JSON.stringify(msg.obj, null, 2));
-                    this.saveBtnDisable = true;
-                }
+                this.$confirm({
+                    title: '{{ i18n "pages.settings.resetXrayConfigTemp"}}',
+                    content: '{{ i18n "pages.settings.resetXrayConfigTempContent"}}',
+                    class: themeSwitcher.darkCardClass,
+                    okText: '{{ i18n "reset"}}',
+                    cancelText: '{{ i18n "cancel"}}',
+                    onOk: async () => {
+                        this.loading(true);
+                        const msg = await HttpUtil.get("/xui/setting/getDefaultJsonConfig");
+                        this.loading(false);
+                        if (msg.success) {
+                            this.templateSettings = JSON.parse(JSON.stringify(msg.obj, null, 2));
+                            this.updateAllSetting();
+                        }
+                    },
+                });
             },
             syncRulesWithOutbound(tag, setting) {
                 const newTemplateSettings = this.templateSettings;

@@ -232,6 +232,7 @@
 "currentPassword" = "Пароль сейчас"
 "newUsername" = "Новое имя пользователя"
 "newPassword" = "Новый пароль"
+"telegramBotLanguage" = "Язык бота Telegram"
 "telegramBotEnable" = "Включить Телеграм-бота"
 "telegramBotEnableDesc" = "Перезагрузите панель для применения настроек"
 "telegramToken" = "Токен Телеграм-бота"
@@ -271,6 +272,8 @@
 "subUpdatesDesc" = "Часовой интервал между обновлениями в клиентском приложении"
 "language" = "Язык"
 "otherSettings" = "Другие настройки"
+"resetXrayConfigTemp" = "Сбросить конфигурацию рентгена"
+"resetXrayConfigTempContent" = "Вы уверены, что сбросили конфигурацию xray? Все сделанные вами изменения будут потеряны"
 
 [pages.settings.templates]
 "title" = "Шаблоны"
@@ -342,6 +345,9 @@
 "manualDirectIPs" = "Список прямых IP-адресов"
 "manualDirectDomains" = "Список прямых доменов"
 "manualIPv4Domains" = "Список доменов IPv4"
+"IPv4Domains" = "IPv4-домены"
+"BlockedIPsDomains" = "Заблокированные IP-адреса и домены"
+"DirectIPsDomains" = "Прямые IP-адреса и домены"
 
 [pages.settings.toasts]
 "modifySettings" = "Изменение настроек"

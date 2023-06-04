@@ -231,6 +231,7 @@
 "currentPassword" = "رمز عبور فعلی"
 "newUsername" = "نام کاربری جدید"
 "newPassword" = "رمز عبور جدید"
+"telegramBotLanguage" = "زبان ربات تلگرام"
 "telegramBotEnable" = "فعالسازی ربات تلگرام"
 "telegramBotEnableDesc" = "از طریق بات تلگرام به امکانات ابن پنل متصل شوید"
 "telegramToken" = "توکن تلگرام"
@@ -270,6 +271,8 @@
 "subUpdatesDesc" = "ساعت های فاصله بین به روز رسانی در برنامه کاربر"
 "language" = "زبان"
 "otherSettings" = "سایر تنظیمات"
+"resetXrayConfigTemp" = "بازنشانی پیکربندی Xray"
+"resetXrayConfigTempContent" = "آیا مطمئن هستید که پیکربندی xray را بازنشانی کنید؟ هر تغییری که انجام دادید از بین خواهد رفت"
 
 [pages.settings.templates]
 "title" = "الگوها"
@@ -341,6 +344,9 @@
 "manualDirectIPs" = "لیست آی‌پی های مستقیم"
 "manualDirectDomains" = "لیست دامنه های مستقیم"
 "manualIPv4Domains" = "لیست دامنه‌های IPv4"
+"IPv4Domains" = "IPv4 دامنه‌های"
+"BlockedIPsDomains" = "آی‌پی ها و دامنه های مسدود شده"
+"DirectIPsDomains" = "آی‌پی ها و دامنه های مستقیم"
 
 [pages.settings.toasts]
 "modifySettings" = "ویرایش تنظیمات"

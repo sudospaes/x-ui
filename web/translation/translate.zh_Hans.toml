@@ -232,6 +232,7 @@
 "currentPassword" = "原密码"
 "newUsername" = "新用户名"
 "newPassword" = "新密码"
+"telegramBotLanguage" = "电报机器人语言"
 "telegramBotEnable" = "启用电报机器人"
 "telegramBotEnableDesc" = "重启面板生效"
 "telegramToken" = "电报机器人TOKEN"
@@ -271,6 +272,8 @@
 "subUpdatesDesc" = "客户端应用程序更新之间的间隔时间"
 "language" = "语言"
 "otherSettings" = "其他设置"
+"resetXrayConfigTemp" = "重置 Xray 配置"
+"resetXrayConfigTempContent" = "您确定重置 xray 配置吗？您所做的任何更改都将丢失"
 
 [pages.settings.templates]
 "title" = "模板"
@@ -342,6 +345,9 @@
 "manualDirectIPs" = "直接 IP 列表"
 "manualDirectDomains" = "直接域列表"
 "manualIPv4Domains" = "IPv4 域名列表"
+"IPv4Domains" = "IPv4 域"
+"BlockedIPsDomains" = "被阻止的 IP 和域"
+"DirectIPsDomains" = "直接 IP 和域"
 
 [pages.settings.toasts]
 "modifySettings" = "修改设置"
