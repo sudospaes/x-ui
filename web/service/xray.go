@@ -161,7 +161,7 @@ func (s *XrayService) RestartXray(isForce bool) error {
 
 	if p != nil && p.IsRunning() {
 		if !isForce && p.GetConfig().Equals(xrayConfig) {
-			logger.Debug("not need to restart xray")
+			logger.Debug("It does not need to restart xray")
 			return nil
 		}
 		p.Stop()
