@@ -492,12 +492,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.blockedIPs = [...this.blockedIPs, ...this.settingsData.ips.ir];
-                    } else {
-                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ir.includes(data));
-                    }
-                    if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.ir];
                     } else {
+                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ir.includes(data));
                         this.blockedDomains = this.blockedDomains.filter(data => !this.settingsData.domains.ir.includes(data));
                     }
                 }
@@ -512,12 +509,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.blockedIPs = [...this.blockedIPs, ...this.settingsData.ips.cn];
-                    } else {
-                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.cn.includes(data));
-                    }
-                    if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.cn];
                     } else {
+                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.cn.includes(data));
                         this.blockedDomains = this.blockedDomains.filter(data => !this.settingsData.domains.cn.includes(data));
                     }
                 }
@@ -532,12 +526,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.blockedIPs = [...this.blockedIPs, ...this.settingsData.ips.ru];
-                    } else {
-                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ru.includes(data));
-                    }
-                    if (newValue) {
                         this.blockedDomains = [...this.blockedDomains, ...this.settingsData.domains.ru];
                     } else {
+                        this.blockedIPs = this.blockedIPs.filter(data => !this.settingsData.ips.ru.includes(data));
                         this.blockedDomains = this.blockedDomains.filter(data => !this.settingsData.domains.ru.includes(data));
                     }
                 }
@@ -552,12 +543,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.directIPs = [...this.directIPs, ...this.settingsData.ips.ir];
-                    } else {
-                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ir.includes(data));
-                    }
-                    if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.ir];
                     } else {
+                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ir.includes(data));
                         this.directDomains = this.directDomains.filter(data => !this.settingsData.domains.ir.includes(data));
                     }
                 }
@@ -572,12 +560,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.directIPs = [...this.directIPs, ...this.settingsData.ips.cn];
-                    } else {
-                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.cn.includes(data));
-                    }
-                    if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.cn];
                     } else {
+                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.cn.includes(data));
                         this.directDomains = this.directDomains.filter(data => !this.settingsData.domains.cn.includes(data));
                     }
                 }
@@ -592,12 +577,9 @@
                 set: function (newValue) {
                     if (newValue) {
                         this.directIPs = [...this.directIPs, ...this.settingsData.ips.ru];
-                    } else {
-                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ru.includes(data));
-                    }
-                    if (newValue) {
                         this.directDomains = [...this.directDomains, ...this.settingsData.domains.ru];
                     } else {
+                        this.directIPs = this.directIPs.filter(data => !this.settingsData.ips.ru.includes(data));
                         this.directDomains = this.directDomains.filter(data => !this.settingsData.domains.ru.includes(data));
                     }
                 }
