@@ -74,15 +74,15 @@ x-ui
 ```
 2.  After that will show x-ui script menu and enter the number 2
 <br><br>
-![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201330.png)
+![](https://github.com/sudospaes/x-ui-old/raw/main/media/how_to_update/Screenshot%202023-04-06%20201330.png)
 <br><br>
 3. Then a message will be shown to confirm the update. enter y
 <br><br>
-![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201739.png)
+![](https://github.com/sudospaes/x-ui-old/raw/main/media/how_to_update/Screenshot%202023-04-06%20201739.png)
 <br><br>
 4. Wait until the successful update message is displayed
 <br><br>
-![](https://github.com/sudospaes/x-ui/raw/main/media/how_to_update/Screenshot%202023-04-06%20201811.png)
+![](https://github.com/sudospaes/x-ui-old/raw/main/media/how_to_update/Screenshot%202023-04-06%20201811.png)
 
 ## API routes
 
@@ -163,8 +163,8 @@ Reference syntax:
 - Multi language bot
 </details>
 
-# a special thanks to
+## Special thanks to
 
 - [HexaSoftwareTech](https://github.com/HexaSoftwareTech/)
 - [MHSanaei](https://github.com/MHSanaei)
-- [AlirezaAhmadi](https://github.com/alireza0/x-ui)
+- [AlirezaAhmadi](https://github.com/alireza0)
