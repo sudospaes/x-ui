@@ -250,9 +250,8 @@
                 :href="'data:application/text;charset=utf-8,' + encodeURIComponent(logModal.logs)" download="x-ui.log">{{ i18n "download" }} x-ui.log</a-button>
             </a-form-item>
        </a-form>
-        <a-input type="textarea" v-model="logModal.logs" disabled="true"
-                :autosize="{ minRows: 10, maxRows: 22}"
-                :style="themeSwitcher.darkCardClass ? 'cursor: default;': 'cursor: default; color: rgba(0,0,0,.65);'"></a-input>
+        <a-input type="textarea" v-model="logModal.logs"
+                :autosize="{ minRows: 10, maxRows: 22}"></a-input>
     </a-modal>
 
     <a-modal id="backup-modal" v-model="backupModal.visible" :title="backupModal.title"

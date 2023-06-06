@@ -3,13 +3,14 @@
          :closable="true" ok-text='{{ i18n "copy" }}' cancel-text='{{ i18n "close" }}'
          :class="themeSwitcher.darkCardClass"
          :ok-button-props="{attrs:{id:'txt-modal-ok-btn'}}">
-    <a-button v-if="!ObjectUtil.isEmpty(txtModal.fileName)" type="primary" style="margin-bottom: 10px;"
+    <a-button icon="download" v-if="!ObjectUtil.isEmpty(txtModal.fileName)" type="primary" style="margin-bottom: 10px;"
               :href="'data:application/text;charset=utf-8,' + encodeURIComponent(txtModal.content)"
               :download="txtModal.fileName">
         {{ i18n "download" }} [[ txtModal.fileName ]]
     </a-button>
-    <a-input type="textarea" v-model="txtModal.content"
-             :autosize="{ minRows: 10, maxRows: 20}"></a-input>
+    <a-input type="textarea" v-model="txtModal.content" disabled="true" 
+            :style="themeSwitcher.darkCardClass ? 'cursor: default;': 'cursor: default; color: rgba(0,0,0,.65);'"
+            :autosize="{ minRows: 10, maxRows: 20}"></a-input>
 </a-modal>
 
 <script>
