@@ -571,7 +571,7 @@ show_menu() {
         echo -e "Panel IPv4 login address is: ${GREEN}http://$v4:$config_port ${PLAIN}"
         echo -e "Panel IPv6 login address is: ${GREEN}http://[$v6]:$config_port ${PLAIN}"
     fi
-    echo && read -rp "Please enter the option [0-18]: " num
+    echo && read -rp "Please enter the option [0-15]: " num
     
     case "${num}" in
         0) exit 1 ;;
