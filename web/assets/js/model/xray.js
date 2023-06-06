@@ -1478,6 +1478,20 @@ class Inbound extends XrayCommonClass {
         return url.toString();
     }
 
+    genSocksLink(address = '', remark = '') {
+        let settings = this.settings;
+        const port = this.port;
+        let link = '';
+        if (!ObjectUtil.isEmpty(settings.accounts[0].user) && !ObjectUtil.isEmpty(settings.accounts[0].pass)) {
+            link = `socks5://${settings.accounts[0].user}:${settings.accounts[0].pass}${address}:${this.port}#${remark}`;
+        }
+        else {
+            link = `socks5://${address}:${port}#${remark}`;
+        }
+        const url = new URL(link);
+        return url.toString();
+    }
+
     genLink(address='', remark='', clientIndex=0) {
         switch (this.protocol) {
             case Protocols.VMESS:

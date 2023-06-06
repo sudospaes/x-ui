@@ -130,52 +130,6 @@
                 <td><a-tag color="green">[[ inbound.settings.network ]]</a-tag></td>
             </tr>
         </table>
-        <table v-if="inbound.protocol == Protocols.DOKODEMO" style="margin-bottom: 10px; width: 100%;">
-            <tr>
-                <th>{{ i18n "pages.inbounds.targetAddress" }}</th>
-                <th>{{ i18n "pages.inbounds.destinationPort" }}</th>
-                <th>{{ i18n "pages.inbounds.network" }}</th>
-                <th>FollowRedirect</th>
-            </tr><tr>
-                <td><a-tag color="green">[[ inbound.settings.address ]]</a-tag></td>
-                <td><a-tag color="blue">[[ inbound.settings.port ]]</a-tag></td>
-                <td><a-tag color="green">[[ inbound.settings.network ]]</a-tag></td>
-                <td><a-tag color="blue">[[ inbound.settings.followRedirect ]]</a-tag></td>
-            </tr>
-        </table>
-        </table>
-        <table v-if="inbound.protocol == Protocols.SOCKS" style="margin-bottom: 10px; width: 100%;">
-            <tr>
-                <th>{{ i18n "password" }} Auth</th>
-                <th>{{ i18n "pages.inbounds.enable" }} udp</th>
-                <th>IP</th>
-            </tr><tr>
-                <td><a-tag color="green">[[ inbound.settings.auth ]]</a-tag></td>
-                <td><a-tag color="blue">[[ inbound.settings.udp]]</a-tag></td>
-                <td><a-tag color="green">[[ inbound.settings.ip ]]</a-tag></td>
-            </tr><tr v-if="inbound.settings.auth == 'password'">
-                <td> </td>
-                <td>{{ i18n "username" }}</td>
-                <td>{{ i18n "password" }}</td>
-            </tr><tr v-for="account,index in inbound.settings.accounts">
-                <td><a-tag color="green">[[ index ]]</a-tag></td>
-                <td><a-tag color="blue">[[ account.user ]]</a-tag></td>
-                <td><a-tag color="green">[[ account.pass ]]</a-tag></td>
-            </tr>
-        </table>
-        </table>
-        <table v-if="inbound.protocol == Protocols.HTTP" style="margin-bottom: 10px; width: 100%;">
-            <tr>
-                <th> </th>
-                <th>{{ i18n "username" }}</th>
-                <th>{{ i18n "password" }}</th>
-            </tr><tr v-for="account,index in inbound.settings.accounts">
-                <td><a-tag color="green">[[ index ]]</a-tag></td>
-                <td><a-tag color="blue">[[ account.user ]]</a-tag></td>
-                <td><a-tag color="green">[[ account.pass ]]</a-tag></td>
-            </tr>
-        </table>
-        </table>
     </template>
     <div v-if="dbInbound.hasLink()">
         <a-divider>URL</a-divider>

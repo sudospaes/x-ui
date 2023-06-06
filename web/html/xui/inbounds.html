@@ -148,6 +148,12 @@
                                                 {{ i18n "pages.inbounds.delDepletedClients" }}
                                             </a-menu-item>
                                         </template>
+                                        <template v-else>
+                                            <a-menu-item key="showInfoOther">
+                                                <a-icon type="info-circle"></a-icon>
+                                                {{ i18n "info"}}
+                                            </a-menu-item>
+                                        </template>
                                         <a-menu-item key="resetTraffic">
                                             <a-icon type="retweet"></a-icon> {{ i18n "pages.inbounds.resetTraffic" }}
                                         </a-menu-item>
@@ -506,6 +512,9 @@
                     case "showInfo":
                         this.showInfo(dbInbound);
                         break;
+                    case "showInfoOther":
+                        this.showInfoOther(dbInbound);
+                        break;
                     case "edit":
                         this.openEditInbound(dbInbound.id);
                         break;
@@ -779,6 +788,10 @@
                 newDbInbound = this.checkFallback(dbInbound);
                 infoModal.show(newDbInbound, index);
             },
+            showInfoOther(dbInbound, index) {
+                newDbInbound = this.checkFallback(dbInbound);
+                otherInfoModal.show(newDbInbound, index);
+            },
             switchEnable(dbInboundId) {
                 dbInbound = this.dbInbounds.find(row => row.id === dbInboundId);
                 this.submit(`/xui/inbound/update/${dbInboundId}`, dbInbound);
@@ -963,6 +976,7 @@
 {{template "qrcodeModal"}}
 {{template "textModal"}}
 {{template "inboundInfoModal"}}
+{{template "inboundInfoModalOther"}}
 {{template "clientsModal"}}
 {{template "clientsBulkModal"}}
 </body>
