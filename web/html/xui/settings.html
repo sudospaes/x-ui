@@ -35,7 +35,7 @@
                         <a-button type="primary" :disabled="saveBtnDisable" @click="updateAllSetting" icon="save">{{ i18n "pages.settings.save" }}</a-button>
                         <a-button type="danger" :disabled="!saveBtnDisable" @click="restartPanel" icon="sync">{{ i18n "pages.settings.restartPanel" }}</a-button>
                     </a-space>
-                    <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 5px; margin-top: 2px;">
+                    <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 5px;">
                         {{template "settings/panel"}}
                         {{template "settings/user"}}
                         {{template "settings/xray"}}

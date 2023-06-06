@@ -171,6 +171,10 @@ body {
     background-color: #EBEEF5;
 }
 
+.ant-tabs:not(.ant-card-dark) {
+    background-color: white;
+}
+
 .ant-menu-dark,
 .ant-menu-dark .ant-menu-sub,
 .ant-layout-header,
@@ -247,6 +251,17 @@ body {
 .ant-card-dark .ant-calendar-input,
 .ant-card-dark .ant-select-dropdown-menu-item-selected,
 .ant-card-dark .ant-select-selection,
+.ant-card-dark .ant-calendar-month-panel,
+.ant-card-dark .ant-calendar-month-panel-cell,
+.ant-card-dark .ant-calendar-month-panel-month,
+.ant-card-dark .ant-calendar-month-panel-year-select-content,
+.ant-card-dark .ant-calendar-year-panel,
+.ant-card-dark .ant-calendar-year-panel-cell,
+.ant-card-dark .ant-calendar-year-panel-year,
+.ant-card-dark .ant-calendar-year-panel-decade-select-content,
+.ant-card-dark .ant-calendar-decade-panel,
+.ant-card-dark .ant-calendar-decade-panel-cell,
+.ant-card-dark .ant-calendar-decade-panel-decade,
 .ant-card-dark .ant-calendar-picker-clear {
     color: hsla(0,0%,100%,.65);
     background-color: #2e3b52;
@@ -430,4 +445,20 @@ body {
 
 .ant-card-dark .new-client {
     color:rgb(87, 170, 238);
+}
+
+.ant-btn-primary-disabled, .ant-btn-primary-disabled.active, .ant-btn-primary-disabled:active, .ant-btn-primary-disabled:focus, .ant-btn-primary-disabled:hover, .ant-btn-primary.disabled, .ant-btn-primary.disabled.active, .ant-btn-primary.disabled:active, .ant-btn-primary.disabled:focus, .ant-btn-primary.disabled:hover, .ant-btn-primary[disabled], .ant-btn-primary[disabled].active, .ant-btn-primary[disabled]:active, .ant-btn-primary[disabled]:focus, .ant-btn-primary[disabled]:hover {
+    color: rgb(189 185 185);
+    background-color: rgb(189 189 189 / 10%);
+    border: 1px solid rgb(199 199 199 / 50%);
+    text-shadow: none;
+    box-shadow: none;
+}
+
+.ant-btn-danger-disabled, .ant-btn-danger-disabled.active, .ant-btn-danger-disabled:active, .ant-btn-danger-disabled:focus, .ant-btn-danger-disabled:hover, .ant-btn-danger.disabled, .ant-btn-danger.disabled.active, .ant-btn-danger.disabled:active, .ant-btn-danger.disabled:focus, .ant-btn-danger.disabled:hover, .ant-btn-danger[disabled], .ant-btn-danger[disabled].active, .ant-btn-danger[disabled]:active, .ant-btn-danger[disabled]:focus, .ant-btn-danger[disabled]:hover {
+    color: rgb(189 185 185);
+    background-color: rgb(189 189 189 / 10%);
+    border: 1px solid rgb(199 199 199 / 50%);
+    text-shadow: none;
+    box-shadow: none;
 }

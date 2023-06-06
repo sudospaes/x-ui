@@ -1,17 +1,17 @@
 {{define "settings/xray"}}
 <a-tab-pane key="3" tab='{{ i18n "pages.settings.xrayConfiguration"}}'>
-    <a-tabs default-active-key="part-1" :class="themeSwitcher.darkCardClass" style="border-radius: 0; box-shadow: none;">
+    <a-tabs default-active-key="part-1" :class="themeSwitcher.darkCardClass">
         <a-tab-pane key="part-1" tab='{{ i18n "pages.settings.templates.xrayConfigTemplate"}}'>
-            <a-list item-layout="horizontal">
-                <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigTemplate"}}' desc='{{ i18n "pages.settings.templates.xrayConfigTemplateDesc"}}' v-model="allSetting.xrayTemplateConfig"></setting-list-item>
-            </a-list>
-            <a-list item-layout="horizontal">
-                <a-button icon="fire" type="primary" @click="resetXrayConfigToDefault">{{ i18n "pages.settings.resetXrayConfigTemp" }}</a-button>
-            </a-list>
+                <a-list item-layout="horizontal">
+                    <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigTemplate"}}' desc='{{ i18n "pages.settings.templates.xrayConfigTemplateDesc"}}' v-model="allSetting.xrayTemplateConfig"></setting-list-item>
+                </a-list>
+                <a-form style="padding-left: 20px; padding-bottom: 20px;">
+                    <a-button icon="fire" type="primary" @click="resetXrayConfigToDefault">{{ i18n "pages.settings.resetXrayConfigTemp" }}</a-button>
+                </a-form>
         </a-tab-pane>
       <a-tab-pane key="part-2" tab='{{ i18n "pages.settings.templates.basicTemplate"}}'>
 
-          <a-tabs default-active-key="sec-1" :class="themeSwitcher.darkCardClass" style="border-radius: 0; box-shadow: none;">
+          <a-tabs default-active-key="sec-1" :class="themeSwitcher.darkCardClass">
             <a-tab-pane key="sec-1" tab='{{ i18n "pages.settings.templates.generalConfigs"}}'>
                 <a-list item-layout="horizontal">
                     <a-row style="padding: 20px">
@@ -117,7 +117,7 @@
         </a-tab-pane>
 
         <a-tab-pane key="part-4" tab='{{ i18n "pages.settings.templates.manualLists"}}'>
-            <a-tabs default-active-key="manual-1" :class="themeSwitcher.darkCardClass" style="border-radius: 0; box-shadow: none;">
+            <a-tabs default-active-key="manual-1" :class="themeSwitcher.darkCardClass">
                 <a-tab-pane key="manual-1" tab='{{ i18n "pages.settings.templates.IPv4Domains"}}'>
                     <a-list item-layout="horizontal">
                         <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.manualIPv4Domains"}}' desc='{{ i18n "pages.settings.templates.manualListsDesc"}}' v-model="manualIPv4Domains"></setting-list-item>
