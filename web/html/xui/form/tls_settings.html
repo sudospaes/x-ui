@@ -111,6 +111,14 @@
                 </a-form-item>
             </td>
         </tr>
+        <tr>
+            <td>Reject Unknown SNI</td>
+            <td>
+                <a-form-item>
+                    <a-switch v-model="inbound.stream.tls.settings.rejectUnknownSni"></a-switch>
+                </a-form-item>
+            </td>
+        </tr>
         <template v-for="cert,index in inbound.stream.tls.certs">
             <tr>
                 <td colspan="2">
