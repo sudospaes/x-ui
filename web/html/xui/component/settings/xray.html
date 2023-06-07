@@ -93,27 +93,29 @@
             </a-tabs>
         </a-tab-pane>
         <a-tab-pane key="part-3" tab='{{ i18n "pages.settings.templates.advancedTemplate"}}'>
-            <a-list item-layout="horizontal">
-                <a-collapse>
-                    <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigInbounds"}}'>
-                        <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigInbounds"}}' desc='{{ i18n "pages.settings.templates.xrayConfigInboundsDesc"}}' v-model="inboundSettings"></setting-list-item>
-                    </a-collapse-panel>
-                </a-collapse>
-            </a-list>
-            <a-list item-layout="horizontal">
-                <a-collapse>
-                    <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigOutbounds"}}'>
-                        <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigOutbounds"}}' desc='{{ i18n "pages.settings.templates.xrayConfigOutboundsDesc"}}' v-model="outboundSettings"></setting-list-item>
-                    </a-collapse-panel>
-                </a-collapse>
-            </a-list>
-            <a-list item-layout="horizontal">
-                <a-collapse>
-                    <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigRoutings"}}'>
-                        <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigRoutings"}}' desc='{{ i18n "pages.settings.templates.xrayConfigRoutingsDesc"}}' v-model="routingRuleSettings"></setting-list-item>
-                    </a-collapse-panel>
-                </a-collapse>
-            </a-list>
+            <a-form style="padding: 20px;">
+                <a-list item-layout="horizontal">
+                    <a-collapse>
+                        <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigInbounds"}}'>
+                            <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigInbounds"}}' desc='{{ i18n "pages.settings.templates.xrayConfigInboundsDesc"}}' v-model="inboundSettings"></setting-list-item>
+                        </a-collapse-panel>
+                    </a-collapse>
+                </a-list>
+                <a-list item-layout="horizontal" style="margin-top: 20px;">
+                    <a-collapse>
+                        <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigOutbounds"}}'>
+                            <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigOutbounds"}}' desc='{{ i18n "pages.settings.templates.xrayConfigOutboundsDesc"}}' v-model="outboundSettings"></setting-list-item>
+                        </a-collapse-panel>
+                    </a-collapse>
+                </a-list>
+                <a-list item-layout="horizontal" style="margin-top: 20px;">
+                    <a-collapse>
+                        <a-collapse-panel header='{{ i18n "pages.settings.templates.xrayConfigRoutings"}}'>
+                            <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.xrayConfigRoutings"}}' desc='{{ i18n "pages.settings.templates.xrayConfigRoutingsDesc"}}' v-model="routingRuleSettings"></setting-list-item>
+                        </a-collapse-panel>
+                    </a-collapse>
+                </a-list>
+            </a-form>
         </a-tab-pane>
 
         <a-tab-pane key="part-4" tab='{{ i18n "pages.settings.templates.manualLists"}}'>
