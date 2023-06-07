@@ -468,14 +468,32 @@ open_ports(){
     before_show_menu
 }
 
-update_geo(){
+warp_fixchatgpt() {
+    curl -fsSL https://gist.githubusercontent.com/hamid-gh98/dc5dd9b0cc5b0412af927b1ccdb294c7/raw/install_warp_proxy.sh | bash
+    echo ""
+    before_show_menu
+}
+
+update_geo() {
+    local defaultBinFolder="/usr/local/x-ui/bin"
+    read -p "Please enter x-ui bin folder path. Leave blank for default. (Default: '${defaultBinFolder}')" binFolder
+    binFolder=${binFolder:-${defaultBinFolder}}
+    if [[ ! -d ${binFolder} ]]; then
+        LOGE "Folder ${binFolder} not exists!"
+        LOGI "making bin folder: ${binFolder}..."
+        mkdir -p ${binFolder}
+    fi
+
     systemctl stop x-ui
-    cd /usr/local/x-ui/bin
-    rm -f geoip.dat geosite.dat
+    cd ${binFolder}
+    rm -f geoip.dat geosite.dat iran.dat dlc.dat
     wget -N https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
     wget -N https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+    wget -N https://github.com/bootmortis/iran-hosted-domains/releases/latest/download/iran.dat
+    wget -N https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat
     systemctl start x-ui
-    green "Geosite and Geoip have been updated successfully！"
+    echo -e "${green}geosite.dat + geoip.dat + iran.dat + dlc.dat have been updated successfully in bin folder '${binfolder}'!${plain}"
+    before_show_menu
 }
 
 check_login_info(){
@@ -558,8 +576,10 @@ show_menu() {
  ${GREEN}12.${PLAIN} Set the X-UI auto-start at boot
  ${GREEN}13.${PLAIN} Cancel the X-UI auto-start at boot
 ---------------------------------------------------------------------------------
- ${GREEN}14.${PLAIN} One-click installation BBR (the latest kernel)
- ${GREEN}15.${PLAIN} Open all network ports in the server
+ ${GREEN}14.${PLAIN} Update Geo Files
+ ${GREEN}15.${PLAIN} Install WARP by hamid-gh98 Script
+ ${GREEN}16.${PLAIN} One-click installation BBR (the latest kernel)
+ ${GREEN}17.${PLAIN} Open all network ports in the server
  --------------------------------------------------------------------------------   "
     show_status
     echo ""
@@ -571,7 +591,7 @@ show_menu() {
         echo -e "Panel IPv4 login address is: ${GREEN}http://$v4:$config_port ${PLAIN}"
         echo -e "Panel IPv6 login address is: ${GREEN}http://[$v6]:$config_port ${PLAIN}"
     fi
-    echo && read -rp "Please enter the option [0-15]: " num
+    echo && read -rp "Please enter the option [0-17]: " num
     
     case "${num}" in
         0) exit 1 ;;
@@ -588,9 +608,11 @@ show_menu() {
         11) check_install && show_log ;;
         12) check_install && enable_xui ;;
         13) check_install && disable_xui ;;
-        14) install_bbr ;;
-        15) open_ports ;;
-        *) red "Please enter the correct option [0-15]" ;;
+        14) update_geo ;;
+        15) warp_fixchatgpt ;;
+        16) install_bbr ;;
+        17) open_ports ;;
+        *) red "Please enter the correct option [0-17]" ;;
     esac
 }
 
