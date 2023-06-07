@@ -90,6 +90,15 @@
                     <setting-list-item type="switch" title='{{ i18n "pages.settings.templates.xrayConfigNetflixIPv4"}}' desc='{{ i18n "pages.settings.templates.xrayConfigNetflixIPv4Desc"}}' v-model="NetflixIPv4Settings"></setting-list-item>
                 </a-list>
             </a-tab-pane>
+
+            <a-tab-pane key="sec-6" tab='{{ i18n "pages.settings.templates.warpConfigs"}}'>
+                <a-list item-layout="horizontal">
+                    <setting-list-item type="switch" title='{{ i18n "pages.settings.templates.xrayConfigGoogleWARP"}}' desc='{{ i18n "pages.settings.templates.xrayConfigGoogleWARPDesc"}}' v-model="GoogleWARPSettings"></setting-list-item>
+                    <setting-list-item type="switch" title='{{ i18n "pages.settings.templates.xrayConfigOpenAIWARP"}}' desc='{{ i18n "pages.settings.templates.xrayConfigOpenAIWARPDesc"}}' v-model="OpenAIWARPSettings"></setting-list-item>
+                    <setting-list-item type="switch" title='{{ i18n "pages.settings.templates.xrayConfigNetflixWARP"}}' desc='{{ i18n "pages.settings.templates.xrayConfigNetflixWARPDesc"}}' v-model="NetflixWARPSettings"></setting-list-item>
+                    <setting-list-item type="switch" title='{{ i18n "pages.settings.templates.xrayConfigSpotifyWARP"}}' desc='{{ i18n "pages.settings.templates.xrayConfigSpotifyWARPDesc"}}' v-model="SpotifyWARPSettings"></setting-list-item>
+                </a-list>
+            </a-tab-pane>
             </a-tabs>
         </a-tab-pane>
         <a-tab-pane key="part-3" tab='{{ i18n "pages.settings.templates.advancedTemplate"}}'>
@@ -135,6 +144,11 @@
                     <a-list item-layout="horizontal">
                         <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.manualDirectIPs"}}' desc='{{ i18n "pages.settings.templates.manualListsDesc"}}' v-model="manualDirectIPs"></setting-list-item>
                         <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.manualDirectDomains"}}' desc='{{ i18n "pages.settings.templates.manualListsDesc"}}' v-model="manualDirectDomains"></setting-list-item>                    
+                    </a-list>
+                </a-tab-pane>
+                <a-tab-pane key="manual-4" tab='{{ i18n "pages.settings.templates.WARPDomains"}}'>
+                    <a-list item-layout="horizontal">
+                        <setting-list-item type="textarea" title='{{ i18n "pages.settings.templates.manualWARPDomains"}}' desc='{{ i18n "pages.settings.templates.manualListsDesc"}}' v-model="manualWARPDomains"></setting-list-item>
                     </a-list>
                 </a-tab-pane>
             </a-tabs>

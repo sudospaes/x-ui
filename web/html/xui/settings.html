@@ -33,7 +33,7 @@
                 <a-space direction="vertical">
                     <a-space direction="horizontal">
                         <a-button type="primary" :disabled="saveBtnDisable" @click="updateAllSetting" icon="save">{{ i18n "pages.settings.save" }}</a-button>
-                        <a-button type="danger" ghost :disabled="!saveBtnDisable" @click="restartPanel" icon="sync">{{ i18n "pages.settings.restartPanel" }}</a-button>
+                        <a-button type="danger" :disabled="!saveBtnDisable" @click="restartPanel" icon="sync">{{ i18n "pages.settings.restartPanel" }}</a-button>
                     </a-space>
                     <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 5px;">
                         {{template "settings/panel"}}
@@ -73,6 +73,18 @@
                     domainStrategy: "UseIPv4"
                 }
             },
+            warpSettings: {
+                tag: "WARP",
+                protocol: "socks",
+                settings: {
+                    servers: [
+                        {
+                            address: "127.0.0.1",
+                            port: 40000
+                        }
+                    ]
+                }
+            },
             directSettings: {
                 tag: "direct",
                 protocol: "freedom"
@@ -96,6 +108,8 @@
                     ],
                     google: ["geosite:google"],
                     netflix: ["geosite:netflix"],
+                    openai: ["geosite:openai"],
+                    spotify: ["geosite:spotify"],
                     cn: [
                         "regexp:.*\\.cn$",
                         "geosite:cn"
@@ -387,6 +401,15 @@
                     this.syncRulesWithOutbound("IPv4", this.ipv4Settings);
                 }
             },
+            warpDomains: {
+                get: function () {
+                    return this.templateRuleGetter({ outboundTag: "WARP", property: "domain" });
+                },
+                set: function (newValue) {
+                    this.templateRuleSetter({ outboundTag: "WARP", property: "domain", data: newValue });
+                    this.syncRulesWithOutbound("WARP", this.warpSettings);
+                }
+            },
             manualBlockedIPs: {
                 get: function () { return JSON.stringify(this.blockedIPs, null, 2); },
                 set: debounce(function (value) { this.blockedIPs = JSON.parse(value); }, 1000)
@@ -406,6 +429,10 @@
             manualIPv4Domains: {
                 get: function () { return JSON.stringify(this.ipv4Domains, null, 2); },
                 set: debounce(function (value) { this.ipv4Domains = JSON.parse(value); }, 1000)
+            },
+            manualWARPDomains: {
+                get: function () { return JSON.stringify(this.warpDomains, null, 2); },
+                set: debounce(function (value) { this.warpDomains = JSON.parse(value); }, 1000)
             },
             torrentSettings: {
                 get: function () {
@@ -625,6 +652,54 @@
                         this.directDomains = this.directDomains.filter(data => !this.settingsData.domains.ru.includes(data));
                     }
                 }
+            },
+            GoogleWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.google, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.google];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.google.includes(data));
+                    }
+                },
+            },
+            OpenAIWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.openai, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.openai];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.openai.includes(data));
+                    }
+                },
+            },
+            NetflixWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.netflix, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.netflix];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.netflix.includes(data));
+                    }
+                },
+            },
+            SpotifyWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.spotify, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.spotify];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.spotify.includes(data));
+                    }
+                },
             },
         },
     });
