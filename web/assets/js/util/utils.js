@@ -77,8 +77,6 @@ class PromiseUtil {
 
 const seq = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
-const shortIdSeq = 'abcdef0123456789'.split('');
-
 class RandomUtil {
     static randomIntRange(min, max) {
         return parseInt(Math.random() * (max - min) + min, 10);
@@ -95,17 +93,12 @@ class RandomUtil {
         }
         return str;
     }
-
-    static randomShortIdSeq(count) {
-        let str = '';
-        for (let i = 0; i < count; ++i) {
-            str += shortIdSeq[this.randomInt(16)];
-        }
-        return str;
-    }
     
     static randomShortId() {
-        return this.randomShortIdSeq(8);
+        const randomBytes = new Uint8Array(8);
+        crypto.getRandomValues(randomBytes);
+        const shortId = Array.from(randomBytes).map(byte => byte.toString(16).padStart(2, '0')).join('');
+        return shortId;
     }
 
     static randomLowerAndNum(count) {
