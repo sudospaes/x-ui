@@ -465,6 +465,7 @@ class TlsStreamSettings extends XrayCommonClass {
                 minVersion = TLS_VERSION_OPTION.TLS12,
                 maxVersion = TLS_VERSION_OPTION.TLS13,
                 cipherSuites = '',
+                rejectUnknownSni = false,
                 certificates=[new TlsStreamSettings.Cert()],
                 alpn=[],
                 settings=new TlsStreamSettings.Settings()) {
@@ -473,6 +474,7 @@ class TlsStreamSettings extends XrayCommonClass {
         this.minVersion = minVersion;
         this.maxVersion = maxVersion;
         this.cipherSuites = cipherSuites;
+        this.rejectUnknownSni = rejectUnknownSni;
         this.certs = certificates;
         this.alpn = alpn;
         this.settings = settings;
@@ -494,13 +496,14 @@ class TlsStreamSettings extends XrayCommonClass {
         }
 
 		if (!ObjectUtil.isEmpty(json.settings)) {
-            settings = new TlsStreamSettings.Settings(json.settings.allowInsecure, json.settings.rejectUnknownSni, json.settings.fingerprint, json.settings.serverName, json.settings.domains);
+            settings = new TlsStreamSettings.Settings(json.settings.allowInsecure, json.settings.fingerprint, json.settings.serverName, json.settings.domains);
         }
         return new TlsStreamSettings(
             json.serverName,
             json.minVersion,
             json.maxVersion,
             json.cipherSuites,
+            json.rejectUnknownSni,
             certs,
             json.alpn,
             settings,
@@ -513,6 +516,7 @@ class TlsStreamSettings extends XrayCommonClass {
             minVersion: this.minVersion,
             maxVersion: this.maxVersion,
             cipherSuites: this.cipherSuites,
+            rejectUnknownSni: this.rejectUnknownSni,
             certificates: TlsStreamSettings.toJsonArray(this.certs),
             alpn: this.alpn,
             settings: this.settings,
@@ -562,10 +566,9 @@ TlsStreamSettings.Cert = class extends XrayCommonClass {
 };
 
 TlsStreamSettings.Settings = class extends XrayCommonClass {
-    constructor(allowInsecure = false, rejectUnknownSni = false, fingerprint = '', serverName = '', domains = []) {
+    constructor(allowInsecure = false, fingerprint = '', serverName = '', domains = []) {
         super();
         this.allowInsecure = allowInsecure;
-        this.rejectUnknownSni = rejectUnknownSni;
         this.fingerprint = fingerprint;
         this.serverName = serverName;
         this.domains = domains;
@@ -573,7 +576,6 @@ TlsStreamSettings.Settings = class extends XrayCommonClass {
     static fromJson(json = {}) {
         return new TlsStreamSettings.Settings(
             json.allowInsecure,
-            json.rejectUnknownSni,
             json.fingerprint,
             json.serverName,
             json.domains,
@@ -582,7 +584,6 @@ TlsStreamSettings.Settings = class extends XrayCommonClass {
     toJson() {
         return {
             allowInsecure: this.allowInsecure,
-            rejectUnknownSni: this.rejectUnknownSni,
             fingerprint: this.fingerprint,
             serverName: this.serverName,
             domains: this.domains,
