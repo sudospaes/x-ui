@@ -109,19 +109,6 @@ class RandomUtil {
         return str;
     }
 
-    static randomMTSecret() {
-        let str = '';
-        for (let i = 0; i < 32; ++i) {
-            let index = this.randomInt(16);
-            if (index <= 9) {
-                str += index;
-            } else {
-                str += seq[index - 10];
-            }
-        }
-        return str;
-    }
-
     static randomUUID() {
         return ('10000000-1000-4000-8000-100000000000').replace(/[018]/g, c => (
             c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
