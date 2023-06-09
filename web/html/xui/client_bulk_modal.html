@@ -72,7 +72,7 @@
                 </td>
             </tr>
             <tr v-if="app.subSettings.enable">
-                <td>Subscription</td>
+                <td>Subscription <a-icon @click="clientsBulkModal.subId = RandomUtil.randomText(16,16)" type="sync"></a-icon></td>
                 <td>
                     <a-form-item>
                         <a-input v-model.trim="clientsBulkModal.subId" style="width: 250px"></a-input>
@@ -80,7 +80,7 @@
                 </td>
             </tr>
             <tr v-if="app.tgBotEnable">
-                <td>Telegram Username</td>
+                <td>Telegram Username <a-icon @click="clientsBulkModal.tgId = RandomUtil.randomText(6)" type="sync"></a-icon></td>
                 <td>
                     <a-form-item>
                         <a-input v-model.trim="clientsBulkModal.tgId" style="width: 250px"></a-input>
