@@ -19,8 +19,8 @@ require (
 	golang.org/x/text v0.9.0
 	google.golang.org/grpc v1.55.0
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gorm.io/driver/sqlite v1.5.1
-	gorm.io/gorm v1.25.1
+	gorm.io/driver/sqlite v1.5.2
+	gorm.io/gorm v1.25.2-0.20230530020048-26663ab9bf55
 )
 
 require (
@@ -45,18 +45,16 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.5 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
-	github.com/kr/text v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
 	github.com/lufia/plan9stats v0.0.0-20230326075908-cb1d2100619a // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-sqlite3 v1.14.16 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pires/go-proxyproto v0.7.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
 	github.com/refraction-networking/utls v1.3.2 // indirect
 	github.com/riobard/go-bloom v0.0.0-20200614022211-cdc8013cb5b3 // indirect
-	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/seiflotfy/cuckoofilter v0.0.0-20220411075957-e3b120b3f5fb // indirect
 	github.com/shoenig/go-m1cpu v0.1.6 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
