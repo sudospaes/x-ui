@@ -95,7 +95,7 @@ class RandomUtil {
     }
     
     static randomShortId() {
-        const randomBytes = new Uint8Array(8);
+        const randomBytes = new Uint8Array(4);
         crypto.getRandomValues(randomBytes);
         const shortId = Array.from(randomBytes).map(byte => byte.toString(16).padStart(2, '0')).join('');
         return shortId;
