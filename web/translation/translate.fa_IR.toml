@@ -101,8 +101,8 @@
 "backup" = "پشتیبان گیری"
 "backupTitle" = "پشتیبان گیری دیتابیس"
 "backupDescription" = "به یاد داشته باشید که قبل از وارد کردن یک دیتابیس جدید، نسخه پشتیبان تهیه کنید"
-"exportDatabase" = "دانلود دیتابیس"
-"importDatabase" = "آپلود دیتابیس"
+"exportDatabase" = "دریافت دیتابیس"
+"importDatabase" = "وارد کردن دیتابیس"
 
 [pages.inbounds]
 "title" = "کاربران"
