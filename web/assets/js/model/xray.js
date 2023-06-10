@@ -1731,7 +1731,7 @@ Inbound.VLESSSettings = class extends Inbound.Settings {
 
 };
 Inbound.VLESSSettings.VLESS = class extends XrayCommonClass {
-    constructor(id=RandomUtil.randomUUID(), flow=TLS_FLOW_CONTROL.VISION, email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId=RandomUtil.randomText(16,16)) {
+    constructor(id=RandomUtil.randomUUID(), flow='', email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId=RandomUtil.randomText(16,16)) {
         super();
         this.id = id;
         this.flow = flow;
