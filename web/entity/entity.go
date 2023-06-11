@@ -53,6 +53,7 @@ type AllSetting struct {
 	SubCertFile        string `json:"subCertFile" form:"subCertFile"`
 	SubKeyFile         string `json:"subKeyFile" form:"subKeyFile"`
 	SubUpdates         int    `json:"subUpdates" form:"subUpdates"`
+	SubEncrypt         bool   `json:"subEncrypt" form:"subEncrypt"`
 }
 
 func (s *AllSetting) CheckValid() error {

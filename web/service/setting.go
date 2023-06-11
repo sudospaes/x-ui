@@ -49,6 +49,7 @@ var defaultValueMap = map[string]string{
 	"subCertFile":        "",
 	"subKeyFile":         "",
 	"subUpdates":         "12",
+	"subEncrypt":         "false",
 }
 
 type SettingService struct {
@@ -365,6 +366,10 @@ func (s *SettingService) GetSubKeyFile() (string, error) {
 
 func (s *SettingService) GetSubUpdates() (int, error) {
 	return s.getInt("subUpdates")
+}
+
+func (s *SettingService) GetSubEncrypt() (bool, error) {
+	return s.getBool("subEncrypt")
 }
 
 func (s *SettingService) UpdateAllSetting(allSetting *entity.AllSetting) error {

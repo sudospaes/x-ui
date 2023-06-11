@@ -272,6 +272,8 @@
 "subDomainDesc" = "留空默认监控所有域名和IP"
 "subUpdates" = "订阅更新间隔"
 "subUpdatesDesc" = "客户端应用程序更新之间的间隔时间"
+"subEncrypt" = "加密配置"
+"subEncryptDesc" = "在订阅中加密返回的配置"
 "language" = "语言"
 "otherSettings" = "其他设置"
 "resetXrayConfigTemp" = "重置 Xray 配置"
