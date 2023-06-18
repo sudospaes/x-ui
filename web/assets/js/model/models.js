@@ -179,6 +179,7 @@ class AllSetting {
         this.tgBotChatId = "";
         this.tgRunTime = "@daily";
         this.tgBotBackup = false;
+        this.tgBotLoginNotify = false;
         this.tgCpu = "";
         this.tgLang = "";
         this.xrayTemplateConfig = "";
