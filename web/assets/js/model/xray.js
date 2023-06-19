@@ -1055,7 +1055,6 @@ class Inbound extends XrayCommonClass {
             add: address,
             port: this.port,
             id: this.settings.vmesses[clientIndex].id,
-            aid: this.settings.vmesses[clientIndex].alterId,
             net: this.stream.network,
             type: 'none',
             tls: this.stream.security,
@@ -1641,10 +1640,9 @@ Inbound.VmessSettings = class extends Inbound.Settings {
     }
 };
 Inbound.VmessSettings.Vmess = class extends XrayCommonClass {
-    constructor(id=RandomUtil.randomUUID(), alterId=0, email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId='') {
+    constructor(id=RandomUtil.randomUUID(), email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId='') {
         super();
         this.id = id;
-        this.alterId = alterId;
         this.email = email;
         this.totalGB = totalGB;
         this.expiryTime = expiryTime;
@@ -1656,7 +1654,6 @@ Inbound.VmessSettings.Vmess = class extends XrayCommonClass {
     static fromJson(json={}) {
         return new Inbound.VmessSettings.Vmess(
             json.id,
-            json.alterId,
             json.email,
             json.totalGB,
             json.expiryTime,

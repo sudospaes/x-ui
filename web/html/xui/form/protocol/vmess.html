@@ -27,14 +27,6 @@
                     </a-form-item>
                 </td>
             </tr>
-            <tr>
-                <td>{{ i18n "additional" }}</td>
-                <td>
-                    <a-form-item>
-                        <a-input-number v-model.number="client.alterId"></a-input-number>
-                    </a-form-item>
-                </td>
-            </tr>
             <tr v-if="client.email && app.subSettings.enable">
                 <td>Subscription <a-icon @click="client.subId = RandomUtil.randomText(16,16)" type="sync"></a-icon></td>
                 <td>
