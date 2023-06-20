@@ -51,6 +51,7 @@
 "reload" = "Reload"
 "all" = "All"
 "darkMode" = "Dark Mode"
+"remained" = "Remained"
 
 [menu]
 "dashboard" = "System Status"
