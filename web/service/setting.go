@@ -50,7 +50,7 @@ var defaultValueMap = map[string]string{
 	"subCertFile":        "",
 	"subKeyFile":         "",
 	"subUpdates":         "12",
-	"subEncrypt":         "false",
+	"subEncrypt":         "true",
 }
 
 type SettingService struct {
