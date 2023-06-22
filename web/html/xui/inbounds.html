@@ -617,9 +617,17 @@
                     port: RandomUtil.randomIntRange(10000, 60000),
                     protocol: baseInbound.protocol,
                     settings: Inbound.Settings.getSettings(baseInbound.protocol).toString(),
-                    streamSettings: baseInbound.stream.toString(),
                     sniffing: baseInbound.canSniffing() ? baseInbound.sniffing.toString() : '{}',
                 };
+                if(baseInbound.stream.isReality) {
+                    const getNewX25519 = await HttpUtil.post('/server/getNewX25519Cert');
+                    baseInbound.stream.reality.shortIds = RandomUtil.randomShortId();
+                    baseInbound.stream.reality.privateKey = getNewX25519.obj.privateKey
+                    baseInbound.stream.reality.settings.publicKey = getNewX25519.obj.publicKey;
+                    data.streamSettings = baseInbound.stream.toString();
+                } else {
+                    data.streamSettings = baseInbound.stream.toString();
+                }
                 await this.submit('/xui/inbound/add', data, inModal);
             },
             async addInbound(inbound, dbInbound) {
