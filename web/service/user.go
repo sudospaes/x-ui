@@ -50,6 +50,34 @@ func (s *UserService) UpdateUser(id int, username string, password string) error
 		Error
 }
 
+func (s *UserService) UpdateUserTotp(id int, otp_secret string, otp_enable bool, otp_verify bool, otp_url string, otp_qrcode []byte) error { 
+	db := database.GetDB()
+	return db.Model(model.User{}).
+		Where("id = ?", id).
+    Updates(map[string]interface{}{"otp_secret": otp_secret ,"otp_enabled": otp_enable, "otp_verified": otp_verify, "otp_auth_url": otp_url, "otp_qrcode": otp_qrcode}).
+		Error
+}
+
+func (s *UserService) CheckUserTotpEnabled(username string) bool {
+	db := database.GetDB()
+
+	user := &model.User{}
+	err := db.Model(model.User{}).
+		Where("username = ? ", username).
+		First(user).Error
+  if err != nil{
+    return false
+  }
+  if user.Otp_enabled{
+    return true
+  }
+	return false
+
+}
+
+func (s *UserService) DisableTotp() error{
+  return s.UpdateUserTotp(1, "", false, false, "", nil)
+}
 func (s *UserService) UpdateFirstUser(username string, password string) error {
 	if username == "" {
 		return errors.New("username can not be empty")

@@ -52,6 +52,8 @@
 {{template "component/themeSwitcher" .}}
 {{template "component/password" .}}
 {{template "component/setting"}}
+{{template "otpModal"}}
+{{template "otpQrcodeModal"}}
 <script>
 
     const app = new Vue({
@@ -138,6 +140,7 @@
                 const msg = await HttpUtil.post("/xui/setting/all");
                 this.loading(false);
                 if (msg.success) {
+                    console.log(msg.obj)
                     this.oldAllSetting = new AllSetting(msg.obj);
                     this.allSetting = new AllSetting(msg.obj);
                     this.saveBtnDisable = true;
@@ -159,6 +162,48 @@
                     this.user = {};
                     window.location.replace(basePath + "logout");
                 }
+            },
+            async generateOTP(){
+                const msg = await HttpUtil.post("/totp/generate", this.user);
+                if(msg.success){
+                    otpModal.show({title: 'Enable 2FA', okText: 'Enable',qrcode: msg.obj });
+                    while(true){
+                        await PromiseUtil.sleep(1000);
+                        if(otpModal.success){
+                            this.loading(true)
+                            this.allSetting.twoFactorAuth = true;
+                            this.updateAllSetting()
+                            this.loading(false)
+                            break
+                        }
+                        if(otpModal.visible == false)
+                            break
+                    }
+               }
+            },
+            async showQrCode() { 
+                const msg = await HttpUtil.post("/totp/qrcode", this.user);
+                if(msg.success){
+                    otpQrCodeModal.show({title: '{{ i18n "pages.settings.showTotpQrCode" }}', okText:'Ok', qrcode: msg.obj})
+                }
+            },
+            async disableOTP(){
+                this.$confirm({
+                    title: '{{ i18n "pages.settings.disable2FATitle"}}',
+                    content: '{{ i18n "pages.settings.disable2FADesc"}}',
+                    class: themeSwitcher.darkCardClass,
+                    okText: '{{ i18n "sure"}}',
+                    cancelText: '{{ i18n "cancel"}}',
+                    onOk: async () => {
+                        this.loading(true);
+                        const msg = await HttpUtil.post("/totp/disable", this.user)
+                        this.loading(false);
+                        if (msg.success){
+                            this.allSetting.twoFactorAuth = false;
+                            this.updateAllSetting()
+                        }
+                    },
+                });
             },
             async restartPanel() {
                 await new Promise(resolve => {

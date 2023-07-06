@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "登录"
 "loginAgain" = "登录时效已过，请重新登录"
+"totpTitle" = "托普验证"
 
 [pages.login.toasts]
 "invalidFormData" = "数据格式错误"
@@ -71,6 +72,8 @@
 "emptyPassword" = "请输入密码"
 "wrongUsernameOrPassword" = "用户名或密码错误"
 "successLogin" = "登录"
+"totpTokenInvalid" = "TOTP 令牌无效"
+"totpSomethingWrong" = "出了些问题"
 
 [pages.index]
 "title" = "系统状态"
@@ -276,6 +279,16 @@
 "otherSettings" = "其他设置"
 "resetXrayConfigTemp" = "重置 Xray 配置"
 "resetXrayConfigTempContent" = "您确定重置 xray 配置吗？您所做的任何更改都将丢失"
+"2FATitle" = "设置两因素身份验证"  
+"2FADesc" = "使用基于时间的一次性密码进行安全登录" 
+"setup2FA" = "设置 2FA"
+"setup2FADesc_1" = "1. 使用验证器应用程序扫描上面的二维码"
+"setup2FADesc_2" = "2. 在身份验证器应用程序中输入生成的号码，然后单击“启用”"
+"showTotpQrCode" = "显示二维码"
+"showTotpQrCodeDesc" = "使用验证器应用程序扫描上面的二维码"
+"disable2FA" = "禁用 2FA"
+"disable2FATitle" = "禁用 2 因素身份验证"
+"disable2FADesc" = "您确定要禁用 2FA 吗？"
 
 [pages.settings.templates]
 "title" = "模板"
@@ -357,6 +370,11 @@
 "modifyUser" = "修改用户"
 "originalUserPassIncorrect" = "原用户名或原密码错误"
 "userPassMustBeNotEmpty" = "新用户名和新密码不能为空"
+"userTotpIncorrect" = "无法验证 TOTP，请重试"
+"userTotpGenerated" = "TOTP生成成功"
+"userTotpEnabled" = "TOTP 已成功验证并启用"
+"userTotpDisabled" = "TOTP 已成功禁用"
+"userTotpOperationFailed" = "手术失败"
 
 [tgbot]
 "noResult" = "❗ 没有结果！"

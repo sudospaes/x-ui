@@ -49,6 +49,7 @@ var defaultValueMap = map[string]string{
 	"subCertFile":        "",
 	"subKeyFile":         "",
 	"subUpdates":         "12",
+  "twoFactorAuth":       "false",
 }
 
 type SettingService struct {
@@ -365,6 +366,14 @@ func (s *SettingService) GetSubKeyFile() (string, error) {
 
 func (s *SettingService) GetSubUpdates() (int, error) {
 	return s.getInt("subUpdates")
+}
+
+func (s *SettingService) GetTwoFactorAuth() (bool, error){
+  return s.getBool("twoFactorAuth")
+}
+
+func (s *SettingService) SetTwoFactorAuth(value bool) (error){
+  return s.setBool("twoFactorAuth", value)
 }
 
 func (s *SettingService) UpdateAllSetting(allSetting *entity.AllSetting) error {

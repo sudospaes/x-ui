@@ -573,3 +573,7 @@ func (s *ServerService) GetNewX25519Cert() (interface{}, error) {
 
 	return keyPair, nil
 }
+
+func (s *ServerService) GetServerAddress() (string, string){
+	return getPublicIP("https://api.ipify.org") , getPublicIP("https://api6.ipify.org")
+}

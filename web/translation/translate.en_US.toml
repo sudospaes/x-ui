@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "Login"
 "loginAgain" = "The login time limit has expired, please log in again"
+"totpTitle" = "Totp verification"
 
 [pages.login.toasts]
 "invalidFormData" = "Input data format is invalid."
@@ -71,6 +72,8 @@
 "emptyPassword" = "Please enter password."
 "wrongUsernameOrPassword" = "Invalid username or password."
 "successLogin" = "Login"
+"totpTokenInvalid" = "Invalid TOTP token"
+"totpSomethingWrong" = "Something went wrong"
 
 [pages.index]
 "title" = "System Status"
@@ -276,7 +279,16 @@
 "otherSettings" = "Other Settings"
 "resetXrayConfigTemp" = "Reset Xray Configuration"
 "resetXrayConfigTempContent" = "Are you sure reset xray configuration ? Any changes you did made will be lost"
-
+"2FATitle" = "Setup Two Factor Authentication"  
+"2FADesc" = "Secure login with Time-based one-time password" 
+"setup2FA" = "Setup 2FA"
+"setup2FADesc_1" = "1. Scan The Qr code above with authenticator app "
+"setup2FADesc_2" = "2. Enter the generated number in your authenticator app and click Enable "
+"showTotpQrCode" = "Show Qr code"
+"showTotpQrCodeDesc" = "Scan The Qr code above with authenticator app "
+"disable2FA" = "Disable 2FA"
+"disable2FATitle" = "Disable 2 Factor Authentication"
+"disable2FADesc" = "Are you sure you want to disable 2FA?"
 
 [pages.settings.templates]
 "title" = "Templates"
@@ -358,6 +370,11 @@
 "modifyUser" = "Modify User "
 "originalUserPassIncorrect" = "Incorrect original username or password"
 "userPassMustBeNotEmpty" = "New username and new password cannot be empty"
+"userTotpIncorrect" = "Couldn't verify TOTP, Try again"
+"userTotpGenerated" = "TOTP generated successfully"
+"userTotpEnabled" = "TOTP validated and enabled successfully"
+"userTotpDisabled" = "TOTP disabled successfully"
+"userTotpOperationFailed" = "Operation Failed"
 
 [tgbot]
 "noResult" = "❗ No result!"

@@ -21,6 +21,11 @@ type User struct {
 	Id       int    `json:"id" gorm:"primaryKey;autoIncrement"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+  Otp_enabled bool `json:"otpenabled" gorm:"default:false;"`
+  Otp_verified bool `json:"otpverified" gorm:"default:false;"`
+  Otp_secret string `json:"otpsecret"`
+  Otp_auth_url string  `json:"otpauthurl"`
+  Otp_qrcode   []byte `json:"otpqrcode"`
 }
 
 type Inbound struct {
