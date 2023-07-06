@@ -1,0 +1,56 @@
+{{define "otpQrcodeModal"}}
+<a-modal id="otp-qrcode-modal" v-model="otpQrCodeModal.visible" :title="otpQrCodeModal.title" @ok="otpQrCodeModal.ok"
+         :confirm-loading="otpQrCodeModal.confirmLoading" :closable="true" :mask-closable="false"
+         :class="themeSwitcher.darkCardClass"
+         :ok-text="otpQrCodeModal.okText" cancel-text='{{ i18n "close" }}'>
+    <div style="display:flex; flex-direction:column">
+        <img src='' id='otp_qrcode_img' style="width: 250px; height: 250px; margin:auto"/>
+        <p>{{ i18n "pages.settings.showTotpQrCodeDesc"}}</p>
+    </div>
+</a-modal>
+<script>
+
+    const otpQrCodeModal = {
+        title: '',
+        visible: false,
+        confirmLoading: false,
+        okText: '{{ i18n "sure" }}',
+        isEdit: false,
+        qrcode: null,
+        success: false,
+        confirm: null,
+        async ok() {
+            otpQrCodeModal.visible = false;
+        },
+        show({ title='', okText='{{ i18n "sure" }}', qrcode=null}) {
+            this.title = title;
+            this.okText = okText;
+            this.qrcode = qrcode;
+            this.visible = true;
+            this.isEdit = false;
+        },
+        close() {
+            otpQrCodeModal.visible = false;
+        },
+        loading(loading) {
+            otpQrCodeModal.confirmLoading = loading;
+        },
+   };
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#otp-qrcode-modal',
+        data: {
+            otpQrCodeModal: otpQrCodeModal,
+       },
+        methods: {
+           setQrCode(content) {
+               document.querySelector('#otp_qrcode_img').src = "data:image/png;base64,"+content 
+           }
+       },
+        updated() { 
+           this.setQrCode(otpQrCodeModal.qrcode)
+        }
+    });
+
+</script>
+{{end}}

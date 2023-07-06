@@ -40,7 +40,6 @@
 "depleted" = "耗尽"
 "depletingSoon" = "即将耗尽"
 "domainName" = "域名"
-"additional" = "额外 ID"
 "monitor" = "监听"
 "certificate" = "证书"
 "fail" = "失败"
@@ -52,6 +51,7 @@
 "reload" = "重新加载"
 "all" = "全部"
 "darkMode" = "深色模式"
+"remained" = "仍然存在"
 
 [menu]
 "dashboard" = "系统状态"
@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "登录"
 "loginAgain" = "登录时效已过，请重新登录"
+"totpTitle" = "托普验证"
 
 [pages.login.toasts]
 "invalidFormData" = "数据格式错误"
@@ -71,6 +72,8 @@
 "emptyPassword" = "请输入密码"
 "wrongUsernameOrPassword" = "用户名或密码错误"
 "successLogin" = "登录"
+"totpTokenInvalid" = "TOTP 令牌无效"
+"totpSomethingWrong" = "出了些问题"
 
 [pages.index]
 "title" = "系统状态"
@@ -101,8 +104,8 @@
 "backup" = "备份"
 "backupTitle" = "备份数据库"
 "backupDescription" = "请记住在导入新数据库之前进行备份"
-"exportDatabase" = "下载数据库"
-"importDatabase" = "上传数据库"
+"exportDatabase" = "导出数据库"
+"importDatabase" = "导入数据库"
 
 [pages.inbounds]
 "title" = "入站列表"
@@ -245,6 +248,8 @@
 "telegramNotifyTimeDesc" = "采用Crontab定时格式"
 "tgNotifyBackup" = "数据库备份"
 "tgNotifyBackupDesc" = "正在发送数据库备份文件和报告通知"
+"tgNotifyLogin" = "登录通知"
+"tgNotifyLoginDesc" = "当有人试图登录您的面板时显示用户名、IP 地址和时间"
 "sessionMaxAge" = "会话最大年龄"
 "sessionMaxAgeDesc" = "您可以保持登录状态的时间（单位：分钟）"
 "expireTimeDiff" = "耗尽时间阈值"
@@ -272,10 +277,22 @@
 "subDomainDesc" = "留空默认监控所有域名和IP"
 "subUpdates" = "订阅更新间隔"
 "subUpdatesDesc" = "客户端应用程序更新之间的间隔时间"
+"subEncrypt" = "加密配置"
+"subEncryptDesc" = "在订阅中加密返回的配置"
 "language" = "语言"
 "otherSettings" = "其他设置"
 "resetXrayConfigTemp" = "重置 Xray 配置"
 "resetXrayConfigTempContent" = "您确定重置 xray 配置吗？您所做的任何更改都将丢失"
+"2FATitle" = "设置两因素身份验证"  
+"2FADesc" = "使用基于时间的一次性密码进行安全登录" 
+"setup2FA" = "设置 2FA"
+"setup2FADesc_1" = "1. 使用验证器应用程序扫描上面的二维码"
+"setup2FADesc_2" = "2. 在身份验证器应用程序中输入生成的号码，然后单击“启用”"
+"showTotpQrCode" = "显示二维码"
+"showTotpQrCodeDesc" = "使用验证器应用程序扫描上面的二维码"
+"disable2FA" = "禁用 2FA"
+"disable2FATitle" = "禁用 2 因素身份验证"
+"disable2FADesc" = "您确定要禁用 2FA 吗？"
 
 [pages.settings.templates]
 "title" = "模板"
@@ -334,6 +351,15 @@
 "xrayConfigGoogleIPv4Desc" = "添加谷歌连接IPv4的路由"
 "xrayConfigNetflixIPv4" = "为 Netflix 使用 IPv4"
 "xrayConfigNetflixIPv4Desc" = "添加Netflix连接IPv4的路由"
+"warpConfigs" = "WARP 配置"
+"xrayConfigGoogleWARP" = "将谷歌路由到 WARP"
+"xrayConfigGoogleWARPDesc" = "为谷歌添加路由到WARP"
+"xrayConfigOpenAIWARP" = "将 OpenAI (ChatGPT) 路由到 WARP"
+"xrayConfigOpenAIWARPDesc" = "将OpenAI（ChatGPT）路由添加到WARP"
+"xrayConfigNetflixWARP" = "将 Netflix 路由到 WARP"
+"xrayConfigNetflixWARPDesc" = "为Netflix添加路由到WARP"
+"xrayConfigSpotifyWARP" = "将 Spotify 路由到 WARP"
+"xrayConfigSpotifyWARPDesc" = "为Spotify添加路由到WARP"
 "xrayConfigInbounds" = "入站配置"
 "xrayConfigInboundsDesc" = "更改配置模板接受特殊客户端"
 "xrayConfigOutbounds" = "出站配置"
@@ -347,9 +373,11 @@
 "manualDirectIPs" = "直接 IP 列表"
 "manualDirectDomains" = "直接域列表"
 "manualIPv4Domains" = "IPv4 域名列表"
+"manualWARPDomains" = "WARP域名列表"
 "IPv4Domains" = "IPv4 域"
 "BlockedIPsDomains" = "被阻止的 IP 和域"
 "DirectIPsDomains" = "直接 IP 和域"
+"WARPDomains" = "WARP 域"
 
 [pages.settings.toasts]
 "modifySettings" = "修改设置"
@@ -357,6 +385,11 @@
 "modifyUser" = "修改用户"
 "originalUserPassIncorrect" = "原用户名或原密码错误"
 "userPassMustBeNotEmpty" = "新用户名和新密码不能为空"
+"userTotpIncorrect" = "无法验证 TOTP，请重试"
+"userTotpGenerated" = "TOTP生成成功"
+"userTotpEnabled" = "TOTP 已成功验证并启用"
+"userTotpDisabled" = "TOTP 已成功禁用"
+"userTotpOperationFailed" = "手术失败"
 
 [tgbot]
 "noResult" = "❗ 没有结果！"

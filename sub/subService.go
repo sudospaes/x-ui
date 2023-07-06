@@ -124,7 +124,14 @@ func (s *SubService) getFallbackMaster(dest string) (*model.Inbound, error) {
 func (s *SubService) getLink(inbound *model.Inbound, email string) string {
 	switch inbound.Protocol {
 	case "vmess":
-		return s.genVmessLink(inbound, email)
+		var stream map[string]interface{}
+		json.Unmarshal([]byte(inbound.StreamSettings), &stream)
+		security, _ := stream["security"].(string)
+		if security == "reality" {
+			return s.genVmessRealityLink(inbound, email)
+		} else {
+			return s.genVmessLink(inbound, email)
+		}
 	case "vless":
 		return s.genVlessLink(inbound, email)
 	case "trojan":
@@ -236,7 +243,6 @@ func (s *SubService) genVmessLink(inbound *model.Inbound, email string) string {
 		}
 	}
 	obj["id"] = clients[clientIndex].ID
-	obj["aid"] = clients[clientIndex].AlterIds
 
 	if len(domains) > 0 {
 		links := ""
@@ -255,6 +261,98 @@ func (s *SubService) genVmessLink(inbound *model.Inbound, email string) string {
 
 	jsonStr, _ := json.MarshalIndent(obj, "", "  ")
 	return "vmess://" + base64.StdEncoding.EncodeToString(jsonStr)
+}
+
+func (s *SubService) genVmessRealityLink(inbound *model.Inbound, email string) string {
+	address := s.address
+	if inbound.Protocol != model.VMess {
+		return ""
+	}
+	var stream map[string]interface{}
+	json.Unmarshal([]byte(inbound.StreamSettings), &stream)
+	clients, _ := s.inboundService.GetClients(inbound)
+	clientIndex := -1
+	for i, client := range clients {
+		if client.Email == email {
+			clientIndex = i
+			break
+		}
+	}
+	uuid := clients[clientIndex].ID
+	port := inbound.Port
+	streamNetwork := stream["network"].(string)
+	params := make(map[string]string)
+	params["type"] = streamNetwork
+
+	switch streamNetwork {
+	case "tcp":
+		tcp, _ := stream["tcpSettings"].(map[string]interface{})
+		header, _ := tcp["header"].(map[string]interface{})
+		typeStr, _ := header["type"].(string)
+		if typeStr == "http" {
+			request := header["request"].(map[string]interface{})
+			requestPath, _ := request["path"].([]interface{})
+			params["path"] = requestPath[0].(string)
+			headers, _ := request["headers"].(map[string]interface{})
+			params["host"] = searchHost(headers)
+			params["headerType"] = "http"
+		}
+	case "http":
+		http, _ := stream["httpSettings"].(map[string]interface{})
+		params["path"] = http["path"].(string)
+		params["host"] = searchHost(http)
+	case "grpc":
+		grpc, _ := stream["grpcSettings"].(map[string]interface{})
+		params["serviceName"] = grpc["serviceName"].(string)
+		if grpc["multiMode"].(bool) {
+			params["mode"] = "multi"
+		}
+	}
+	params["security"] = "reality"
+	realitySetting, _ := stream["realitySettings"].(map[string]interface{})
+	realitySettings, _ := searchKey(realitySetting, "settings")
+	if realitySetting != nil {
+		if sniValue, ok := searchKey(realitySetting, "serverNames"); ok {
+			sNames, _ := sniValue.([]interface{})
+			params["sni"], _ = sNames[0].(string)
+		}
+		if pbkValue, ok := searchKey(realitySettings, "publicKey"); ok {
+			params["pbk"], _ = pbkValue.(string)
+		}
+		if sidValue, ok := searchKey(realitySetting, "shortIds"); ok {
+			shortIds, _ := sidValue.([]interface{})
+			params["sid"], _ = shortIds[0].(string)
+		}
+		if fpValue, ok := searchKey(realitySettings, "fingerprint"); ok {
+			if fp, ok := fpValue.(string); ok && len(fp) > 0 {
+				params["fp"] = fp
+			}
+		}
+		if spxValue, ok := searchKey(realitySettings, "spiderX"); ok {
+			if spx, ok := spxValue.(string); ok && len(spx) > 0 {
+				params["spx"] = spx
+			}
+		}
+		if serverName, ok := searchKey(realitySettings, "serverName"); ok {
+			if sname, ok := serverName.(string); ok && len(sname) > 0 {
+				address = sname
+			}
+		}
+	}
+
+	link := fmt.Sprintf("vmess://%s@%s:%d", uuid, address, port)
+	url, _ := url.Parse(link)
+	q := url.Query()
+
+	for k, v := range params {
+		q.Add(k, v)
+	}
+
+	// Set the new query values on the URL
+	url.RawQuery = q.Encode()
+	remark := fmt.Sprintf("%s-%s", inbound.Remark, email)
+	url.Fragment = remark
+	return url.String()
 }
 
 func (s *SubService) genVlessLink(inbound *model.Inbound, email string) string {

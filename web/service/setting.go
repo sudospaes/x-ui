@@ -39,6 +39,7 @@ var defaultValueMap = map[string]string{
 	"tgBotChatId":        "",
 	"tgRunTime":          "@daily",
 	"tgBotBackup":        "false",
+	"tgBotLoginNotify":   "false",
 	"tgCpu":              "0",
 	"tgLang":             "en-US",
 	"subEnable":          "false",
@@ -49,6 +50,8 @@ var defaultValueMap = map[string]string{
 	"subCertFile":        "",
 	"subKeyFile":         "",
 	"subUpdates":         "12",
+  "twoFactorAuth":       "false",
+	"subEncrypt":         "true",
 }
 
 type SettingService struct {
@@ -250,6 +253,10 @@ func (s *SettingService) GetTgBotBackup() (bool, error) {
 	return s.getBool("tgBotBackup")
 }
 
+func (s *SettingService) GetTgBotLoginNotify() (bool, error) {
+	return s.getBool("tgBotLoginNotify")
+}
+
 func (s *SettingService) GetTgCpu() (int, error) {
 	return s.getInt("tgCpu")
 }
@@ -365,6 +372,18 @@ func (s *SettingService) GetSubKeyFile() (string, error) {
 
 func (s *SettingService) GetSubUpdates() (int, error) {
 	return s.getInt("subUpdates")
+}
+
+func (s *SettingService) GetTwoFactorAuth() (bool, error){
+  return s.getBool("twoFactorAuth")
+}
+
+func (s *SettingService) SetTwoFactorAuth(value bool) (error){
+  return s.setBool("twoFactorAuth", value)
+
+func (s *SettingService) GetSubEncrypt() (bool, error) {
+	return s.getBool("subEncrypt")
+
 }
 
 func (s *SettingService) UpdateAllSetting(allSetting *entity.AllSetting) error {

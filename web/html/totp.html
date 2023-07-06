@@ -3,8 +3,9 @@
 {{template "head" .}}
 <style>
 
-    #app {
+    #app-totp {
         padding-top: 100px;
+        height: 100vh;
     }
 
     h1 {
@@ -45,31 +46,26 @@
 
 </style>
 <body>
-<a-layout id="app" v-cloak :class="themeSwitcher.darkCardClass">
+<a-layout id="app-totp" v-cloak :class="themeSwitcher.darkCardClass">
     <transition name="list" appear>
         <a-layout-content>
             <a-row type="flex" justify="center">
                 <a-col :xs="22" :sm="20" :md="16" :lg="12" :xl="8">
-                    <h1 class="title" :style="themeSwitcher.textStyle">{{ i18n "pages.login.title" }}</h1>
+                  <h1 class="title" :style="themeSwitcher.textStyle">{{ i18n "pages.login.totpTitle"}}</h1>
                 </a-col>
             </a-row>
             <a-row type="flex" justify="center">
                 <a-col :xs="22" :sm="20" :md="16" :lg="12" :xl="8">
                     <a-form>
                         <a-form-item>
-                            <a-input v-model.trim="user.username" placeholder='{{ i18n "username" }}'
-                                     @keydown.enter.native="login" autofocus>
-                                <a-icon slot="prefix" type="user" :style="'font-size: 16px;' + themeSwitcher.textStyle"/>
+                            <a-input v-model.trim="user.token" placeholder='TOTP'
+                                     @keydown.enter.native="loginTotp" type="number" autofocus>
+                                <a-icon slot="prefix" type="number" :style="'font-size: 16px;' + themeSwitcher.textStyle"/>
                             </a-input>
                         </a-form-item>
                         <a-form-item>
-                            <password-input icon="lock" v-model.trim="user.password"
-                                            placeholder='{{ i18n "password" }}' @keydown.enter.native="login">
-                            </password-input>
-                        </a-form-item>
-                        <a-form-item>
                             <a-row justify="center" class="centered">
-                                <a-button type="primary" :loading="loading" @click="login" :icon="loading ? 'poweroff' : undefined"
+                                <a-button type="primary" :loading="loading" @click="loginTotp" :icon="loading ? 'poweroff' : undefined"
                                           :style="loading ? { width: '50px' } : { display: 'block', width: '100%' }">
                                     [[ loading ? '' : '{{ i18n "login" }}' ]]
                                 </a-button>
@@ -100,15 +96,14 @@
 </a-layout>
 {{template "js" .}}
 {{template "component/themeSwitcher" .}}
-{{template "component/password" .}}
 <script>
     const app = new Vue({
         delimiters: ['[[', ']]'],
-        el: '#app',
+        el: '#app-totp',
         data: {
             themeSwitcher,
             loading: false,
-            totp: false,
+            totp: true,
             user: new User(),
             lang: ""
         },
@@ -117,22 +112,18 @@
             this.lang = getLang();
         },
         methods: {
-            async login() {
+            async loginTotp() {
                 this.loading = true;
-                const msg = await HttpUtil.post('/login', this.user);
+                const msg = await HttpUtil.post('/login/2fa', {token: this. user.token});
+                
                 this.loading = false;
                 if (msg.success) {
-                    this.totp = ((msg.obj == null) ? false : msg.obj.totp) 
-                    if(this.totp) {
-                      location.href = basePath + 'totp/';
-                      setCookie('SECURE_PAGE', 'GOTOTOTPPAGE', 150);
-                      return  
-                    }
+                    setCookie('SECURE_PAGE', 'NONE', 150);
                     location.href = basePath + 'xui/';
                 }
             },
             updateBackground() {
-                document.querySelector('#app').style.background = colors[this.themeSwitcher.currentTheme].bg;
+                document.querySelector('#app-totp').style.background = colors[this.themeSwitcher.currentTheme].bg;
             },
         },
         watch: {

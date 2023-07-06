@@ -40,7 +40,6 @@
 "depleted" = "Depleted"
 "depletingSoon" = "Depleting soon"
 "domainName" = "Domain name"
-"additional" = "Alter ID"
 "monitor" = "Listen IP"
 "certificate" = "Certificate"
 "fail" = " Fail"
@@ -52,6 +51,7 @@
 "reload" = "Reload"
 "all" = "All"
 "darkMode" = "Dark Mode"
+"remained" = "Remained"
 
 [menu]
 "dashboard" = "System Status"
@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "Login"
 "loginAgain" = "The login time limit has expired, please log in again"
+"totpTitle" = "Totp verification"
 
 [pages.login.toasts]
 "invalidFormData" = "Input data format is invalid."
@@ -71,6 +72,8 @@
 "emptyPassword" = "Please enter password."
 "wrongUsernameOrPassword" = "Invalid username or password."
 "successLogin" = "Login"
+"totpTokenInvalid" = "Invalid TOTP token"
+"totpSomethingWrong" = "Something went wrong"
 
 [pages.index]
 "title" = "System Status"
@@ -101,8 +104,8 @@
 "backup" = "Backup & Restore"
 "backupTitle" = "Backup & Restore Database"
 "backupDescription" = "Remember to backup before importing a new database."
-"exportDatabase" = "Download Database"
-"importDatabase" = "Upload Database"
+"exportDatabase" = "Export Database"
+"importDatabase" = "Import Database"
 
 [pages.inbounds]
 "title" = "Inbounds"
@@ -245,6 +248,8 @@
 "telegramNotifyTimeDesc" = "Use Crontab timing format."
 "tgNotifyBackup" = "Database Backup"
 "tgNotifyBackupDesc" = "Send database backup file with report notification"
+"tgNotifyLogin" = "Login Notification"
+"tgNotifyLoginDesc" = "Displays the username, IP address, and time when someone tries to log into your panel"
 "sessionMaxAge" = "Session maximum age"
 "sessionMaxAgeDesc" = "The time that you can stay login (unit: minute)"
 "expireTimeDiff" = "Expiration threshold for notification"
@@ -256,7 +261,7 @@
 "timeZone" = "Time Zone"
 "timeZoneDesc" = "Scheduled tasks run according to the time in this time zone."
 "subSettings" = "Subscription"
-"subEnable" = "Enable service"
+"subEnable" = "Enable Service"
 "subEnableDesc" = "Subscription feature with separate configuration"
 "subListen" = "Listening IP"
 "subListenDesc" = "Leave blank by default to monitor all IPs"
@@ -272,11 +277,22 @@
 "subDomainDesc" = "Leave blank by default to monitor all domains and IPs"
 "subUpdates" = "Subscription update intervals"
 "subUpdatesDesc" = "Interval hours between updates in client application"
+"subEncrypt" = "Encrypt Configs"
+"subEncryptDesc" = "Encrypt the returned configs in subscription"
 "language" = "Language"
 "otherSettings" = "Other Settings"
 "resetXrayConfigTemp" = "Reset Xray Configuration"
 "resetXrayConfigTempContent" = "Are you sure reset xray configuration ? Any changes you did made will be lost"
-
+"2FATitle" = "Setup Two Factor Authentication"  
+"2FADesc" = "Secure login with Time-based one-time password" 
+"setup2FA" = "Setup 2FA"
+"setup2FADesc_1" = "1. Scan The Qr code above with authenticator app "
+"setup2FADesc_2" = "2. Enter the generated number in your authenticator app and click Enable "
+"showTotpQrCode" = "Show Qr code"
+"showTotpQrCodeDesc" = "Scan The Qr code above with authenticator app "
+"disable2FA" = "Disable 2FA"
+"disable2FATitle" = "Disable 2 Factor Authentication"
+"disable2FADesc" = "Are you sure you want to disable 2FA?"
 
 [pages.settings.templates]
 "title" = "Templates"
@@ -335,6 +351,15 @@
 "xrayConfigGoogleIPv4Desc" = "Add routing for Google to connect with IPv4."
 "xrayConfigNetflixIPv4" = "Use IPv4 for Netflix"
 "xrayConfigNetflixIPv4Desc" = "Add routing for Netflix to connect with IPv4."
+"warpConfigs" = "WARP Configs"
+"xrayConfigGoogleWARP" = "Route Google through WARP"
+"xrayConfigGoogleWARPDesc" = "Add routing for Google via WARP."
+"xrayConfigOpenAIWARP" = "Route OpenAI (ChatGPT) through WARP"
+"xrayConfigOpenAIWARPDesc" = "Add routing for OpenAI (ChatGPT) via WARP."
+"xrayConfigNetflixWARP" = "Route Netflix through WARP"
+"xrayConfigNetflixWARPDesc" = "Add routing for Netflix via WARP."
+"xrayConfigSpotifyWARP" = "Route Spotify through WARP"
+"xrayConfigSpotifyWARPDesc" = "Add routing for Spotify via WARP."
 "xrayConfigInbounds" = "Configuration of Inbounds"
 "xrayConfigInboundsDesc" = "Change the configuration template to accept specific clients."
 "xrayConfigOutbounds" = "Configuration of Outbounds"
@@ -348,9 +373,11 @@
 "manualDirectIPs" = "List of Direct IPs"
 "manualDirectDomains" = "List of Direct Domains"
 "manualIPv4Domains" = "List of IPv4 Domains"
+"manualWARPDomains" = "List of WARP Domains"
 "IPv4Domains" = "IPv4 Domains"
 "BlockedIPsDomains" = "Blocked IPs and Domains"
 "DirectIPsDomains" = "Direct IPs and Domains"
+"WARPDomains" = "WARP Domains"
 
 [pages.settings.toasts]
 "modifySettings" = "Modify Settings "
@@ -358,6 +385,11 @@
 "modifyUser" = "Modify User "
 "originalUserPassIncorrect" = "Incorrect original username or password"
 "userPassMustBeNotEmpty" = "New username and new password cannot be empty"
+"userTotpIncorrect" = "Couldn't verify TOTP, Try again"
+"userTotpGenerated" = "TOTP generated successfully"
+"userTotpEnabled" = "TOTP validated and enabled successfully"
+"userTotpDisabled" = "TOTP disabled successfully"
+"userTotpOperationFailed" = "Operation Failed"
 
 [tgbot]
 "noResult" = "❗ No result!"

@@ -179,6 +179,7 @@ class AllSetting {
         this.tgBotChatId = "";
         this.tgRunTime = "@daily";
         this.tgBotBackup = false;
+        this.tgBotLoginNotify = false;
         this.tgCpu = "";
         this.tgLang = "";
         this.xrayTemplateConfig = "";
@@ -190,6 +191,8 @@ class AllSetting {
         this.subCertFile = "";
         this.subKeyFile = "";
         this.subUpdates = 0;
+        this.twoFactorAuth = false;
+        this.subEncrypt = true;
 
         this.timeLocation = "Asia/Tehran";
 

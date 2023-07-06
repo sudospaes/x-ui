@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"syscall"
 	"x-ui/config"
 	"x-ui/util/common"
 
@@ -220,5 +221,5 @@ func (p *process) Stop() error {
 	if !p.IsRunning() {
 		return errors.New("xray is not running")
 	}
-	return p.cmd.Process.Kill()
+	return p.cmd.Process.Signal(syscall.SIGTERM)
 }

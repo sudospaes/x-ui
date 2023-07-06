@@ -1,0 +1,67 @@
+{{define "otpModal"}}
+<a-modal id="otp-modal" v-model="otpModal.visible" :title="otpModal.title" @ok="otpModal.ok"
+         :confirm-loading="otpModal.confirmLoading" :closable="true" :mask-closable="false"
+         :class="themeSwitcher.darkCardClass"
+         :ok-text="otpModal.okText" cancel-text='{{ i18n "close" }}'>
+    <div style="display:flex; flex-direction:column">
+        <img src='' id='otp_qrcode' style="width: 250px; height: 250px; margin:auto"/>
+        <p>{{ i18n "pages.settings.setup2FADesc_1"}}</p>
+        <p>{{ i18n "pages.settings.setup2FADesc_2"}}</p>
+        <a-form layout='inline'>
+            <a-form-item>
+                <span>Token:</span><a-input v-model.trim="otpModal.token" style="width: 100%; margin-left:5px;"/>
+            </a-form-item>
+        </a-form> 
+    </div>
+</a-modal>
+<script>
+
+    const otpModal = {
+        title: '',
+        visible: false,
+        confirmLoading: false,
+        okText: '{{ i18n "sure" }}',
+        isEdit: false,
+        token: null,
+        qrcode: null,
+        success: false,
+        confirm: null,
+        async ok() {
+            const msg = await HttpUtil.post("/totp/verify", {token: otpModal.token});
+            if(msg.success){
+                otpModal.success = true;
+                otpModal.visible = false;
+            }
+        },
+        async show({ title='', okText='{{ i18n "sure" }}', qrcode=null}) {
+            this.title = title;
+            this.okText = okText;
+            this.qrcode = qrcode;
+            this.visible = true;
+            this.isEdit = false;
+        },
+        close() {
+            otpModal.visible = false;
+        },
+        loading(loading) {
+            otpModal.confirmLoading = loading;
+        },
+   };
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#otp-modal',
+        data: {
+            otpModal: otpModal,
+       },
+        methods: {
+           setQrCode(content) {
+               document.querySelector('#otp_qrcode').src = "data:image/png;base64,"+content 
+           }
+       },
+        updated() { 
+           this.setQrCode(otpModal.qrcode)
+        }
+    });
+
+</script>
+{{end}}

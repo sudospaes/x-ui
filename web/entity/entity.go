@@ -41,6 +41,7 @@ type AllSetting struct {
 	TgBotChatId        string `json:"tgBotChatId" form:"tgBotChatId"`
 	TgRunTime          string `json:"tgRunTime" form:"tgRunTime"`
 	TgBotBackup        bool   `json:"tgBotBackup" form:"tgBotBackup"`
+	TgBotLoginNotify   bool   `json:"tgBotLoginNotify" form:"tgBotLoginNotify"`
 	TgCpu              int    `json:"tgCpu" form:"tgCpu"`
 	TgLang             string `json:"tgLang" form:"tgLang"`
 	XrayTemplateConfig string `json:"xrayTemplateConfig" form:"xrayTemplateConfig"`
@@ -53,6 +54,8 @@ type AllSetting struct {
 	SubCertFile        string `json:"subCertFile" form:"subCertFile"`
 	SubKeyFile         string `json:"subKeyFile" form:"subKeyFile"`
 	SubUpdates         int    `json:"subUpdates" form:"subUpdates"`
+  TwoFactorAuth      bool   `json:"twoFactorAuth" form:"twoFactorAuth"`
+	SubEncrypt         bool   `json:"subEncrypt" form:"subEncrypt"`
 }
 
 func (s *AllSetting) CheckValid() error {

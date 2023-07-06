@@ -64,6 +64,7 @@ func (a *SettingController) getDefaultSettings(c *gin.Context) {
 		"subDomain":   func() (interface{}, error) { return a.settingService.GetSubDomain() },
 		"subKeyFile":  func() (interface{}, error) { return a.settingService.GetSubKeyFile() },
 		"subCertFile": func() (interface{}, error) { return a.settingService.GetSubCertFile() },
+    "twoFactorAuth":func() (interface{}, error){ return a.settingService.GetTwoFactorAuth() },
 	}
 
 	result := make(map[string]interface{})

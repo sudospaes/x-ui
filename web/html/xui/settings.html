@@ -35,7 +35,7 @@
                         <a-button type="primary" :disabled="saveBtnDisable" @click="updateAllSetting" icon="save">{{ i18n "pages.settings.save" }}</a-button>
                         <a-button type="danger" :disabled="!saveBtnDisable" @click="restartPanel" icon="sync">{{ i18n "pages.settings.restartPanel" }}</a-button>
                     </a-space>
-                    <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 5px; margin-top: 2px;">
+                    <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 5px;">
                         {{template "settings/panel"}}
                         {{template "settings/user"}}
                         {{template "settings/xray"}}
@@ -52,6 +52,8 @@
 {{template "component/themeSwitcher" .}}
 {{template "component/password" .}}
 {{template "component/setting"}}
+{{template "otpModal"}}
+{{template "otpQrcodeModal"}}
 <script>
 
     const app = new Vue({
@@ -71,6 +73,18 @@
                 protocol: "freedom",
                 settings: {
                     domainStrategy: "UseIPv4"
+                }
+            },
+            warpSettings: {
+                tag: "WARP",
+                protocol: "socks",
+                settings: {
+                    servers: [
+                        {
+                            address: "127.0.0.1",
+                            port: 40000
+                        }
+                    ]
                 }
             },
             directSettings: {
@@ -96,6 +110,8 @@
                     ],
                     google: ["geosite:google"],
                     netflix: ["geosite:netflix"],
+                    openai: ["geosite:openai"],
+                    spotify: ["geosite:spotify"],
                     cn: [
                         "regexp:.*\\.cn$",
                         "geosite:cn"
@@ -108,14 +124,7 @@
                         "regexp:.*\\.ir$",
                         "ext:iran.dat:ir",
                         "ext:iran.dat:other",
-                        "geosite:category-ir-gov",
-                        "geosite:category-ir-news",
-                        "geosite:category-ir-bank",
-                        "geosite:category-ir-tech",
-                        "geosite:category-ir-travel",
-                        "geosite:category-ir-shopping",
-                        "geosite:category-ir-insurance",
-                        "geosite:category-ir-scholar"
+                        "geosite:category-ir"
                     ]
                 },
                 familyProtectDNS: {
@@ -138,6 +147,7 @@
                 const msg = await HttpUtil.post("/xui/setting/all");
                 this.loading(false);
                 if (msg.success) {
+                    console.log(msg.obj)
                     this.oldAllSetting = new AllSetting(msg.obj);
                     this.allSetting = new AllSetting(msg.obj);
                     this.saveBtnDisable = true;
@@ -159,6 +169,48 @@
                     this.user = {};
                     window.location.replace(basePath + "logout");
                 }
+            },
+            async generateOTP(){
+                const msg = await HttpUtil.post("/totp/generate", this.user);
+                if(msg.success){
+                    otpModal.show({title: 'Enable 2FA', okText: 'Enable',qrcode: msg.obj });
+                    while(true){
+                        await PromiseUtil.sleep(1000);
+                        if(otpModal.success){
+                            this.loading(true)
+                            this.allSetting.twoFactorAuth = true;
+                            this.updateAllSetting()
+                            this.loading(false)
+                            break
+                        }
+                        if(otpModal.visible == false)
+                            break
+                    }
+               }
+            },
+            async showQrCode() { 
+                const msg = await HttpUtil.post("/totp/qrcode", this.user);
+                if(msg.success){
+                    otpQrCodeModal.show({title: '{{ i18n "pages.settings.showTotpQrCode" }}', okText:'Ok', qrcode: msg.obj})
+                }
+            },
+            async disableOTP(){
+                this.$confirm({
+                    title: '{{ i18n "pages.settings.disable2FATitle"}}',
+                    content: '{{ i18n "pages.settings.disable2FADesc"}}',
+                    class: themeSwitcher.darkCardClass,
+                    okText: '{{ i18n "sure"}}',
+                    cancelText: '{{ i18n "cancel"}}',
+                    onOk: async () => {
+                        this.loading(true);
+                        const msg = await HttpUtil.post("/totp/disable", this.user)
+                        this.loading(false);
+                        if (msg.success){
+                            this.allSetting.twoFactorAuth = false;
+                            this.updateAllSetting()
+                        }
+                    },
+                });
             },
             async restartPanel() {
                 await new Promise(resolve => {
@@ -387,6 +439,15 @@
                     this.syncRulesWithOutbound("IPv4", this.ipv4Settings);
                 }
             },
+            warpDomains: {
+                get: function () {
+                    return this.templateRuleGetter({ outboundTag: "WARP", property: "domain" });
+                },
+                set: function (newValue) {
+                    this.templateRuleSetter({ outboundTag: "WARP", property: "domain", data: newValue });
+                    this.syncRulesWithOutbound("WARP", this.warpSettings);
+                }
+            },
             manualBlockedIPs: {
                 get: function () { return JSON.stringify(this.blockedIPs, null, 2); },
                 set: debounce(function (value) { this.blockedIPs = JSON.parse(value); }, 1000)
@@ -406,6 +467,10 @@
             manualIPv4Domains: {
                 get: function () { return JSON.stringify(this.ipv4Domains, null, 2); },
                 set: debounce(function (value) { this.ipv4Domains = JSON.parse(value); }, 1000)
+            },
+            manualWARPDomains: {
+                get: function () { return JSON.stringify(this.warpDomains, null, 2); },
+                set: debounce(function (value) { this.warpDomains = JSON.parse(value); }, 1000)
             },
             torrentSettings: {
                 get: function () {
@@ -625,6 +690,54 @@
                         this.directDomains = this.directDomains.filter(data => !this.settingsData.domains.ru.includes(data));
                     }
                 }
+            },
+            GoogleWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.google, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.google];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.google.includes(data));
+                    }
+                },
+            },
+            OpenAIWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.openai, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.openai];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.openai.includes(data));
+                    }
+                },
+            },
+            NetflixWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.netflix, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.netflix];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.netflix.includes(data));
+                    }
+                },
+            },
+            SpotifyWARPSettings: {
+                get: function () {
+                    return doAllItemsExist(this.settingsData.domains.spotify, this.warpDomains);
+                },
+                set: function (newValue) {
+                    if (newValue) {
+                        this.warpDomains = [...this.warpDomains, ...this.settingsData.domains.spotify];
+                    } else {
+                        this.warpDomains = this.warpDomains.filter(data => !this.settingsData.domains.spotify.includes(data));
+                    }
+                },
             },
         },
     });

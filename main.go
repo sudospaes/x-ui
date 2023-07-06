@@ -114,8 +114,36 @@ func resetSetting() {
 	if err != nil {
 		fmt.Println("reset setting failed:", err)
 	} else {
-		fmt.Println("reset setting success")
+    userService := service.UserService{}
+    err = userService.DisableTotp()
+    if err != nil {
+		  fmt.Println("reset setting failed:", err)
+    }else {
+		  fmt.Println("reset setting success")
+    }
 	}
+}
+
+func disable2FA() {
+	err := database.InitDB(config.GetDBPath())
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+  userService := service.UserService{}
+  err = userService.DisableTotp()
+  if err != nil {
+    fmt.Println("disable 2FA failed:", err)
+  }else {
+    settingService := service.SettingService{}
+    err = settingService.SetTwoFactorAuth(false)
+    if err != nil {
+      fmt.Println("disable 2FA failed:", err)
+    }else{
+      fmt.Println("disable 2FA success")
+    }
+  }
+
 }
 
 func showSetting(show bool) {
@@ -266,9 +294,11 @@ func main() {
 	var tgbotRuntime string
 	var reset bool
 	var show bool
+  var twoFA bool
 	settingCmd.BoolVar(&reset, "reset", false, "reset all settings")
 	settingCmd.BoolVar(&show, "show", false, "show current settings")
 	settingCmd.IntVar(&port, "port", 0, "set panel port")
+  settingCmd.BoolVar(&twoFA, "twoFA", false, "disable 2FA")
 	settingCmd.StringVar(&username, "username", "", "set login username")
 	settingCmd.StringVar(&password, "password", "", "set login password")
 	settingCmd.StringVar(&tgbottoken, "tgbottoken", "", "set telegram bot token")
@@ -333,6 +363,9 @@ func main() {
 		if enabletgbot {
 			updateTgbotEnableSts(enabletgbot)
 		}
+    if twoFA {
+      disable2FA()
+    }
 	default:
 		fmt.Println("except 'run' or 'v2-ui' or 'setting' subcommands")
 		fmt.Println()
