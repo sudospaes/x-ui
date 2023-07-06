@@ -250,26 +250,21 @@
                 :href="'data:application/text;charset=utf-8,' + encodeURIComponent(logModal.logs)" download="x-ui.log">{{ i18n "download" }} x-ui.log</a-button>
             </a-form-item>
        </a-form>
-        <a-input type="textarea" v-model="logModal.logs" disabled="true"
-                :autosize="{ minRows: 10, maxRows: 22}"
-                :style="themeSwitcher.darkCardClass ? 'cursor: default;': 'cursor: default; color: rgba(0,0,0,.65);'"></a-input>
+        <a-input type="textarea" v-model="logModal.logs"
+                :autosize="{ minRows: 10, maxRows: 22}"></a-input>
     </a-modal>
 
     <a-modal id="backup-modal" v-model="backupModal.visible" :title="backupModal.title"
             :closable="true" :class="themeSwitcher.darkCardClass"
-            @ok="() => backupModal.hide()" @cancel="() => backupModal.hide()">
-        <p style="color: inherit; font-size: 16px; padding: 4px 2px;">
+            @ok="() => backupModal.hide()" @cancel="() => backupModal.hide()" footer="">
+        <p style="color: inherit; font-size: 16px; padding: 4px 2px; text-align: center;">
             <a-icon type="warning" style="color: inherit; font-size: 20px;"></a-icon>
             [[ backupModal.description ]]
         </p>
-        <a-space direction="horizontal" align="center" style="margin-bottom: 10px;">
-            <a-button type="primary" @click="exportDatabase()">
-                [[ backupModal.exportText ]]
-            </a-button>
-            <a-button type="primary" @click="importDatabase()">
-                [[ backupModal.importText ]]
-            </a-button>
-        </a-space>
+        <div style="margin-bottom: 10px; text-align: center;">
+            <a-button type="primary" @click="exportDatabase()" style="margin-right: 3px;">[[ backupModal.exportText ]]</a-button>
+            <a-button type="primary" @click="importDatabase()" style="margin-left: 3px;">[[ backupModal.importText ]]</a-button>
+        </div>
     </a-modal>
 
 </a-layout>

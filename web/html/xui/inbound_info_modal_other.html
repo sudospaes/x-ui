@@ -1,0 +1,143 @@
+{{define "inboundInfoModalOther"}}
+<a-modal id="inbound-info-modal-other"
+    v-model="otherInfoModal.visible" title='{{ i18n "pages.inbounds.details"}}'
+    :closable="true"
+    :mask-closable="true"
+    :class="themeSwitcher.darkCardClass"
+    :footer="null"
+    width="600px"
+    >
+    <table style="margin-bottom: 10px; width: 100%;">
+        <tr><td>
+            <table>
+                <tr><td>{{ i18n "protocol" }} </td><td><a-tag color="pink">[[ dbInbound.protocol ]]</a-tag></td></tr>
+                <tr><td>{{ i18n "pages.inbounds.address" }} </td><td><a-tag color="blue">[[ dbInbound.address ]]</a-tag></td></tr>
+                <tr><td>{{ i18n "pages.inbounds.port" }} </td><td><a-tag color="green">[[ dbInbound.port ]]</a-tag></td></tr>
+            </table>
+        </td>
+    </table>
+    <template>
+        <a-divider></a-divider>
+        <table v-if="inbound.protocol == Protocols.DOKODEMO" style="margin-bottom: 10px; width: 100%;">
+            <tr>
+                <th>{{ i18n "pages.inbounds.targetAddress" }}</th>
+                <th>{{ i18n "pages.inbounds.destinationPort" }}</th>
+                <th>{{ i18n "pages.inbounds.network" }}</th>
+                <th>FollowRedirect</th>
+            </tr><tr>
+                <td><a-tag color="green">[[ inbound.settings.address ]]</a-tag></td>
+                <td><a-tag color="blue">[[ inbound.settings.port ]]</a-tag></td>
+                <td><a-tag color="green">[[ inbound.settings.network ]]</a-tag></td>
+                <td><a-tag color="blue">[[ inbound.settings.followRedirect ]]</a-tag></td>
+            </tr>
+        </table>
+        </table>
+        <table v-if="inbound.protocol == Protocols.SOCKS" style="margin-bottom: 10px; width: 100%;">
+            <tr>
+                <th>{{ i18n "password" }} Auth</th>
+                <th>{{ i18n "pages.inbounds.enable" }} udp</th>
+                <th>IP</th>
+            </tr>
+            <tr>
+                <td><a-tag color="green">[[ inbound.settings.auth ]]</a-tag></td>
+                <td><a-tag color="blue">[[ inbound.settings.udp]]</a-tag></td>
+                <td><a-tag color="green">[[ inbound.settings.ip ]]</a-tag></td>
+            </tr>
+            <tr v-if="inbound.settings.auth == 'password'" v-for="account,index in inbound.settings.accounts">
+                <td>{{ i18n "username" }} <a-tag color="blue">[[ account.user ]]</a-tag></td>
+                <td>{{ i18n "password" }} <a-tag color="green">[[ account.pass ]]</a-tag></td>
+            </tr>
+        </table>
+        </table>
+        <table v-if="inbound.protocol == Protocols.HTTP" style="margin-bottom: 10px; width: 100%;">
+            <tr>
+                <th> </th>
+                <th>{{ i18n "username" }}</th>
+                <th>{{ i18n "password" }}</th>
+            </tr><tr v-for="account,index in inbound.settings.accounts">
+                <td><a-tag color="blue">[[ account.user ]]</a-tag></td>
+                <td><a-tag color="green">[[ account.pass ]]</a-tag></td>
+            </tr>
+        </table>
+        </table>
+    </template>
+    <div v-if = "inbound.protocol == Protocols.SOCKS">
+        <a-divider>URL</a-divider>
+        <div v-for="(link,index) in otherInfoModal.links" style="display: block; text-align: center; margin-top: 10px; margin-bottom: 10px;">
+            <p>[[ link.link ]]</p>
+            <a-button type="primary" icon="copy" :id="'copy-url-link-'+index" @click="copyToClipboard('copy-url-link-'+index, link.link)">
+                {{ i18n "copy" }}
+            </a-button>
+        </div>
+    </div>
+</a-modal>
+<script>
+    const otherInfoModal = {
+        visible: false,
+        inbound: new Inbound(),
+        dbInbound: new DBInbound(),
+        settings: null,
+        upStats: 0,
+        downStats: 0,
+        clipboard: null,
+        links: [],
+        index: null,
+        isExpired: false,
+        show(dbInbound, index) {
+            this.index = index;
+            this.inbound = dbInbound.toInbound();
+            this.dbInbound = new DBInbound(dbInbound);
+            this.settings = JSON.parse(this.inbound.settings);
+            this.isExpired = this.inbound.isExpiry(index);
+            remark = this.dbInbound.remark;
+            address = this.dbInbound.address;
+            this.links = [];
+            if (this.inbound.protocol == Protocols.SOCKS) {
+                this.links.push({
+                    link: this.inbound.genSocksLink(address, remark)
+                });
+            }
+            this.visible = true;
+        },
+        close() {
+            otherInfoModal.visible = false;
+        },
+    };
+
+    const otherInfoModalApp = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#inbound-info-modal-other',
+        data: {
+            otherInfoModal,
+            get dbInbound() {
+                return this.otherInfoModal.dbInbound;
+            },
+            get inbound() {
+                return this.otherInfoModal.inbound;
+            },
+            get isActive() {
+                return this.otherInfoModal.dbInbound.isEnable;
+            },
+            get isEnable() {
+                return this.otherInfoModal.dbInbound.isEnable;
+            },
+        },
+        methods: {
+            copyToClipboard(elmentId,content) {
+                this.otherInfoModal.clipboard = new ClipboardJS('#' + elmentId, {
+                        text: () => content,
+                    });
+                this.otherInfoModal.clipboard.on('success', () => { 
+                    app.$message.success('{{ i18n "copied" }}')
+                    this.otherInfoModal.clipboard.destroy();
+                });
+            },
+            statsColor(stats) {
+                return usageColor(stats.up + stats.down, app.trafficDiff, stats.total);
+            }
+        },
+        
+    });
+
+</script>
+{{end}}
