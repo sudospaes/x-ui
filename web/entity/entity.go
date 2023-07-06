@@ -54,6 +54,7 @@ type AllSetting struct {
 	SubCertFile        string `json:"subCertFile" form:"subCertFile"`
 	SubKeyFile         string `json:"subKeyFile" form:"subKeyFile"`
 	SubUpdates         int    `json:"subUpdates" form:"subUpdates"`
+  TwoFactorAuth      bool   `json:"twoFactorAuth" form:"twoFactorAuth"`
 	SubEncrypt         bool   `json:"subEncrypt" form:"subEncrypt"`
 }
 

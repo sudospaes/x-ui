@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "логин"
 "loginAgain" = "Время пребывания в сети вышло. Пожалуйста, войдите в систему снова"
+"totpTitle" = "Топ-проверка"
 
 [pages.login.toasts]
 "invalidFormData" = "Недопустимый формат данных"
@@ -71,6 +72,8 @@
 "emptyPassword" = "Введите пароль"
 "wrongUsernameOrPassword" = "Неверное имя пользователя или пароль"
 "successLogin" = "успешный вход"
+"totpTokenInvalid" = "Недействительный токен TOTP"
+"totpSomethingWrong" = "Что-то пошло не так"
 
 [pages.index]
 "title" = "статус системы"
@@ -280,6 +283,16 @@
 "otherSettings" = "Другие настройки"
 "resetXrayConfigTemp" = "Сбросить конфигурацию рентгена"
 "resetXrayConfigTempContent" = "Вы уверены, что сбросили конфигурацию xray? Все сделанные вами изменения будут потеряны"
+"2FATitle" = "Настроить двухфакторную аутентификацию"  
+"2FADesc" = "Безопасный вход с одноразовым паролем на основе времени" 
+"setup2FA" = "Setup 2FA"
+"setup2FADesc_1" = "1. Отсканируйте приведенный выше Qr-код с помощью приложения для аутентификации."
+"setup2FADesc_2" = "2. Введите сгенерированный номер в приложение для проверки подлинности и нажмите «Включить»."
+"showTotpQrCode" = "Show Qr code"
+"showTotpQrCodeDesc" = "Сканируйте приведенный выше Qr-код с помощью приложения для проверки подлинности."
+"disable2FA" = "Disable 2FA"
+"disable2FATitle" = "Отключить двухфакторную аутентификацию"
+"disable2FADesc" = "Вы уверены, что хотите отключить 2FA?"
 
 [pages.settings.templates]
 "title" = "Шаблоны"
@@ -372,6 +385,11 @@
 "modifyUser" = "Изменение пользователя "
 "originalUserPassIncorrect" = "Неверное имя пользователя или пароль"
 "userPassMustBeNotEmpty" = "Новое имя пользователя и новый пароль должны быть заполнены"
+"userTotpIncorrect" = "Не удалось проверить код TOTP. Повторите попытку."
+"userTotpGenerated" = "TOTP создан успешно"
+"userTotpEnabled" = "TOTP успешно подтвержден и включен"
+"userTotpDisabled" = "TOTP успешно отключен"
+"userTotpOperationFailed" = "Операция не удалась"
 
 [tgbot]
 "noResult" = "❗ Нет результатов!"

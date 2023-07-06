@@ -64,6 +64,7 @@
 [pages.login]
 "title" = "ورود به سیستم X-UI"
 "loginAgain" = "مدت زمان استفاده به اتمام رسیده ، لطفا دوباره وارد شوید"
+"totpTitle" = "صحت سنجی رمز پویا"
 
 [pages.login.toasts]
 "invalidFormData" = "اطلاعات وارد شده به صورت درست وارد نشده است"
@@ -71,6 +72,8 @@
 "emptyPassword" = "رمز عبور خالی میباشد"
 "wrongUsernameOrPassword" = "نام کاربری و رمز عبور اشتباه میباشد"
 "successLogin" = "خوش آمدید"
+"totpTokenInvalid" = "رمز پویا اشتباه است"
+"totpSomethingWrong" = "مشکلی پیش آمده است"
 
 [pages.index]
 "title" = "وضعیت سیستم"
@@ -279,6 +282,16 @@
 "otherSettings" = "سایر تنظیمات"
 "resetXrayConfigTemp" = "بازنشانی پیکربندی Xray"
 "resetXrayConfigTempContent" = "آیا مطمئن هستید که پیکربندی xray را بازنشانی کنید؟ هر تغییری که انجام دادید از بین خواهد رفت"
+"2FATitle" = "فعال سازی ورود دو مرحله ای"  
+"2FADesc" = "با استفاده از رمز پویا فرآیند ورود را امن تر کنید" 
+"setup2FA" = "فعال سازی رمز پویا"
+"setup2FADesc_1" = "۱. بارکد بالا را با استفاده از اپلیکیشن های تولید رمز پویا اسکن نمائید"
+"setup2FADesc_2" = "2. کد تولید شده توسط برنامه تولید رمز را وارد کنید و روی فعال کلیک کنید"
+"showTotpQrCode" = "نمایش بارکد"
+"showTotpQrCodeDesc" = "بارکد بالا را با استفاده از اپلیکیشن های تولید رمز اسکن نمائید"
+"disable2FA" = "غیرفعال رمز پویا"
+"disable2FATitle" = "غیر فعال کردن ورود در مرحله ای"
+"disable2FADesc" = "آیا از غیرفعال نمودن ورود دو مرحله ای مطمئن هستید؟ "
 
 [pages.settings.templates]
 "title" = "الگوها"
@@ -371,6 +384,11 @@
 "modifyUser" = "ویرایش کاربر"
 "originalUserPassIncorrect" = "نام کاربری و رمز عبور فعلی اشتباه می باشد "
 "userPassMustBeNotEmpty" = "نام کاربری و رمز عبور جدید نمیتواند خالی باشد "
+"userTotpIncorrect" = "رمز پویا صحیح نمی باشد"
+"userTotpGenerated" = "رمز پویا با موفقیت تولید شد"
+"userTotpEnabled" = "رمز پویا صحت سنجی و قعال گردید"
+"userTotpDisabled" = "رمز پویا با موفقیت غیرفعال شد"
+"userTotpOperationFailed" = "خطا در انجام عملیات"
 
 [tgbot]
 "noResult" = "❗ نتیجه‌ای یافت نشد!"

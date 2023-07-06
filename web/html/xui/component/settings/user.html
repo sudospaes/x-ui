@@ -1,21 +1,47 @@
 {{define "settings/user"}}
 <a-tab-pane key="2" tab='{{ i18n "pages.settings.userSettings"}}'>
-    <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
-        <a-form-item label='{{ i18n "pages.settings.oldUsername"}}'>
-            <a-input v-model="user.oldUsername" style="max-width: 300px"></a-input>
-        </a-form-item>
-        <a-form-item label='{{ i18n "pages.settings.currentPassword"}}'>
-            <password-input v-model="user.oldPassword" style="max-width: 300px"></password-input>
-        </a-form-item>
-        <a-form-item label='{{ i18n "pages.settings.newUsername"}}'>
-            <a-input v-model="user.newUsername" style="max-width: 300px"></a-input>
-        </a-form-item>
-        <a-form-item label='{{ i18n "pages.settings.newPassword"}}'>
-            <password-input v-model="user.newPassword" style="max-width: 300px"></password-input>
-        </a-form-item>
-        <a-form-item>
-            <a-button type="primary" @click="updateUser">{{ i18n "confirm" }}</a-button>
-        </a-form-item>
-    </a-form>
+     <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 0; box-shadow: none;">
+        <a-tab-pane key="1" tab="General">
+          <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
+              <a-form-item label='{{ i18n "pages.settings.oldUsername"}}'>
+                  <a-input v-model="user.oldUsername" style="max-width: 300px"></a-input>
+              </a-form-item>
+              <a-form-item label='{{ i18n "pages.settings.currentPassword"}}'>
+                  <password-input v-model="user.oldPassword" style="max-width: 300px"></password-input>
+              </a-form-item>
+              <a-form-item label='{{ i18n "pages.settings.newUsername"}}'>
+                  <a-input v-model="user.newUsername" style="max-width: 300px"></a-input>
+              </a-form-item>
+              <a-form-item label='{{ i18n "pages.settings.newPassword"}}'>
+                  <password-input v-model="user.newPassword" style="max-width: 300px"></password-input>
+              </a-form-item>
+              <a-form-item>
+                  <a-button type="primary" @click="updateUser">{{ i18n "confirm" }}</a-button>
+              </a-form-item>
+          </a-form>
+        </a-tab-pane>
+        <a-tab-pane key="2" tab="Security">
+          <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
+            <a-row style="padding: 20px">
+                <a-col :lg="24" :xl="12">
+                    <a-list-item-meta 
+                        title='{{ i18n "pages.settings.2FATitle" }}'
+                        description='{{ i18n "pages.settings.2FADesc" }}'/>
+                </a-col>
+                <a-col :lg="24" :xl="12" style="display:flex; gap:10px;">
+                 <a-form-item lable='Enable 2FA' v-if="allSetting.twoFactorAuth == false">
+                    <a-button type="primary" @click="generateOTP" >{{ i18n "pages.settings.setup2FA" }}</a-button>
+                  </a-form-item>
+                 <a-form-item lable='Show Qr code' v-if="allSetting.twoFactorAuth">
+                    <a-button type="primary" @click="showQrCode" >{{ i18n "pages.settings.showTotpQrCode" }}</a-button>
+                  </a-form-item>
+                  <a-form-item lable='Disable 2FA' v-if="allSetting.twoFactorAuth">
+                    <a-button type="danger" @click="disableOTP" >{{ i18n "pages.settings.disable2FA" }}</a-button>
+                  </a-form-item>
+                </a-col>
+            </a-row>
+         </a-form>
+        </a-tab-pane>
+     </a-tabs/>
 </a-tab-pane>
 {{end}}
