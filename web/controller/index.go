@@ -51,8 +51,8 @@ func (a *IndexController) totp(c *gin.Context) {
     c.Redirect(http.StatusTemporaryRedirect, "xui/")
     return
   }
-  cookie , err := c.Cookie("SECURE_PAGE")
-  if err != nil || cookie != "GOTOTOTPPAGE" {
+  cookie , err := c.Request.Cookie("SECURE_PAGE")
+  if err != nil || cookie.Value != "GOTOTOTPPAGE" {
     c.Redirect(http.StatusTemporaryRedirect, "/")
   }
   html(c, "totp.html", "pages.login.title", nil)
@@ -86,7 +86,6 @@ func (a *IndexController) login(c *gin.Context) {
     if totp {
 		  logger.Infof("%s login attempt ,Ip Address: %s\n", form.Username, getRemoteIp(c))
    		logger.Infof("%s performing 2FA \n", form.Username)
-      c.SetCookie("SECURE_PAGE", "GOTOTOTPPAGE", 1200, "/", "localhost", true, true)
       jsonObj(c, gin.H{"totp": true}, nil)
       return 
     }
@@ -149,7 +148,6 @@ func (a *IndexController) totpLogin(c *gin.Context){
       return 
     }
 	  logger.Info("user", user.Username, "login success")
-    c.SetCookie("SECURE_PAGE", "NONE", 1200, "/", "localhost", true, true)
 	  jsonMsg(c, I18nWeb(c, "pages.login.toasts.successLogin"), nil)
   }
 }

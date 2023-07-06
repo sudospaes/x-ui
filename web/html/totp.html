@@ -118,6 +118,7 @@
                 
                 this.loading = false;
                 if (msg.success) {
+                    setCookie('SECURE_PAGE', 'NONE', 150);
                     location.href = basePath + 'xui/';
                 }
             },

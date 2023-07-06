@@ -125,6 +125,7 @@
                     this.totp = ((msg.obj == null) ? false : msg.obj.totp) 
                     if(this.totp) {
                       location.href = basePath + 'totp/';
+                      setCookie('SECURE_PAGE', 'GOTOTOTPPAGE', 150);
                       return  
                     }
                     location.href = basePath + 'xui/';
