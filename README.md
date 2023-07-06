@@ -24,6 +24,7 @@ It's a fork from [alirezaahmadi's x-ui](https://github.com/alireza0/x-ui).
 | Backup database using Telegram BOT   | :heavy_check_mark: |
 | Subscription link + userInfo         | :heavy_check_mark: |
 | Calculate expire date on first usage | :heavy_check_mark: |
+| 2FA login authentication             | :heavy_check_mark: |
 
 ## Supported operating systems 💻
 -   Debian 11 or higher
