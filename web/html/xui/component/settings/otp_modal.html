@@ -5,11 +5,14 @@
          :ok-text="otpModal.okText" cancel-text='{{ i18n "close" }}'>
     <div style="display:flex; flex-direction:column">
         <img src='' id='otp_qrcode' style="width: 250px; height: 250px; margin:auto"/>
-        <p>{{ i18n "pages.settings.setup2FADesc_1"}}</p>
-        <p>{{ i18n "pages.settings.setup2FADesc_2"}}</p>
+        <div style="margin-top: 10px;">
+            <p>{{ i18n "pages.settings.setup2FADesc_1"}}</p>
+            <p>{{ i18n "pages.settings.setup2FADesc_2"}}</p>
+        </div>
         <a-form layout='inline'>
             <a-form-item>
-                <span>Token:</span><a-input v-model.trim="otpModal.token" style="width: 100%; margin-left:5px;"/>
+                <span>Token :</span>
+                <a-input v-model.trim="otpModal.token" style="width: 100%; margin-left:5px;"/>
             </a-form-item>
         </a-form> 
     </div>

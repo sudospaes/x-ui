@@ -173,7 +173,7 @@
             async generateOTP(){
                 const msg = await HttpUtil.post("/totp/generate", this.user);
                 if(msg.success){
-                    otpModal.show({title: 'Enable 2FA', okText: 'Enable',qrcode: msg.obj });
+                    otpModal.show({title: '{{ i18n "pages.settings.setup2FA" }}', okText: '{{ i18n "enable" }}',qrcode: msg.obj });
                     while(true){
                         await PromiseUtil.sleep(1000);
                         if(otpModal.success){
@@ -191,7 +191,7 @@
             async showQrCode() { 
                 const msg = await HttpUtil.post("/totp/qrcode", this.user);
                 if(msg.success){
-                    otpQrCodeModal.show({title: '{{ i18n "pages.settings.showTotpQrCode" }}', okText:'Ok', qrcode: msg.obj})
+                    otpQrCodeModal.show({title: '{{ i18n "pages.settings.showTotpQrCode" }}', qrcode: msg.obj})
                 }
             },
             async disableOTP(){

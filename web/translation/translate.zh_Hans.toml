@@ -283,6 +283,8 @@
 "otherSettings" = "其他设置"
 "resetXrayConfigTemp" = "重置 Xray 配置"
 "resetXrayConfigTempContent" = "您确定重置 xray 配置吗？您所做的任何更改都将丢失"
+"userGeneral" = "一般的"
+"user2FA" = "2FA 安全"
 "2FATitle" = "设置两因素身份验证"  
 "2FADesc" = "使用基于时间的一次性密码进行安全登录" 
 "setup2FA" = "设置 2FA"

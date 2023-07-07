@@ -1,7 +1,7 @@
 {{define "settings/user"}}
 <a-tab-pane key="2" tab='{{ i18n "pages.settings.userSettings"}}'>
      <a-tabs default-active-key="1" :class="themeSwitcher.darkCardClass" style="border-radius: 0; box-shadow: none;">
-        <a-tab-pane key="1" tab="General">
+        <a-tab-pane key="1" tab='{{ i18n "pages.settings.userGeneral"}}'>
           <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
               <a-form-item label='{{ i18n "pages.settings.oldUsername"}}'>
                   <a-input v-model="user.oldUsername" style="max-width: 300px"></a-input>
@@ -20,7 +20,7 @@
               </a-form-item>
           </a-form>
         </a-tab-pane>
-        <a-tab-pane key="2" tab="Security">
+        <a-tab-pane key="2" tab='{{ i18n "pages.settings.user2FA"}}'>
           <a-form :style="'padding: 20px;' + themeSwitcher.textStyle">
             <a-row style="padding: 20px">
                 <a-col :lg="24" :xl="12">
@@ -42,6 +42,6 @@
             </a-row>
          </a-form>
         </a-tab-pane>
-     </a-tabs/>
+     </a-tabs>
 </a-tab-pane>
 {{end}}

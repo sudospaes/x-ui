@@ -283,6 +283,8 @@
 "otherSettings" = "Other Settings"
 "resetXrayConfigTemp" = "Reset Xray Configuration"
 "resetXrayConfigTempContent" = "Are you sure reset xray configuration ? Any changes you did made will be lost"
+"userGeneral" = "General"
+"user2FA" = "2FA Security"
 "2FATitle" = "Setup Two Factor Authentication"  
 "2FADesc" = "Secure login with Time-based one-time password" 
 "setup2FA" = "Setup 2FA"

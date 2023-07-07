@@ -2,7 +2,7 @@
 <a-modal id="otp-qrcode-modal" v-model="otpQrCodeModal.visible" :title="otpQrCodeModal.title" @ok="otpQrCodeModal.ok"
          :confirm-loading="otpQrCodeModal.confirmLoading" :closable="true" :mask-closable="false"
          :class="themeSwitcher.darkCardClass"
-         :ok-text="otpQrCodeModal.okText" cancel-text='{{ i18n "close" }}'>
+         :ok-text="otpQrCodeModal.okText" cancel-text='{{ i18n "close" }}' :ok-button-props="{ props: { disabled: true } }">
     <div style="display:flex; flex-direction:column">
         <img src='' id='otp_qrcode_img' style="width: 250px; height: 250px; margin:auto"/>
         <p>{{ i18n "pages.settings.showTotpQrCodeDesc"}}</p>
