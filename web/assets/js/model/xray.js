@@ -1470,9 +1470,6 @@ class Inbound extends XrayCommonClass {
             if (!ObjectUtil.isEmpty(this.stream.reality.settings.spiderX)) {
                 params.set("spx", this.stream.reality.settings.spiderX);
             }
-            if (this.stream.network === 'tcp' && !ObjectUtil.isEmpty(this.settings.trojans[clientIndex].flow)) {
-                params.set("flow", this.settings.trojans[clientIndex].flow);
-            }
         }
 
         const link = `trojan://${settings.trojans[clientIndex].password}@${address}:${this.port}`;
@@ -1853,10 +1850,9 @@ Inbound.TrojanSettings = class extends Inbound.Settings {
     }
 };
 Inbound.TrojanSettings.Trojan = class extends XrayCommonClass {
-    constructor(password=RandomUtil.randomSeq(10), flow='', email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId='') {
+    constructor(password=RandomUtil.randomSeq(10), email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId='') {
         super();
         this.password = password;
-        this.flow = flow;
         this.email = email;
         this.totalGB = totalGB;
         this.expiryTime = expiryTime;
@@ -1868,7 +1864,6 @@ Inbound.TrojanSettings.Trojan = class extends XrayCommonClass {
     toJson() {
         return {
             password: this.password,
-            flow: this.flow,
             email: this.email,
             totalGB: this.totalGB,
             expiryTime: this.expiryTime,
@@ -1881,7 +1876,6 @@ Inbound.TrojanSettings.Trojan = class extends XrayCommonClass {
     static fromJson(json = {}) {
         return new Inbound.TrojanSettings.Trojan(
             json.password,
-            json.flow,
             json.email,
             json.totalGB,
             json.expiryTime,
