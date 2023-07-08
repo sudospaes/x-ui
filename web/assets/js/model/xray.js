@@ -1732,7 +1732,7 @@ Inbound.VLESSSettings.VLESS = class extends XrayCommonClass {
     constructor(id=RandomUtil.randomUUID(), flow='', email=RandomUtil.randomText(), totalGB=0, expiryTime=0, enable=true, tgId='', subId='') {
         super();
         this.id = id;
-        this.flow = this.isTcp ? flow : '';
+        this.flow = flow;
         this.email = email;
         this.totalGB = totalGB;
         this.expiryTime = expiryTime;
