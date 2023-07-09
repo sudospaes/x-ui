@@ -106,13 +106,6 @@ func (s *XrayService) GetXrayConfig() (*xray.Config, error) {
 
 			// clear client config for additional parameters
 			var final_clients []interface{}
-
-			// detect inbound transmission type
-			var stream map[string]interface{}
-			json.Unmarshal([]byte(inbound.StreamSettings), &stream)
-			network, _ := stream["network"].(string)
-			security, _ := stream["security"].(string)
-
 			for _, client := range clients {
 
 				c := client.(map[string]interface{})
@@ -128,9 +121,6 @@ func (s *XrayService) GetXrayConfig() (*xray.Config, error) {
 					}
 					if c["flow"] == "xtls-rprx-vision-udp443" {
 						c["flow"] = "xtls-rprx-vision"
-					}
-					if network != "tcp" || !(security == "tls" || security == "reality") {
-						c["flow"] = ""
 					}
 				}
 				final_clients = append(final_clients, interface{}(c))
